@@ -1,1 +1,1 @@
-https://github.com/PycT/RhythmicML
+git@github.com:PycT/RhythmicML
