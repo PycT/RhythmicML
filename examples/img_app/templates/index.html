@@ -1,0 +1,64 @@
+<!doctype html>
+<head>
+	<title>
+		Retina RoboScreening v 1.0
+	</title>
+	<style>
+	
+	.button
+	{
+		border: 2px outset;
+		background-color: #dadaff;
+	}
+
+	.weekday
+	{
+		background-color: #dfdfdf;
+		text-align: center;
+		margin: 2px;
+	}
+
+	.normal, .disabled
+	{
+		text-align: center;
+	}
+
+	.disabled
+	{
+		color: #dadada;
+		text-decoration: line-through;
+	}
+
+	</style>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<div width = "80%" align = "left" style = "padding: 128px;">
+	<form action = "{{ url_for('index_page') }}" enctype="multipart/form-data" method="POST"  onSubmit = "getElementById('messagebox').innerHTML = '<img src=\'{{ url_for('static', filename='elements/loader.gif') }}\' width = 64 style=\'vertical-align: middle;\'>&nbsp;&nbsp;&nbsp;Retina image analysis processing, please wait.'">
+		<b>Retina image file:</b><br><br>
+		<input type="file" name="retina_image" class="button" required><br><br>
+		<input type="submit" name="SubmitButton" value="Check" class="button">
+	</form>
+	<hr>
+
+	<div id="messagebox">
+	<table width = "100%">
+		<tr valign = "top">
+			<td>
+				{% if image_name %}
+				Retina photo:<br>
+				<img src = "{{ url_for('static', filename=image_name) }}" width="300">
+				{% endif %}
+
+				{% if screening %}
+					<h3>
+						Automatic screening result: <span style="color: blue;">{{screening}}</span>
+					</h3>
+				{% endif %}
+			</td>
+		</tr>
+	</table>
+	</div>
+</div>
+
+</body>
