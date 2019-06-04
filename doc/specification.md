@@ -32,4 +32,32 @@ Optional features:
 + key:value arbitrary metadata
 
 ##Workflow
+1. Save a model artifact(s) into a dedicated folder.
+2. Configure a model deployment:
+    + Dependencies
+    + Prediciting script
+3. Upload to the scoring infrastructure
 
+
+
+
+##User Interface
+
+UI implementation stack:
+* Flask
+* SQLite
+
+UI functionality includes:
+
++ General confguration
+    - Default scoring infrastructure location (where to upload a model to)
+
++ Model configuration
+    - scoring infrastructure location, if different from the default one.
+
++ Model automated versioning
+
++ Model management
+    - model upload 
+    - status visualisation
+    - productin version switch

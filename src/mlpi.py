@@ -1,4 +1,4 @@
-#MLPI stands for ML Pruduction Instance
+#MLPI stands for ML Production Instance
 from flask import Flask;
 
 class MLPI:
@@ -10,7 +10,4 @@ class MLPI:
         pass;
 
     def lifeSigh(self):
-        pass;
-
-    def score(self, data):
         pass;
