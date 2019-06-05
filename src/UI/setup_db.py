@@ -1,4 +1,5 @@
 import sqlite3;
+from rhythmic import faultHandler;
 
 db_filename = ".db.sqlite3";
 
@@ -35,21 +36,6 @@ CREATE TABLE IF NOT EXISTS versions
     FOREIGN KEY (model_id) REFERENCES models (id) 
 );
 """;
-
-
-def faultHandler(func):
-
-    def wrapper(*args, **kwargs):
-
-        try:
-            func(*args, **kwargs);
-            return True;
-
-        except Exception as error_message:
-            print("Something went wrong: {}".format(error_message));
-            return False;
-
-    return wrapper;
 
 def dbConnect(db_filename = db_filename):
 

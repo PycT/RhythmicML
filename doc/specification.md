@@ -10,18 +10,18 @@ Deploy might be prepared and performed via CLI tool with configuration defined i
 
 ##Definitions
 
-*Model* - an invocable entity making prediction or inference upon an input data. Might be binary artifact produced by ML framework, code, or a combination of both.
+**Model** - an invocable entity making prediction or inference upon an input data. Might be binary artifact produced by ML framework, code, or a combination of both.
 
-*Production Instance* - runtime with a Model wrapped in and API endpoints exposed.
+**Production Instance** - runtime with a Model wrapped in and API endpoints exposed.
 
-*Deployment* - placing a Model into  a Production Instance
+**Deployment** - placing a Model into  a Production Instance
 
 
 ##Preparations for Deployment
 
 Deployment takes a Model itself and a Configuration. 
 
-*Configuration* includes compulsory features, defining Production Instance behaviour, and optional features to accompany Model versioning and management.
+**Configuration** includes compulsory features, defining Production Instance behaviour, and optional features to accompany Model versioning and management.
 
 Compulsory features include the following:
 + Dependencies: if any dependencies needed to execute a Model loading/scoring - they should be listed line by line in the *requirements.txt* file.
