@@ -8,6 +8,12 @@ Each time model deployed, it gets versioned automatically and stored in models s
 
 Deploy might be prepared and performed via CLI tool with configuration defined in dedicated file or via web-UI.
 
+##Functionality
+
++ Versioning
++ Deployment
++ Monitoring
+
 ##Definitions
 
 **Model** - an invocable entity making prediction or inference upon an input data. Might be binary artifact produced by ML framework, code, or a combination of both.
@@ -39,8 +45,6 @@ Optional features:
 3. Upload to the scoring infrastructure
 
 
-
-
 ##User Interface
 
 UI implementation stack:
@@ -61,3 +65,10 @@ UI functionality includes:
     - model upload 
     - status visualisation
     - productin version switch
+
+##General notes
+
++ A model is added and deletet vi UI part named `Catalogue` (`catalogue.md`);
++ Model metadata, configurations, versions, commits and deployment are made via UI part named `Dashboard` (`dashboard.md`);
+A model version `Dashboard` is entered from `Catalogue`
++ Monitoring is performed via `Monitoring` UI section; Deployed model status is also displayed in `Catalogue` and `Dashboard`

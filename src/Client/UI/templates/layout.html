@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+{% block head %}
+
+    {% block title %}
+    <title>
+        RhythmicML{% if title %}: {{ title }} {% endif %}   
+    </title>
+    {% endblock %}
+
+{% endblock %}
+    <link rel = "stylesheet" type = "text/css" href = "{{ url_for('static', filename = 'main.css') }}">
+    <meta name = "viewport" content = "width=device-width">
+</head>
+
+<body>
+<div class = "main_container">
+    <div class = "main_sidebar">
+        {% block main_sidebar %}
+        <h1 class = "cross_logo">
+            RhythmicML
+        </h1>
+        <hr>
+        here is going to be a main navigation menu
+        {% endblock %}
+    </div>
+    <div class = "main_content">
+        {% block main_content %}
+        <h1 class = "ui_caption">
+            {% if ui_caption %}{{ ui_caption }}{% endif %}
+        </h1>
+        <hr>
+        {% endblock %}
+    </div>
+</div>
+</body>
+
+</html>

@@ -15,10 +15,13 @@ CREATE TABLE IF NOT EXISTS general
 
 models_table = \
 """
-CREATE TABLE IF NOT EXISTS models
+CREATE TABLE IF NOT EXISTS models_table
 (
     id integer PRIMARY KEY,
     model_name text NOT NULL UNIQUE,
+    model_path text NOT NULL UNIQUE,
+    last_version_timestamp text NOT NULL,
+    deploy_destination text,
     model_description text,
     initial_metada text
 );
@@ -26,14 +29,31 @@ CREATE TABLE IF NOT EXISTS models
 
 model_versions_table = \
 """
-CREATE TABLE IF NOT EXISTS versions
+CREATE TABLE IF NOT EXISTS versions_table
 (
     id integer PRIMARY KEY,
     model_id integer NOT NULL,
     version integer NOT NULL DEFAULT 0,
     metadata text,
     commit_comment text NOT NULL,
-    FOREIGN KEY (model_id) REFERENCES models (id) 
+    created_timestamp text NOT NULL,
+    FOREIGN KEY (model_id) REFERENCES models_table (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE 
+);
+""";
+
+model_files_table = \
+"""
+CREATE TABLE IF NOT EXISTS files_table
+(
+    id integer PRIMARY KEY,
+    model_version_id integer NOT NULL,
+    file_path text NOT NULL,
+    file_checksum text,
+    FOREIGN KEY (model_version_id) REFERENCES versions_table (id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE 
 );
 """;
 
@@ -60,6 +80,7 @@ def createTables(db_cursor):
     dbExecute(db_cursor, general_table);
     dbExecute(db_cursor, models_table);
     dbExecute(db_cursor, model_versions_table);
+    dbExecute(db_cursor, model_files_table);
 
 def main():
 
