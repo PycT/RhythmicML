@@ -1,6 +1,36 @@
 {% extends "layout.html" %}
+{% block head %}
+{{ super() }}
+    {# uncomment thist string when css debugging is done and remove the following one.}
+    <link rel = "stylesheet" type = "text/css" href = "{{ url_for('static', filename = 'catalogue.css') }}">
+    {##}
+    <link rel = "stylesheet" type = "text/css" href = "{{ url_for('static', filename = 'catalogue.css') + '?v=' + range(0, 1100)|random()|string()}}">
+    {##}
+{% endblock %}
 {% block main_content %}
 {{ super() }}
-pew-pew!
+<div align=center>
+<div class = "catalogue_toolbox">
+    <div align = "left" class = "left_column_align_left">
+        <input class = "catalogue_search" name = "catalogue_search" id = "catalogue_searchsearch" type = text
+        placeholder = "Search...">
+    </div>
+    <div align = "right" class = "right_column_align_right">
+        <button class = "catalogue_add" name = "catalogue_add" id = "catalogue_add">
+            <b>+</b> Add a model
+        </button>
+    </div>
+</div>
+</div>
+
+<div class = "catalogue_content">
+    <ol class = "catalogue_models_list">
+        {% for item in models_list %}
+        <li class = catalogue_models_list_item>
+            {{ item["name"] }}
+        </li>
+        {% endfor %}
+    </ol>
+</div>
 
 {% endblock %}

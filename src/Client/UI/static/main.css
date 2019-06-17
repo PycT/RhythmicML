@@ -48,3 +48,44 @@ h1
 {
     color: #000088;
 }
+
+.navigation_menu_item
+{
+    border: outset 2px #dadada;
+    background-color: #efefff;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    width: 80%;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 16pt;
+    color: #000088;
+}
+
+.navigation_menu_item:hover
+{
+    background-color: #ffffff;
+}
+
+.navigation_menu_item a
+{
+    color: #000088;
+    align-self: center;
+    vertical-align: middle;    
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.left_column_align_left
+{
+    float: left;
+    width: 50%;
+}
+
+.right_column_align_right
+{
+    float: right;
+    width: 50%;
+}

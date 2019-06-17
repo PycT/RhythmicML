@@ -6,9 +6,13 @@ port = "5000";
 
 
 @app.route("/")
-def indexpage():
+def index():
+    """
+    On the root page models catalogue is displayed and managed.
+    """
+    from helpers.get_models_list import models_list; # sets the `models_list` variable
 
-    return render_template("index.html", title = "Catalogue", ui_caption = "Catalogue");
+    return render_template("index.html", title = "Catalogue", ui_caption = "Catalogue", models_list = models_list);
 
 
 

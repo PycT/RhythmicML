@@ -9,22 +9,31 @@
     </title>
     {% endblock %}
 
-{% endblock %}
+    {#
     <link rel = "stylesheet" type = "text/css" href = "{{ url_for('static', filename = 'main.css') }}">
+    {##}
+    
+    <link rel = "stylesheet" type = "text/css" href = "{{ url_for('static', filename = 'main.css')  + '?v=' + range(0, 100500)|random()|string() }}">
     <meta name = "viewport" content = "width=device-width">
+{% endblock %}
 </head>
 
 <body>
 <div class = "main_container">
-    <div class = "main_sidebar">
+    <div class = "main_sidebar" align=center>
         {% block main_sidebar %}
         <h1 class = "cross_logo">
             RhythmicML
         </h1>
         <hr>
-        here is going to be a main navigation menu
+        
+        <div class = "navigation_menu_item" align="center">
+            <a href = "{{url_for('index')}}">Catalogue</a>
+        </div>
+
         {% endblock %}
     </div>
+    
     <div class = "main_content">
         {% block main_content %}
         <h1 class = "ui_caption">
