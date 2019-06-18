@@ -13,6 +13,7 @@ The dashboard is a list of all the models tracked by the system [RhythmicML]
 
 + Button "Add".
 + "Search" field to search a model.
+    The Search input acts as a filter for the tracking list - only models with containing an input names stay in the list, with that part of the name highlighted.
 + Tracking list.
 + List is ordered descending by the timestamp of last changes.
 + Each list-item contains an element, unfolding sublist of the model's versions.
@@ -46,7 +47,8 @@ To add a model to the tracker, User presses **the "Add" button** on the dashboar
 3. The model folder is scanned recursiveliy, adding all the files found to the `files_table` (absolute paths).
 
 ###Deleting a model from tracking list
+When User wishes to delete a model, he is prompted to input model's name to confirm deleteion. The deletion is irreversible.
 
-###Searching a model in the list
+After confirmation `models_table`, `versions_table` and `files_table` are cleaned accordingly.
 
-###Moving to a model space
+Cleaning Server side is up to User.

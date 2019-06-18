@@ -1,7 +1,6 @@
-import sqlite3;
-from rhythmic import faultHandler;
+from rhythmic.db import SQLiteDB;
 
-db_filename = ".db.sqlite3";
+db_filename = ".rhml_db.sqlite3";
 
 general_table = \
 """
@@ -57,44 +56,18 @@ CREATE TABLE IF NOT EXISTS files_table
 );
 """;
 
-def dbConnect(db_filename = db_filename):
-
-    try:
-        db_connection = sqlite3.connect(db_filename);
-        db_cursor = db_connection.cursor();
-
-        return db_connection, db_cursor;
-
-    except Exception as error_message:
-        print("Something went wrong: {}".format(error_message));
-        
-        return False, False;
-
-@faultHandler
-def dbExecute(db_cursor, db_request):
-        db_cursor.execute(db_request);
-
-@faultHandler
-def createTables(db_cursor):
-
-    dbExecute(db_cursor, general_table);
-    dbExecute(db_cursor, models_table);
-    dbExecute(db_cursor, model_versions_table);
-    dbExecute(db_cursor, model_files_table);
-
 def main():
 
-    db_connection, db_cursor = dbConnect();
+    with SQLiteDB(db_filename) as db:
 
-    if db_connection:
-        createTables(db_cursor);
-        db_connection.commit();
-        db_connection.close();
+        db.runScript(
+            general_table +
+            models_table +
+            model_versions_table +
+            model_files_table
+            );
 
-        print("Database created, tables created.")
-    else:
-        print("db connection failed.");
-        exit(4);
+    print("Database is created, tables are created.")
 
 if __name__ == "__main__":
     main();

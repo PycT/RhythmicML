@@ -1,0 +1,71 @@
+.catalogue_toolbox
+{
+    border: solid 1px #888888;
+    background-color: #efefef;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    display: flex;
+}
+
+.catalogue_toolbox_text_input
+{
+    width: 90%;
+    vertical-align: middle;
+    padding-left: 8px;
+    font-size: 18pt;
+}
+
+.catalogue_model_path_picker
+{
+    color: red;
+    font-weight: bolder;
+    font-size: 12pt;
+}
+
+.catalogue_button
+{
+    background-color: #77ff77;
+    color: #007700;
+    font-size: 18pt;
+}
+
+.catalogue_button#catalogue_cancel_adding_button
+{
+    background-color: #ff7777;
+    color: #770000;
+}
+
+.catalogue_models_list_item
+{
+}
+
+.catalogue_model_list_item_name
+{
+    font-size: 14pt;
+    font-weight: bolder;
+    color: blue;
+}
+
+.catalogue_model_list_item_version
+{
+    font-size: 12pt;
+    color: #000000;
+    padding-right: 16px;
+}
+
+.catalogue_model_list_item_timestamp
+{
+    font-size: 12pt;
+    color: #888888;
+}
+
+.catalogue_model_list_item_path
+{
+    font-size: 10pt;
+    color: #888888;
+    border-bottom: 1px dashed #dadada;
+}

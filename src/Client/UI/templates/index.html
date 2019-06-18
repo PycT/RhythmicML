@@ -1,35 +1,84 @@
 {% extends "layout.html" %}
+
 {% block head %}
 {{ super() }}
-    {# uncomment thist string when css debugging is done and remove the following one.}
-    <link rel = "stylesheet" type = "text/css" href = "{{ url_for('static', filename = 'catalogue.css') }}">
-    {##}
-    <link rel = "stylesheet" type = "text/css" href = "{{ url_for('static', filename = 'catalogue.css') + '?v=' + range(0, 1100)|random()|string()}}">
-    {##}
-{% endblock %}
+
+    <link rel = "stylesheet" type = "text/css" href = "{{ url_for('static', filename = 'css/catalogue.css') + anti_cache }}">
+    <script  type = "text/javascript" src = "{{ url_for('static', filename = 'js/toggle_display.js') + anti_cache }}">
+    </script>
+
+    <script  type = "text/javascript" src = "{{ url_for('static', filename = 'js/catalogue.js') + anti_cache }}">
+    </script>
+
+ {% endblock %}
 {% block main_content %}
 {{ super() }}
+
 <div align=center>
-<div class = "catalogue_toolbox">
-    <div align = "left" class = "left_column_align_left">
-        <input class = "catalogue_search" name = "catalogue_search" id = "catalogue_searchsearch" type = text
-        placeholder = "Search...">
+
+    <div class = "catalogue_toolbox" id = "catalogue_toolbox_add_model" style = "display: none;">
+        <div align = "left" class = "left_column_align_left">
+            <input class = "catalogue_toolbox_text_input" type = "text" name = "new_model_name" id = "new_model_name"
+            placeholder = "New model name..." required>
+            <br><br>
+            <b style="color:#000088; font-family: 12pt;">Pick any file from a directory with your model:</b><br>
+            <input class = "catalogue_model_path_picker" type = "file" name = "new_model_path" id ="new_model_path" requred
+            caption="pew-pew!">
+        </div>
+        <div align = right class = "right_column_align_right">
+            <button class = "catalogue_button" name = "catalogue_cancel_adding" id = "catalogue_cancel_adding_button"
+            onclick = "onCancelNewModelSubmitButtonClick();">
+                <b>Cancel</b>
+            </button>
+            &nbsp;
+            <button class = "catalogue_button" name = "catalogue_submit_model" id = "catalogue_submit_model_button">
+                <b>Add</b>
+            </button>
+        </div>
     </div>
-    <div align = "right" class = "right_column_align_right">
-        <button class = "catalogue_add" name = "catalogue_add" id = "catalogue_add">
-            <b>+</b> Add a model
-        </button>
+
+    <div class = "catalogue_toolbox" id = "catalogue_toolbox_regular">
+        <div align = "left" class = "left_column_align_left">
+            <input class = "catalogue_toolbox_text_input" name = "catalogue_search" id = "catalogue_searchsearch" type = text
+            placeholder = "Search...">
+        </div>
+        <div align = "right" class = "right_column_align_right">
+            <button class = "catalogue_button" name = "catalogue_add" id = "catalogue_invoke_add_button"
+            onclick="onAddInvocationButtonClick();">
+                <b>+</b> Add a model
+            </button>
+        </div>
     </div>
-</div>
+
 </div>
 
 <div class = "catalogue_content">
     <ol class = "catalogue_models_list">
+        <table width = "100%">
         {% for item in models_list %}
-        <li class = catalogue_models_list_item>
-            {{ item["name"] }}
-        </li>
+        <tr>
+            <td class = "catalogue_models_list_item" width = "60%">
+                <li>
+                    <a class = "catalogue_model_list_item_name"  id = "model{{ item['id'] }}" 
+                    href = "{{ url_for('dashboard', model_id = item['id']) }}">
+                        {{ item["name"] }}
+                    </a>
+                </li>
+            </td>
+            <td class = "catalogue_model_list_item_version" align = "right">
+                v. {{ item["version"] }} 
+            </td>
+            <td class = "catalogue_model_list_item_timestamp">
+                {{ item["timestamp"] }}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" class = "catalogue_model_list_item_path">
+                {{item["path"]}}
+            </td>
+        </tr>
         {% endfor %}
+    </table>
     </ol>
 </div>
 

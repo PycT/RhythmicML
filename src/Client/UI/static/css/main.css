@@ -21,10 +21,19 @@ h1
     color: #000088;
 }
 
+.cross_footer
+{
+    font-size: 8pt;
+    color: #aaaaaa;
+    padding-right: 32px;
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+}
+
 .main_container
 {
     display: flex;
-    height: 90vh;
 }
 
 .main_sidebar
@@ -41,7 +50,6 @@ h1
     padding: 32px;
     border-left: 1px solid #e2e2e2;
     height: 100%;
-    overflow: scroll;
 }
 
 .ui_caption
@@ -62,6 +70,7 @@ h1
     padding-bottom: 8px;
     font-size: 16pt;
     color: #000088;
+    overflow: hidden;
 }
 
 .navigation_menu_item:hover
