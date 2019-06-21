@@ -1,14 +1,19 @@
-        function onCancelNewModelSubmitButtonClick()
-        {
-            toggle_display('catalogue_toolbox_regular');
-            toggle_display('catalogue_toolbox_add_model');
-            return true;
-        }
+"use strict";
 
-        function onAddInvocationButtonClick()
-        {
-            toggle_display('catalogue_toolbox_regular');
-            toggle_display('catalogue_toolbox_add_model');
-            return true;
-        }
+//toggleDisplay defied in manipulations.js
+
+function onCancelNewModelSubmitButtonClick()
+{
+    toggleDisplay('catalogue_toolbox_regular');
+    toggleDisplay('catalogue_toolbox_add_model');
+    return true;
+}
+
+function onAddInvocationButtonClick()
+{
+    toggleDisplay('catalogue_toolbox_regular');
+    toggleDisplay('catalogue_toolbox_add_model');
+    return true;
+}
+
 

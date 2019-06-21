@@ -1,0 +1,44 @@
+<div class = "folder_contents_box" width = "80%">
+
+    {% if folder_contents %}
+
+        <div class = "folder_contents_box_current_folder" align=center>
+            {% if the_folder == "~" %}
+                $HOME
+            {% else %}
+                {{ the_folder }}
+            {%endif%}
+
+            <button>Pick</button>
+
+        </div>
+
+        <ul>
+
+        {% for item in folder_contents %}
+
+            {% if item.is_dir %}
+
+                <li>
+                    <a class = "local_folder" href = "#" onclick="asyncPostRequest('/folders', '{{ item.absolute_path|escape() }}', 'new_model_path');">
+                        <b>{{ item.base_name}}</b>
+                    </a>
+                </li>
+
+            {% else %}
+
+                <li>
+                    {{ item.base_name }}
+                </li>
+
+            {% endif %}
+
+        {% endfor %}
+
+        </ul>
+    {% else %}
+        Something went wrong...
+    {% endif %}
+
+
+</div>

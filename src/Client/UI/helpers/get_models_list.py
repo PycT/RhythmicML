@@ -1,4 +1,4 @@
-def get_models_list():
+def getModelsList():
 
     debug_list = \
     [
@@ -41,4 +41,4 @@ def get_models_list():
 
     return debug_list;
 
-models_list = get_models_list();
+models_list = getModelsList();

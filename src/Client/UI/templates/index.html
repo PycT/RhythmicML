@@ -4,10 +4,14 @@
 {{ super() }}
 
     <link rel = "stylesheet" type = "text/css" href = "{{ url_for('static', filename = 'css/catalogue.css') + anti_cache }}">
-    <script  type = "text/javascript" src = "{{ url_for('static', filename = 'js/toggle_display.js') + anti_cache }}">
+
+    <script  type = "text/javascript" src = "{{ url_for('static', filename = 'js/async_requests.js') + anti_cache }}">
     </script>
 
-    <script  type = "text/javascript" src = "{{ url_for('static', filename = 'js/catalogue.js') + anti_cache }}">
+    <script  type = "text/javascript" src = "{{ url_for('static', filename = 'js/manipulations.js') + anti_cache }}">
+    </script>
+
+    <script  type = "text/javascript" src = "{{ url_for('static', filename = 'js/catalogue.js') + anti_cache }}" type = "module">
     </script>
 
  {% endblock %}
@@ -16,15 +20,23 @@
 
 <div align=center>
 
-    <div class = "catalogue_toolbox" id = "catalogue_toolbox_add_model" style = "display: none;">
+    <div class = "catalogue_toolbox" id = "catalogue_toolbox_add_model" style = "display: flex;">
+
         <div align = "left" class = "left_column_align_left">
+            <b class = "guideline">Pick a folder containing your model:</b><br>
+            <button onclick = "asyncPostRequest('/folders', '~', 'new_model_path');">
+                Browse
+            </button>
+            <br><br>
+
+            <div id = "new_model_path">
+            </div>
+
+            <br><br>
             <input class = "catalogue_toolbox_text_input" type = "text" name = "new_model_name" id = "new_model_name"
             placeholder = "New model name..." required>
-            <br><br>
-            <b style="color:#000088; font-family: 12pt;">Pick any file from a directory with your model:</b><br>
-            <input class = "catalogue_model_path_picker" type = "file" name = "new_model_path" id ="new_model_path" requred
-            caption="pew-pew!">
         </div>
+
         <div align = right class = "right_column_align_right">
             <button class = "catalogue_button" name = "catalogue_cancel_adding" id = "catalogue_cancel_adding_button"
             onclick = "onCancelNewModelSubmitButtonClick();">
@@ -35,19 +47,23 @@
                 <b>Add</b>
             </button>
         </div>
+
     </div>
 
     <div class = "catalogue_toolbox" id = "catalogue_toolbox_regular">
+
         <div align = "left" class = "left_column_align_left">
             <input class = "catalogue_toolbox_text_input" name = "catalogue_search" id = "catalogue_searchsearch" type = text
-            placeholder = "Search...">
+            placeholder = "Search..." autofocus>
         </div>
+
         <div align = "right" class = "right_column_align_right">
             <button class = "catalogue_button" name = "catalogue_add" id = "catalogue_invoke_add_button"
             onclick="onAddInvocationButtonClick();">
                 <b>+</b> Add a model
             </button>
         </div>
+
     </div>
 
 </div>

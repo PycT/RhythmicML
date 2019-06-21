@@ -5,7 +5,7 @@
 
 body
 {
-    font-family: "Roboto";
+    font-family: "Liberation Sans";
     height: 100%;
 }
 
@@ -13,6 +13,13 @@ h1
 {
     margin-top: 0;
     text-align: center;
+}
+
+button
+{
+    background-color: #fafafa;
+    color: #777777;
+    font-size: 18pt;
 }
 
 .cross_logo
@@ -26,9 +33,10 @@ h1
     font-size: 8pt;
     color: #aaaaaa;
     padding-right: 32px;
-    position: absolute;
+    position: relative;
     bottom: 16px;
     right: 16px;
+    margin-top: 64px;
 }
 
 .main_container
@@ -97,4 +105,30 @@ h1
 {
     float: right;
     width: 50%;
+}
+
+.guideline
+{
+    color:#000088;
+    font-size: 14pt;
+}
+
+.folder_contents_box
+{
+    padding: 16px;
+    border-top: solid 3px #dadada;
+}
+
+.folder_contents_box_current_folder
+{
+    font-size: 16pt;
+    font-weight: bolder;
+    color: 008800;
+    padding: 8px;
+    border: dashed 1px #dadada;
+}
+
+.local_folder
+{
+    font-size: 14pt;
 }

@@ -1,4 +1,4 @@
-#Dashboard - index.html
+#Catalogue - index.html
 
 The dashboard is a list of all the models tracked by the system [RhythmicML]
 

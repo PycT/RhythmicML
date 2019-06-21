@@ -49,12 +49,15 @@ CREATE TABLE IF NOT EXISTS files_table
     id integer PRIMARY KEY,
     model_version_id integer NOT NULL,
     file_path text NOT NULL,
+    file_new_state text,
     file_checksum text,
     FOREIGN KEY (model_version_id) REFERENCES versions_table (id)
     ON DELETE CASCADE
     ON UPDATE CASCADE 
 );
 """;
+
+# file_new_state options: new, same, changed, deleted
 
 def main():
 
@@ -67,7 +70,7 @@ def main():
             model_files_table
             );
 
-    print("Database is created, tables are created.")
+    print("Database is created, tables are created. DB file: \"{}\"".format(db_filename));
 
 if __name__ == "__main__":
     main();
