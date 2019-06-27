@@ -40,5 +40,3 @@ def getModelsList():
     ]
 
     return debug_list;
-
-models_list = getModelsList();

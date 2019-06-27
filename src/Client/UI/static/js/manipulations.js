@@ -16,17 +16,20 @@ function toggleDisplay(dom_element_id, display = "flex")
     return the_element.style.display;
 }
 
-function setInnerHTML(the_text, element_id)
+function setVisible(dom_element_id, display = "flex")
 {
-    let dom_element = document.getElementById(element_id);
-    dom_element.innerHTML = the_text;
-    return true;
+    var the_element = document.getElementById(dom_element_id);
+
+    the_element.style.display = display;
+
+    return the_element.style.display;
 }
 
-function setValue(the_value, element_id)
+function setInvisible(dom_element_id)
 {
-    let dom_element = document.getElementById(element_id);
-    dom_element.value = the_value;
-    return true;
-}
+    var the_element = document.getElementById(dom_element_id);
 
+    the_element.style.display = "none";
+
+    return the_element.style.display;
+}

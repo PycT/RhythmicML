@@ -39,6 +39,17 @@ button
     margin-top: 64px;
 }
 
+.status_bar
+{
+    font-size: 8pt;
+    color: #aaaaff;
+    padding-left: 32px;
+    position: relative;
+    bottom: 16px;
+    left: 16px;
+    margin-top: 32px;
+}
+
 .main_container
 {
     display: flex;

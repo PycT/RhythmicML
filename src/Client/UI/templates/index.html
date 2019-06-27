@@ -20,32 +20,33 @@
 
 <div align=center>
 
-    <div class = "catalogue_toolbox" id = "catalogue_toolbox_add_model" style = "display: flex;">
+    <div class = "catalogue_toolbox" id = "catalogue_toolbox_add_model" style = "display: none;">
 
         <div align = "left" class = "left_column_align_left">
             <b class = "guideline">Pick a folder containing your model:</b><br>
-            <button onclick = "asyncPostRequest('/folders', '~', 'new_model_path');">
-                Browse
-            </button>
             <br><br>
 
-            <div id = "new_model_path">
+            <div id = "new_model_folder">
             </div>
-
-            <br><br>
-            <input class = "catalogue_toolbox_text_input" type = "text" name = "new_model_name" id = "new_model_name"
-            placeholder = "New model name..." required>
+            <div id = "model_name_input_container">
+                <b class = "guideline">New model name:</b><br><br>
+                <input class = "catalogue_toolbox_text_input" type = "text" name = "new_model_name" id = "new_model_name"
+                placeholder = "New model name..." value = "" required>
+            </div>
         </div>
 
         <div align = right class = "right_column_align_right">
             <button class = "catalogue_button" name = "catalogue_cancel_adding" id = "catalogue_cancel_adding_button"
-            onclick = "onCancelNewModelSubmitButtonClick();">
+            onclick = "
+                onCancelNewModelSubmitButtonClick();
+            ">
                 <b>Cancel</b>
             </button>
             &nbsp;
-            <button class = "catalogue_button" name = "catalogue_submit_model" id = "catalogue_submit_model_button">
+            <button class = "catalogue_button" name = "catalogue_submit_model" id = "catalogue_submit_model_button" onclick = "onAddModelButtonClick();">
                 <b>Add</b>
             </button>
+            <input type = "hidden" name = "new_model_path" id = "new_model_path" value = "~">
         </div>
 
     </div>
@@ -54,7 +55,7 @@
 
         <div align = "left" class = "left_column_align_left">
             <input class = "catalogue_toolbox_text_input" name = "catalogue_search" id = "catalogue_searchsearch" type = text
-            placeholder = "Search..." autofocus>
+            placeholder = "Search by name / path..." autofocus oninput = "onSearchInputChange(this.value);">
         </div>
 
         <div align = "right" class = "right_column_align_right">
@@ -68,18 +69,31 @@
 
 </div>
 
+<script type="text/javascript">
+    var models_array = [];
+</script>
+
 <div class = "catalogue_content">
     <ol class = "catalogue_models_list">
         <table width = "100%">
         {% for item in models_list %}
-        <tr>
+        <tr id = "model{{ item['id'] }}">
             <td class = "catalogue_models_list_item" width = "60%">
                 <li>
-                    <a class = "catalogue_model_list_item_name"  id = "model{{ item['id'] }}" 
+                    <a class = "catalogue_model_list_item_name" 
                     href = "{{ url_for('dashboard', model_id = item['id']) }}">
                         {{ item["name"] }}
                     </a>
                 </li>
+                <script type="text/javascript">
+                    var model_item = 
+                    {
+                        "id": "{{ item['id'] }}", 
+                        "name": "{{ item['name'] }}".toLowerCase(), 
+                        "path": "{{ item['path'] }}".toLowerCase()
+                    };
+                    models_array.push(model_item);
+                </script>
             </td>
             <td class = "catalogue_model_list_item_version" align = "right">
                 v. {{ item["version"] }} 
@@ -88,7 +102,7 @@
                 {{ item["timestamp"] }}
             </td>
         </tr>
-        <tr>
+        <tr id = "model_path{{ item['id'] }}">
             <td colspan="3" class = "catalogue_model_list_item_path">
                 {{item["path"]}}
             </td>
@@ -97,5 +111,9 @@
     </table>
     </ol>
 </div>
+
+<script>
+    initOnLoad();
+</script>
 
 {% endblock %}

@@ -3,7 +3,7 @@ from os.path import abspath as absolutePath, isdir as isDir, expanduser as expan
 from rhythmic.general import faultReturnHandler;
 
 @faultReturnHandler
-def scanFolder(folder_to_scan = "~"):
+def scanFolder(folder_to_scan = "~", show_started_with_dot = False):
     """
      scanFolder(folder_to_scan)
 
@@ -33,8 +33,14 @@ def scanFolder(folder_to_scan = "~"):
 
     the_folder_scan = scanDir(absolute_path);
 
-    for item in the_folder_scan:
-        if access(item.path, W_OK):
+    for item in sorted(the_folder_scan, key = lambda the_item: the_item.name):
+
+        if item.name.startswith("."):
+            inclusion = show_started_with_dot;
+        else:
+            inclusion = True;
+
+        if ( inclusion and access(item.path, W_OK) ):
             folder_contents.append(
                 {
                     "absolute_path": item.path,
