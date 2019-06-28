@@ -17,7 +17,7 @@ function asyncGetRequest(request_url, dom_element_id, to_innerHTML = true)
         }
     }
 
-    async_request.open("GET", request_url + "?anti_cache = " + Math.random(), true);
+    async_request.open("GET", request_url + "?anti_cache=" + Math.random(), true);
     async_request.send();
 }
 
@@ -39,6 +39,6 @@ function asyncPostRequest(request_url, data, dom_element_id, to_innerHTML = true
         }
     }
 
-    async_request.open("POST", request_url + "?anti_cache = " + Math.random(), true);
+    async_request.open("POST", request_url + "?anti_cache=" + Math.random(), true);
     async_request.send(data);
 }

@@ -20,7 +20,17 @@ def checkPost(entry_point):
 
         else:
 
-            return helpers.random_string();
+            random_string_html = \
+            """
+            <div align = "center" style = "padding: 32px;">
+            <h1>
+            {}
+            </h1>
+            <a href = "/">main page</a>
+            </div>
+            """.format( helpers.randomString() );
+
+            return random_string_html;
 
     return wrapper;
 
@@ -112,9 +122,9 @@ def addModel():
     new_model_name = data["model_name"];
     new_model_path = data["model_path"].replace(" ", "\\ ");
 
-    tmp = "[{}][{}]".format(new_model_name, new_model_path);#"name: {} \n folder: {}".format(model_name, the_folder);
+    execution_status = helpers.addNewModel(new_model_name, new_model_path);
 
-    return tmp;
+    return execution_status;
 
 #==========================================================================
 #==========================================================================

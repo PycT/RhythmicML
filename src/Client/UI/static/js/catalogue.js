@@ -29,9 +29,9 @@ function onAddInvocationButtonClick()
 
 function onPickModelFolderButtonClick()
 {
-    toggleDisplay('pick_the_folder_button');
-    toggleDisplay('the_folder_items_list');
-    toggleDisplay('model_name_input_container');
+    setInvisible('pick_the_folder_button');
+    setInvisible('the_folder_items_list');
+    setVisible('model_name_input_container');
     return true;
 }
 

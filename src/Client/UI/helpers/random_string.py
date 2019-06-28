@@ -12,18 +12,8 @@ strings = \
 "Only one thing is ever guaranteed, that is that you will definitely not achieve the goal if you don't take the shot."
 ];
 
-def random_string():
-    
+def randomString():
+
     random_index = randrange(len(strings));
 
-    random_string = \
-    """
-    <div align = "center" style = "padding: 32px;">
-    <h1>
-    {}
-    </h1>
-    <a href = "/">main page</a>
-    </div>
-    """.format( strings[random_index] );
-
-    return random_string;
+    return strings[random_index];

@@ -1,6 +1,8 @@
 from rhythmic.db import SQLiteDB;
+from datetime import datetime;
+from UI import configuration;
 
-db_filename = ".rhml_db.sqlite3";
+db_file_name = configuration["db_file_name"];
 
 general_table = \
 """
@@ -49,19 +51,20 @@ CREATE TABLE IF NOT EXISTS files_table
     id integer PRIMARY KEY,
     model_version_id integer NOT NULL,
     file_path text NOT NULL,
-    file_new_state text,
-    file_checksum text,
+    file_commit_state text NOT NULL DEFAULT 'new',
+    last_modified_time text NOT NULL,
+    is_deployed integer NOT NULL DEFAULT 1,
     FOREIGN KEY (model_version_id) REFERENCES versions_table (id)
     ON DELETE CASCADE
     ON UPDATE CASCADE 
 );
 """;
 
-# file_new_state options: new, same, changed, deleted
+# file_commit_state a state of file by commit moment; soptions: new, same, changed, deleted
 
 def main():
 
-    with SQLiteDB(db_filename) as db:
+    with SQLiteDB(db_file_name) as db:
 
         db.runScript(
             general_table +
@@ -70,7 +73,7 @@ def main():
             model_files_table
             );
 
-    print("Database is created, tables are created. DB file: \"{}\"".format(db_filename));
+    print(   "Database is created, tables are created. DB file: \"{}\", {}".format(  configuration["db_file_name"], str( datetime.now() )  )   );
 
 if __name__ == "__main__":
     main();

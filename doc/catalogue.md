@@ -42,9 +42,14 @@ Enumerated list of tracked model.
 ###Adding a model to the tracking list
 To add a model to the tracker, User presses **the "Add" button** on the dashboard. A dialogue appears to select a folder, containing a model with all the accompanying files to track. The model inititally named after the containing folder. If there is already a model with such a name in hte base, a number **1** is added to the name, then checked again. This repeats with increasing the number until the unique name is figured. 
 
+0. The path is checked to be already present in the database. If true, the according status returned, workflow stops.
 1. The record containing model name, model path and the timestamp is added to `models_table`.
 2. The record of version 0 is added to `versions_table`.
-3. The model folder is scanned recursiveliy, adding all the files found to the `files_table` (absolute paths).
+3. The model folder is scanned recursiveliy, adding all the files found to the `files_table` (absolute paths). 
+4. The `.rhml_storage` folder created within specified model directory.
+5. The initial, 0-version archive is created.
+
+###Managing the model files tracking and versions: see the `dashboard.md`
 
 ###Deleting a model from tracking list
 When User wishes to delete a model, he is prompted to input model's name to confirm deleteion. The deletion is irreversible.
