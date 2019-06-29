@@ -49,6 +49,10 @@ def index():
     print(helpers);
     models_list = helpers.getModelsList();
     
+    print();
+    print(models_list);
+    print();
+
     return renderTemplate("index.html", title = "Catalogue", ui_caption = "Catalogue", models_list = models_list);
 
 #==========================================================================

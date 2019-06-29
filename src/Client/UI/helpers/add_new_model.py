@@ -104,4 +104,4 @@ def addNewModel(model_name = None, model_dir = None):
 
     #================= Finished building ver0 .zip in storage =====================================
 
-    return "Successfully added model [ {} ], path: [ {} ], ver. 0".format(model_name, model_path);
+    return "Successfully added model [ {} ], path: [ {} ], ver. 0; Please refresh the page.".format(model_name, model_path);

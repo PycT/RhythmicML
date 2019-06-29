@@ -17,6 +17,11 @@ function asyncGetRequest(request_url, dom_element_id, to_innerHTML = true)
         }
     }
 
+    if (to_innerHTML)
+    {
+        document.getElementById(dom_element_id).innerHTML = "<span class = 'wait_blinker'>Please wait...</span>";
+    }
+
     async_request.open("GET", request_url + "?anti_cache=" + Math.random(), true);
     async_request.send();
 }
@@ -37,6 +42,11 @@ function asyncPostRequest(request_url, data, dom_element_id, to_innerHTML = true
                 document.getElementById(dom_element_id).value = this.responseText;
             }
         }
+    }
+
+    if (to_innerHTML)
+    {
+        document.getElementById(dom_element_id).innerHTML = "<span class = 'blinker'>Please wait...</span>";
     }
 
     async_request.open("POST", request_url + "?anti_cache=" + Math.random(), true);

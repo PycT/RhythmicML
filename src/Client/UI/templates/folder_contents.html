@@ -2,7 +2,7 @@
 
     {% if folder_contents %}
 
-        <div class = "folder_contents_box_current_folder" align=center>
+        <div class = "folder_contents_box_current_folder" align = "left">
             <button id = "home_folder_button" onclick = "
                 asyncPostRequest('/helpers/folders', '~', 'new_model_folder');
             ">
@@ -15,15 +15,6 @@
                 {{ the_folder }}
             {%endif%}
 
-            <button class = "catalogue_button" id = "pick_the_folder_button" onclick = 
-            "
-                onPickModelFolderButtonClick();
-                asyncPostRequest('/helpers/folder_name_to_model_name', '{{the_folder}}', 'new_model_name', false);
-                document.folder_picked = true;
-            ">
-                 Pick
-            </button>
-            
         </div>
 
         <ul id = "the_folder_items_list">
@@ -35,8 +26,10 @@
                 <li>
                     <a class = "local_folder" href = "#" onclick=
                     "
+                        var local_folder = '{{ item.absolute_path|escape() }}';
+                        pickFolder(local_folder);
                         asyncPostRequest('/helpers/folders', '{{ item.absolute_path|escape() }}', 'new_model_folder');
-                        document.getElementById('new_model_path').value = '{{ item.absolute_path|escape() }}';
+                        document.getElementById('new_model_path').value = local_folder;
 
                     ">
                         <b>{{ item.base_name}}</b>

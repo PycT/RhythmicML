@@ -47,20 +47,20 @@
 {
     font-size: 14pt;
     font-weight: bolder;
-    color: blue;
+    color: green;
 }
 
 .catalogue_model_list_item_version
 {
     font-size: 12pt;
-    color: #000000;
+    color: #777777;
     padding-right: 16px;
 }
 
 .catalogue_model_list_item_timestamp
 {
-    font-size: 12pt;
-    color: #888888;
+    font-size: 10pt;
+    color: #000000;
 }
 
 .catalogue_model_list_item_path

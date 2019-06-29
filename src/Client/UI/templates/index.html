@@ -19,19 +19,22 @@
 {{ super() }}
 
 <div align=center>
-
     <div class = "catalogue_toolbox" id = "catalogue_toolbox_add_model" style = "display: none;">
 
         <div align = "left" class = "left_column_align_left">
-            <b class = "guideline">Pick a folder containing your model:</b><br>
-            <br><br>
-
-            <div id = "new_model_folder">
-            </div>
             <div id = "model_name_input_container">
                 <b class = "guideline">New model name:</b><br><br>
                 <input class = "catalogue_toolbox_text_input" type = "text" name = "new_model_name" id = "new_model_name"
                 placeholder = "New model name..." value = "" required>
+            </div>
+            <input type = checkbox name = "name_the_model_by_folder" id = "name_the_model_by_folder" checked>
+            <b>
+                Name the model after containing folder
+            </b>
+            <hr>
+            <b class = "guideline">Pick a folder containing your model:</b><br>
+
+            <div id = "new_model_folder">
             </div>
         </div>
 

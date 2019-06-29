@@ -1,11 +1,12 @@
 "use strict";
 
 //toggleDisplay(), setVisible(), setInvisible() are defied in manipulations.js
+//asyncPostRequest() is defined in async_requests.js
 
 function initOnLoad()
 {
     document.folder_picked = false;
-    document.getElementById('model_name_input_container').style.display = 'none';
+    //document.getElementById('model_name_input_container').style.display = 'none';
     document.getElementById('new_model_name').value = "";
     document.getElementById('new_model_path').value = "~";
     return true;
@@ -27,11 +28,22 @@ function onAddInvocationButtonClick()
     return true;
 }
 
-function onPickModelFolderButtonClick()
+// function onPickModelFolderButtonClick()
+// {
+//     setInvisible('pick_the_folder_button');
+//     setInvisible('the_folder_items_list');
+//     setVisible('model_name_input_container');
+//     return true;
+// }
+
+function pickFolder(local_folder)
 {
-    setInvisible('pick_the_folder_button');
-    setInvisible('the_folder_items_list');
-    setVisible('model_name_input_container');
+    if (document.getElementById("name_the_model_by_folder").checked)
+    {
+        asyncPostRequest('/helpers/folder_name_to_model_name', local_folder, 'new_model_name', false);
+    }
+    document.folder_picked = true;
+
     return true;
 }
 
@@ -40,7 +52,7 @@ function onAddModelButtonClick()
     
     if (!document.folder_picked)
     {
-        alert("Pick a folder, containing your model! \n ([Browse] -> [Pick])");
+        alert("Pick a folder, containing your model!");
         return false;
     }
 

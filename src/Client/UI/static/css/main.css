@@ -127,7 +127,6 @@ button
 .folder_contents_box
 {
     padding: 16px;
-    border-top: solid 3px #dadada;
 }
 
 .folder_contents_box_current_folder
@@ -142,4 +141,21 @@ button
 .local_folder
 {
     font-size: 14pt;
+}
+
+.wait_blinker
+{
+  animation: blinker 2s linear infinite;
+  font-size: 16pt;
+  color: red;
+  font-weight: bolder;
+}
+
+@keyframes blinker 
+{
+  50%
+  {
+    opacity: 0;
+    color: green;
+  }
 }

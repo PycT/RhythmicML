@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS models_table
     id integer PRIMARY KEY,
     model_name text NOT NULL UNIQUE,
     model_path text NOT NULL UNIQUE,
+    last_version integer NOT NULL DEFAULT 0,
     last_version_timestamp text NOT NULL,
     deploy_destination text,
     model_description text,
