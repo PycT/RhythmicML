@@ -45,13 +45,10 @@ def index():
     """
     On the root page models catalogue is displayed and managed.
     """
-    print(dir(helpers));
-    print(helpers);
     models_list = helpers.getModelsList();
     
-    print();
+    print(__name__);
     print(models_list);
-    print();
 
     return renderTemplate("index.html", title = "Catalogue", ui_caption = "Catalogue", models_list = models_list);
 

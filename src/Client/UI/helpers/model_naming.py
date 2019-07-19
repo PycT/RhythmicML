@@ -20,7 +20,7 @@ def uniqueName(the_name):
     probe = [None]
     i = 0;
     
-    with SQLiteDB(configuration["db_file_name"]) as db:
+    with SQLiteDB(configuration.db_file_name) as db:
         while len(probe) !=0:
             probe = db.execute("SELECT model_name FROM models_table WHERE model_name = '{}'".format(unique_name));
             if len(probe) !=0:

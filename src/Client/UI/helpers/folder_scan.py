@@ -69,7 +69,7 @@ def scanModelFolder(folder, descend_level = 3):
         return False;
 
     files_list = [];
-    current_folder_contents = scanFolder(folder, show_started_with_dot = True, look_level_above = False, exclusions = [configuration["storage_folder_name"]]);
+    current_folder_contents = scanFolder(folder, show_started_with_dot = True, look_level_above = False, exclusions = [configuration.storage_folder_name]);
 
     for item in current_folder_contents:
         if item["is_dir"]:

@@ -1,1 +1,1 @@
-from .helpers.rhml_configuration import configuration;
+from .helpers import configuration;

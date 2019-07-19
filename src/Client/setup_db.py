@@ -1,8 +1,16 @@
+"""
+List of modules, affected by tables structure defined here:
+
+helpers.add_new_model
+helpers.db_record_to_dictionary
+
+"""
+
 from rhythmic.db import SQLiteDB;
 from datetime import datetime;
 from UI import configuration;
 
-db_file_name = configuration["db_file_name"];
+db_file_name = configuration.db_file_name;
 
 general_table = \
 """
@@ -22,7 +30,7 @@ CREATE TABLE IF NOT EXISTS models_table
     model_name text NOT NULL UNIQUE,
     model_path text NOT NULL UNIQUE,
     last_version integer NOT NULL DEFAULT 0,
-    last_version_timestamp text NOT NULL,
+    active_version integer NOT NULL DEFAULT 0,
     deploy_destination text,
     model_description text,
     initial_metada text
@@ -74,7 +82,7 @@ def main():
             model_files_table
             );
 
-    print(   "Database is created, tables are created. DB file: \"{}\", {}".format(  configuration["db_file_name"], str( datetime.now() )  )   );
+    print(   "Database is created, tables are created. DB file: \"{}\", {}".format(  configuration.db_file_name, str( datetime.now() )  )   );
 
 if __name__ == "__main__":
     main();

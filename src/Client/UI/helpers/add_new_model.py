@@ -13,7 +13,7 @@ def addNewModel(model_name = None, model_dir = None):
     addNewModel(model_name = None, model_dir = None, db_file_name = ".rhml_db.sqlite3")
 
     0. The path is checked to be already present in the database. If true, the according status returned, workflow stops.
-    1. The record containing model name, model path and the timestamp is added to `models_table`.
+    1. The record containing model name, model path is added to `models_table`.
     2. The record of version 0 is added to `versions_table`.
     3. The model folder is scanned recursiveliy, adding all the files found to the `files_table` (absolute paths). 
     4. The `.rhml_storage` folder created within specified model directory.
@@ -32,7 +32,7 @@ def addNewModel(model_name = None, model_dir = None):
 
     #=================starting DB work =====================================
 
-    with SQLiteDB(configuration["db_file_name"]) as db:
+    with SQLiteDB(configuration.db_file_name) as db:
 
         probe = db.execute("SELECT model_name FROM models_table WHERE model_path = '{}'".format(model_path));
 
@@ -45,13 +45,12 @@ def addNewModel(model_name = None, model_dir = None):
             (
                 model_name, 
                 model_path, 
-                last_version_timestamp
             ) 
             VALUES 
             (
-                '{}', '{}', '{}'
+                '{}', '{}'
             );
-            """.format(model_name, model_path, timestamp));
+            """.format(model_name, model_path));
 
         new_model_version_id = db.execute(
             """
@@ -91,7 +90,7 @@ def addNewModel(model_name = None, model_dir = None):
 
     #================= finished DB work =====================================
 
-    model_storage_path = model_path + "/{}".format(configuration["storage_folder_name"]);
+    model_storage_path = model_path + "/{}".format(configuration.storage_folder_name);
 
     if ( (not exists(model_storage_path)) or (not isDir(model_storage_path)) ):
         makeDir(model_storage_path);
