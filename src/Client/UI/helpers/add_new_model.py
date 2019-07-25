@@ -45,12 +45,13 @@ def addNewModel(model_name = None, model_dir = None):
             (
                 model_name, 
                 model_path, 
+                last_version_timestamp
             ) 
             VALUES 
             (
-                '{}', '{}'
+                '{}', '{}', '{}'
             );
-            """.format(model_name, model_path));
+            """.format(model_name, model_path, timestamp));
 
         new_model_version_id = db.execute(
             """
@@ -79,14 +80,15 @@ def addNewModel(model_name = None, model_dir = None):
         """;
         new_model_files = scanModelFolder(model_path);
 
-        files_record_values = "";
+        if len(new_model_files) > 0:
+            files_record_values = "";
 
-        for item in new_model_files:
-            files_record_values += "('{}', '{}', '{}'), \n".format(new_model_version_id, item["file_path"], item["last_modified_time"]);
+            for item in new_model_files:
+                files_record_values += "('{}', '{}', '{}'), \n".format(new_model_version_id, item["file_path"], item["last_modified_time"]);
 
-        files_record_request += files_record_values[:len(files_record_values) -3] + ";";
+            files_record_request += files_record_values[:len(files_record_values) -3] + ";";
 
-        db.execute(files_record_request);
+            db.execute(files_record_request);
 
     #================= finished DB work =====================================
 
@@ -103,4 +105,4 @@ def addNewModel(model_name = None, model_dir = None):
 
     #================= Finished building ver0 .zip in storage =====================================
 
-    return "Successfully added model [ {} ], path: [ {} ], ver. 0; Please refresh the page.".format(model_name, model_path);
+    return "Success";

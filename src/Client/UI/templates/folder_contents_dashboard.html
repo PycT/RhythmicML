@@ -1,0 +1,57 @@
+<div class = "folder_contents_box">
+
+    {% if folder_contents %}
+
+        <div class = "folder_contents_box_current_folder" align = "left">
+            {{ the_folder }}
+        </div>
+        <br>
+        <table id = "the_folder_items_list" width = "100%">
+            <tr>
+                <td width = "60%">
+                    <b>Name</b>
+                </td>
+                <td width = "20%" align = "center">
+                    <b>Is Tracked</b>
+                </td>
+                <td width = "20%" align = "center">
+                    <b>Deployable</b>
+                </td>
+            </tr>
+
+        {% for item in folder_contents %}
+
+                <tr class = "folder_content_box_item">
+                    {% if item.is_dir %}
+                        <td colspan = "3">
+
+                                <a class = "local_folder" href = "#" onclick=
+                                "
+                                    scanFolder('{{ item.absolute_path|escape() }}', model_path); //model_path is defined in parental dashboard.html
+                                ">
+                                    <b>{{ item.base_name}}</b>
+                                </a>
+
+                        </td>
+                    {% else %}
+                        <td width = "60%">
+                                {{ item.base_name }}
+                        </td>
+                        <td width = "20%" align = "center">
+                            <input type = "checkbox">
+                        </td>
+                        <td width = "20%" align = "center">
+                            <input type = "checkbox">
+                        </td>
+                    {% endif %}
+                </tr>
+
+        {% endfor %}
+
+        </table>
+    {% else %}
+        Something went wrong...
+    {% endif %}
+
+
+</div>

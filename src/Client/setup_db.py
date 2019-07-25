@@ -29,13 +29,15 @@ CREATE TABLE IF NOT EXISTS models_table
     id integer PRIMARY KEY,
     model_name text NOT NULL UNIQUE,
     model_path text NOT NULL UNIQUE,
+    last_version_timestamp text NOT NULL,
     last_version integer NOT NULL DEFAULT 0,
     active_version integer NOT NULL DEFAULT 0,
     deploy_destination text,
-    model_description text,
-    initial_metada text
+    deploy_status integer DEFAULT 0
 );
 """;
+
+#deploy_status: 1 if deployed active version.
 
 model_versions_table = \
 """
@@ -44,7 +46,7 @@ CREATE TABLE IF NOT EXISTS versions_table
     id integer PRIMARY KEY,
     model_id integer NOT NULL,
     version integer NOT NULL DEFAULT 0,
-    metadata text,
+    metadata text DEFAULT 'Description: \nDataset: \nTraining Epochs: \nLearning Rate: \nBatch Size: ',
     commit_comment text NOT NULL,
     created_timestamp text NOT NULL,
     FOREIGN KEY (model_id) REFERENCES models_table (id)

@@ -1,7 +1,7 @@
 "use strict";
 
 //toggleDisplay(), setVisible(), setInvisible() are defied in manipulations.js
-//asyncPostRequest() is defined in async_requests.js
+//asyncPostRequest(), asyncPostRequestWithRefresh() are defined in async_requests.js
 
 function initOnLoad()
 {
@@ -24,7 +24,9 @@ function onAddInvocationButtonClick()
 {
     toggleDisplay('catalogue_toolbox_regular');
     toggleDisplay('catalogue_toolbox_add_model');
-    asyncPostRequest('/helpers/folders', '~', 'new_model_folder');
+    var data = {"the_folder": "~"};
+    var data_json = JSON.stringify(data);
+    asyncPostRequest('/helpers/folders/catalogue', data_json, 'new_model_folder');
     return true;
 }
 
@@ -68,7 +70,7 @@ function onAddModelButtonClick()
     var data = {model_name: new_model_name, model_path: new_model_path};
     var data_json = JSON.stringify(data);
 
-    asyncPostRequest("/helpers/add_new_model", data_json, "status_bar");
+    asyncPostRequestWithRefresh("/helpers/add_new_model", data_json, "status_bar");
 
     toggleDisplay('catalogue_toolbox_regular');
     toggleDisplay('catalogue_toolbox_add_model');

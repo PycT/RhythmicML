@@ -14,6 +14,9 @@ Client includes UI and is purposed to:
 + Perform deployment and re-deployment of the model to configured destination
 + Monitor the state of the model in production (optionally)
 
+All the model artifact are stored by Client side in an archive. Archive version contains the whole bunch of files, not changed only.
+That is for opportuniti to rollback to any of version and create a new version upon historic one without hustling of what was ever deleted or added and needs to be got rid of.
+
 **Deployment** eventually is sending artifacts via *http[s]*, so the reseiving side might run any ML serving system, maintained to receive.
 
 ##Server

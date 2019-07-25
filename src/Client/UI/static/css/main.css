@@ -22,6 +22,18 @@ button
     font-size: 18pt;
 }
 
+button#action
+{
+    background-color: #77ff77;
+    color: #007700;
+}
+
+button#cancel
+{
+    background-color: #ff7777;
+    color: #770000;
+}
+
 .cross_logo
 {
     text-align: center;
@@ -44,10 +56,11 @@ button
     font-size: 8pt;
     color: #aaaaff;
     padding-left: 32px;
-    position: relative;
+    position: absolute;
     bottom: 16px;
     left: 16px;
     margin-top: 32px;
+    overflow-x: auto;
 }
 
 .main_container
@@ -127,15 +140,21 @@ button
 .folder_contents_box
 {
     padding: 16px;
+    width: 80%;
 }
 
 .folder_contents_box_current_folder
 {
     font-size: 16pt;
     font-weight: bolder;
-    color: 008800;
+    color: 888888;
     padding: 8px;
-    border: dashed 1px #dadada;
+    border-bottom: dashed 1px #dadada;
+}
+
+.folder_content_box_item:hover
+{
+    background-color: #dadada;
 }
 
 .local_folder

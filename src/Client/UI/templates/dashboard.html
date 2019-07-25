@@ -1,13 +1,102 @@
 {% extends "layout.html" %}
+{% block head %}
+{{ super() }}
+
+    <!-- anti_cache is defined in layout.html -->
+
+    <link rel = "stylesheet" type = "text/css" href = "{{ url_for('static', filename = 'css/dashboard.css') + anti_cache }}">
+
+    <script  type = "text/javascript" src = "{{ url_for('static', filename = 'js/async_requests.js') + anti_cache }}">
+    </script>
+
+    <script  type = "text/javascript" src = "{{ url_for('static', filename = 'js/manipulations.js') + anti_cache }}">
+    </script>
+
+    <script  type = "text/javascript" src = "{{ url_for('static', filename = 'js/dashboard.js') + anti_cache }}">
+    </script>
+
+ {% endblock %}
 
 {% block main_content %}
 {{ super() }}
 
-<h1>
-    {% if model_id %}
-    {{ model_id }}
+{% if model_static_data %}
+
+    {% if model_static_data["properties"] %}
+    
+    <script type = "text/javascript">
+            var model_path = "{{model_static_data['properties']['path']|escape() }}";
+    </script>
+
+    <h1>
+        {{ model_static_data["properties"]["name"] }}
+    </h1>
+    <div class = "dashboard_model_path">
+        {{ model_static_data["properties"]["path"] }};&nbsp;&nbsp;&nbsp; 
+        Last Version v.{{ model_static_data["properties"]["last_version"] }}. / 
+        Active Version v. {{ model_static_data["properties"]["active_version"] }}
+    </div>
+    <div class = "dashboard_model_properties">
+        <span class = "ui_caption">Deploy destination: </span>
+        <br clear = all>
+        <input class = "dashboard_deploy_destination_input" type = text size = 80 value = "" placeholder=" URL..."
+        name = deploy_destination_url>
+        <br>
+        <br clear = all>
+
     {% else %}
-    No Model Specified
+        <h1>
+            Something went wrong: no model properties retrieved.
+        </h1>
     {% endif %}
-</h1>
+    </div>
+    <hr>
+    <div class = "dashboard_versions_list">
+        {% if model_static_data["model_versions"] %}
+            <ul class = "dashboard_versions_ol">
+                {% for model_version in model_static_data["model_versions"] %}
+                <li class = "dashboard_model_versions_item">
+                    <a class = "dashboard_model_version_title" href = "#" 
+                    onclick = "toggleDisplay('model_version_static_data{{ model_version.version_properties.id }}', 'block');">
+                        Version {{ model_version["version_properties"]["version"] }}., created {{ model_version["version_properties"]["created_timestamp"] }}
+                    </a>
+                    <div id = "model_version_static_data{{ model_version['version_properties']['id'] }}"
+                    style = "display: 
+                    {%- if model_static_data['properties']['active_version'] == model_version['version_properties']['version'] %}
+                    block;
+                    {% else %}
+                    none;
+                    {% endif -%}
+                    ">
+                        <br clear = "all">
+                        <span class = "ui_caption">Metadata:</span>
+                        <div class = "dashboard_metadata_and_actions">
+                            <textarea class = "dashboard_model_version_metadata"
+                            cols = "80" rows = "8">{{ model_version["version_properties"]["metadata"] }}</textarea>
+                            &nbsp;
+                            <button>Update v. 0 Metadata</button>
+                            <button id = "action">Save All as v. 1</button>
+                            <button id = "cancel" onclick = "window.location.reload(true);">Discard Unsaved Changes</button>
+                        </div>
+                        
+                        <div id = "model_folder" class = "dashboard_toolbox" width = "100%"></div>
+
+                    </div> <!-- Static data ends here -->
+
+                </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+{% else %}
+    <h1>
+        No Model Specified
+    </h1>
+{% endif %}
+
+<script type="text/javascript">
+    scanFolder(model_path, model_path); //model_path defined in the beginning of the Jinja2 block
+</script>
+
 {% endblock %}

@@ -31,22 +31,23 @@
         {% if models_list %}
             {% if models_list[0] %}
         <div class = "navigation_menu_item" align="center">
-           <a href = "{{url_for('dashboard', model_id = models_list[0]['id'])}}">{{models_list[0]["name"]}}</a>
+           <a href = "{{url_for('dashboard', model_id = models_list[0]['id'])}}" title = "{{models_list[0]['name']}}">{{models_list[0]["name"]}}</a>
         </div>
             {% endif %}
             {% if models_list[1] %}
         <div class = "navigation_menu_item" align="center">
-           <a href = "{{url_for('dashboard', model_id = models_list[1]['id'])}}">{{models_list[1]["name"]}}</a>
+           <a href = "{{url_for('dashboard', model_id = models_list[1]['id'])}}" title = "{{models_list[1]['name']}}">{{models_list[1]["name"]}}</a>
         </div>
             {% endif %}
             {% if models_list[2] %}
         <div class = "navigation_menu_item" align="center">
-           <a href = "{{url_for('dashboard', model_id = models_list[2]['id'])}}">{{models_list[2]["name"]}}</a>
+           <a href = "{{url_for('dashboard', model_id = models_list[2]['id'])}}" title = "{{models_list[2]['name']}}">{{models_list[2]["name"]}}</a>
         </div>
             {% endif %}
         {% endif %}
 
         {% endblock %}
+        <div class = "status_bar" id = "status_bar" align = "left"></div>
     </div>
     
     <div class = "main_content">
@@ -60,7 +61,6 @@
 </div>
 
 <br clear = "all">
-<div class = "status_bar" id = "status_bar" align = "left"></div>
 <div class = "cross_footer" align = "right">
 Copyright 2019 RhythmicML. Apache2 Licence. https://github.com/PycT/RhythmicML &nbsp;
 </div>

@@ -4,7 +4,9 @@
 
         <div class = "folder_contents_box_current_folder" align = "left">
             <button id = "home_folder_button" onclick = "
-                asyncPostRequest('/helpers/folders', '~', 'new_model_folder');
+                var data = {'the_folder':'~'};
+                var data_json = JSON.stringify(data);
+                asyncPostRequest('/helpers/folders/catalogue', data_json, 'new_model_folder');
             ">
                 &#x1F3E0;
             </button>
@@ -28,7 +30,9 @@
                     "
                         var local_folder = '{{ item.absolute_path|escape() }}';
                         pickFolder(local_folder);
-                        asyncPostRequest('/helpers/folders', '{{ item.absolute_path|escape() }}', 'new_model_folder');
+                        var data = {'the_folder':'{{ item.absolute_path|escape() }}'};
+                        var data_json = JSON.stringify(data);
+                        asyncPostRequest('/helpers/folders/catalogue', data_json, 'new_model_folder');
                         document.getElementById('new_model_path').value = local_folder;
 
                     ">

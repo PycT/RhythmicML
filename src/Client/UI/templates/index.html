@@ -3,6 +3,8 @@
 {% block head %}
 {{ super() }}
 
+    <!-- anti_cache is defined in layout.html -->
+
     <link rel = "stylesheet" type = "text/css" href = "{{ url_for('static', filename = 'css/catalogue.css') + anti_cache }}">
 
     <script  type = "text/javascript" src = "{{ url_for('static', filename = 'js/async_requests.js') + anti_cache }}">
@@ -73,7 +75,7 @@
 </div>
 
 <script type="text/javascript">
-    var models_array = [];
+    var models_array = []; //this is to be used for searching through catalogue.
 </script>
 
 <div class = "catalogue_content">
@@ -99,7 +101,7 @@
                 </script>
             </td>
             <td class = "catalogue_model_list_item_version" align = "right">
-                v. {{ item["last_version"] }} 
+                Active v. {{ item["active_version"] }}  / Last v. {{ item["last_version"] }} 
             </td>
             <td class = "catalogue_model_list_item_timestamp">
                 {{ item["timestamp"] }}
@@ -115,7 +117,7 @@
     </ol>
 </div>
 
-<script>
+<script type="text/javascript">
     initOnLoad();
 </script>
 

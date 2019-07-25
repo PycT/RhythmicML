@@ -47,8 +47,8 @@ def index():
     """
     models_list = helpers.getModelsList();
     
-    print(__name__);
-    print(models_list);
+    print("{}/{}".format(__name__, "index"));
+    #print(models_list);
 
     return renderTemplate("index.html", title = "Catalogue", ui_caption = "Catalogue", models_list = models_list);
 
@@ -64,7 +64,12 @@ def dashboard(model_id = None):
     This is a particular model's dashboard, rendered with id.
     """
 
-    return renderTemplate("dashboard.html", title = "Model Dashboard", ui_caption = "Model Dashboard", model_id = model_id);
+    model_static_data = helpers.modelAllStaticData(model_id);
+
+    print("{}/{}".format(__name__, "dashboard"));
+    # print(model_static_data);
+
+    return renderTemplate("dashboard.html", title = "Model Dashboard", ui_caption = "Model Dashboard", model_static_data = model_static_data);
 #==========================================================================
 
 #==========================================================================
@@ -72,22 +77,42 @@ def dashboard(model_id = None):
 #==========================================================================
 
 @app.route("/helpers/folders", methods = ["POST", "GET"])
+@app.route("/helpers/folders/<template_modificator>", methods = ["POST", "GET"])
 @checkPost
-def helperFolders():
+def helperFolders(template_modificator = "catalogue"):
     """
-    /heplers/folders/
+    /heplers/folders/<template_modificator>
     receives local folder path in POST request;
     shows the folder contents, if accessible for the user.
+    template_modificator choses the template to render the content into.
     """
 
-    the_folder = request.data.decode();
+    folder_contents_templates = {
+        "catalogue": "folder_contents_catalogue.html",
+        "dashboard": "folder_contents_dashboard.html"
+    };
 
-    folder_contents = helpers.scanFolder(the_folder);
+    data_json = request.data.decode();
+    data = json.loads(data_json);
+
+    # print("{}, {}".format(__name__, "helperFolders"));
+    # print("==================");
+    # print(data);
+    # print("==================");
+
+    the_folder = data["the_folder"];
+
+    if "look_level_above" in data:
+        look_level_above = data["look_level_above"];
+    else:
+        look_level_above = True;
+
+    folder_contents = helpers.scanFolder(the_folder, look_level_above = look_level_above);
 
     if folder_contents.__class__ == str: #the decorator returns an error message, if folderScan() execution fails
         return folder_contents;
 
-    return renderTemplate("folder_contents.html", folder_contents = folder_contents, the_folder = the_folder);
+    return renderTemplate(folder_contents_templates[template_modificator], folder_contents = folder_contents, the_folder = the_folder);
 #==========================================================================
 
 #==========================================================================
@@ -138,6 +163,8 @@ def runUI(app, host = host, port = port):
     """
 
     app.run(debug = True, host = host, port = port);
+
+    return True;
 
 if __name__ == "__main__":
 
