@@ -22,6 +22,12 @@ button
     font-size: 18pt;
 }
 
+button:disabled
+{
+    background-color: #ffffff!important;
+    color: #dadada!important;
+}
+
 button#action
 {
     background-color: #77ff77;
@@ -32,6 +38,11 @@ button#cancel
 {
     background-color: #ff7777;
     color: #770000;
+}
+
+button#small
+{
+    font-size: 12pt;
 }
 
 .cross_logo

@@ -21,16 +21,17 @@
 
         <ul id = "the_folder_items_list">
 
-        {% for item in folder_contents %}
+        {% for item_path in folder_contents %}
+        {% set item = folder_contents[item_path] %}
 
             {% if item.is_dir %}
 
                 <li>
                     <a class = "local_folder" href = "#" onclick=
                     "
-                        var local_folder = '{{ item.absolute_path|escape() }}';
+                        var local_folder = '{{ local_folder|escape() }}';
                         pickFolder(local_folder);
-                        var data = {'the_folder':'{{ item.absolute_path|escape() }}'};
+                        var data = {'the_folder':'{{ item_path|escape() }}'};
                         var data_json = JSON.stringify(data);
                         asyncPostRequest('/helpers/folders/catalogue', data_json, 'new_model_folder');
                         document.getElementById('new_model_path').value = local_folder;

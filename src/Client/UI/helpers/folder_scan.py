@@ -23,19 +23,18 @@ def scanFolder(folder_to_scan = "~", show_started_with_dot = False, look_level_a
 
     absolute_path = absolutePath(the_folder);
 
-    folder_contents = [];
+    folder_contents = {};
 
     if look_level_above:
         level_above = absolute_path[0:absolute_path.rfind("/")];
 
         if ( (isDir(level_above)) and (access(level_above, W_OK)) ):
-            folder_contents.append(
+            folder_contents[level_above] = \
                 {
                     "absolute_path": level_above,
                     "base_name": "< .. >",
                     "is_dir": True
-                }
-            );
+                };
 
     the_folder_scan = scanDir(absolute_path);
 
@@ -51,14 +50,13 @@ def scanFolder(folder_to_scan = "~", show_started_with_dot = False, look_level_a
                 inclusion = False;
 
         if ( inclusion and access(item.path, W_OK) ):
-            folder_contents.append(
+            folder_contents[ item.path ] = \
                 {
                     "absolute_path": item.path,
                     "base_name": item.name,
                     "is_dir": item.is_dir(),
                     "last_modified_time": item.stat().st_mtime
-                }
-            );
+                };
 
     return folder_contents;
 

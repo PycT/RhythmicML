@@ -1,5 +1,6 @@
 function asyncGetRequest(request_url, dom_element_id, to_innerHTML = true)
 {
+    var the_element = document.getElementById(dom_element_id);
     var async_request = new XMLHttpRequest();
     
     async_request.onreadystatechange = function()
@@ -8,18 +9,18 @@ function asyncGetRequest(request_url, dom_element_id, to_innerHTML = true)
         {
             if (to_innerHTML)
             {
-                document.getElementById(dom_element_id).innerHTML = this.responseText;
+                the_element.innerHTML = this.responseText;
             }
             else 
             {
-                document.getElementById(dom_element_id).value = this.responseText;
+                the_element.value = this.responseText;
             }
         }
     }
 
     if (to_innerHTML)
     {
-        document.getElementById(dom_element_id).innerHTML = "<div class = 'wait_blinker'>Please wait...</div>";
+        the_element.innerHTML = "<div class = 'wait_blinker'>Please wait...</div>";
     }
 
     async_request.open("GET", request_url + "?anti_cache=" + Math.random(), true);
@@ -28,6 +29,7 @@ function asyncGetRequest(request_url, dom_element_id, to_innerHTML = true)
 
 function asyncPostRequest(request_url, data, dom_element_id, to_innerHTML = true)
 {
+    var the_element = document.getElementById(dom_element_id);
     var async_request = new XMLHttpRequest();
     async_request.onreadystatechange = function()
     {
@@ -35,18 +37,18 @@ function asyncPostRequest(request_url, data, dom_element_id, to_innerHTML = true
         {
             if (to_innerHTML)
             {
-                document.getElementById(dom_element_id).innerHTML = this.responseText;
+                the_element.innerHTML = this.responseText;
             }
             else 
             {
-                document.getElementById(dom_element_id).value = this.responseText;
+                the_element.value = this.responseText;
             }
         }
     }
 
     if (to_innerHTML)
     {
-        document.getElementById(dom_element_id).innerHTML = "<div class = 'wait_blinker'>Please wait...</div>";
+        the_element.innerHTML = "<div class = 'wait_blinker'>Please wait...</div>";
     }
 
     async_request.open("POST", request_url + "?anti_cache=" + Math.random(), true);
@@ -55,6 +57,7 @@ function asyncPostRequest(request_url, data, dom_element_id, to_innerHTML = true
 
 function asyncPostRequestWithRefresh(request_url, data, dom_element_id, refresh_ok = "Success")
 {
+    var the_element = document.getElementById(dom_element_id);
     var async_request = new XMLHttpRequest();
     async_request.onreadystatechange = function()
     {
@@ -66,14 +69,14 @@ function asyncPostRequestWithRefresh(request_url, data, dom_element_id, refresh_
             }
             else 
             {
-                document.getElementById(dom_element_id).value = this.responseText;
+                the_element.value = this.responseText;
             }
         }
     }
 
     if (dom_element_id)
     {
-        document.getElementById(dom_element_id).innerHTML = "<div class = 'wait_blinker'>Please wait...</div>";
+        the_element.innerHTML = "<div class = 'wait_blinker'>Please wait...</div>";
     }
 
     async_request.open("POST", request_url + "?anti_cache=" + Math.random(), true);

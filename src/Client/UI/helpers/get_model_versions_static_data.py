@@ -14,7 +14,7 @@ def modelAllStaticData(model_id):
     all_model_info = \
     {
         "properties": {},
-        "model_versions": []
+        "model_versions": {}
     };
 
     with SQLiteDB( configuration.db_file_name) as db:
@@ -45,7 +45,7 @@ def modelAllStaticData(model_id):
 
             version_properties = versionPropertiesDictionary(model_version);
 
-            version_files = [];
+            version_files = {};
 
             version_tracked_files = db.execute(
                 """
@@ -55,12 +55,16 @@ def modelAllStaticData(model_id):
 
             for version_tracked_file in version_tracked_files:
 
-                version_files.append( filePropertiesDictionary(version_tracked_file) );
+                version_tracked_file_data = filePropertiesDictionary(version_tracked_file);
 
-            all_model_info["model_versions"].append(
+                version_files_key = version_tracked_file_data["file_path"];
+                version_files[ version_files_key ] = version_tracked_file_data;
+
+            model_versions_key = version_properties["version"];
+            all_model_info["model_versions"][model_versions_key] = \
                 {
                     "version_properties": version_properties,
                     "version_files": version_files
-                } );
+                };
 
     return all_model_info;

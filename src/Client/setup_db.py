@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS models_table
     last_version_timestamp text NOT NULL,
     last_version integer NOT NULL DEFAULT 0,
     active_version integer NOT NULL DEFAULT 0,
-    deploy_destination text,
+    deploy_destination text DEFAULT "",
     deploy_status integer DEFAULT 0
 );
 """;

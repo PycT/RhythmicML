@@ -2,6 +2,9 @@
 
     {% if folder_contents %}
 
+        <input type="hidden" name= "dashboard_folder_contents" 
+        id = "dashboard_folder_contents" value = '{{ folder_contents|tojson() }}'>
+
         <div class = "folder_contents_box_current_folder" align = "left">
             {{ the_folder }}
         </div>
@@ -19,15 +22,16 @@
                 </td>
             </tr>
 
-        {% for item in folder_contents %}
+        {% for item_path in folder_contents %}
+        {% set item = folder_contents[item_path] %}
 
-                <tr class = "folder_content_box_item">
+                <tr class = "folder_content_box_item" id = "folder_item_{{ item_path|escape() }}">
                     {% if item.is_dir %}
                         <td colspan = "3">
 
                                 <a class = "local_folder" href = "#" onclick=
                                 "
-                                    scanFolder('{{ item.absolute_path|escape() }}', model_path); //model_path is defined in parental dashboard.html
+                                    scanFolder('{{ item_path|escape() }}', model_path); //model_path is defined in parental dashboard.html
                                 ">
                                     <b>{{ item.base_name}}</b>
                                 </a>
@@ -38,10 +42,14 @@
                                 {{ item.base_name }}
                         </td>
                         <td width = "20%" align = "center">
-                            <input type = "checkbox">
+                            <input type = "checkbox"
+                            id = "is_tracked_{{ item_path|escape() }}"
+                            >
                         </td>
                         <td width = "20%" align = "center">
-                            <input type = "checkbox">
+                            <input type = "checkbox"
+                            id = "is_deployed_{{ item_path|escape() }}"
+                            >
                         </td>
                     {% endif %}
                 </tr>

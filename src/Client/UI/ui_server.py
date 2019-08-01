@@ -4,8 +4,6 @@ import json;
 from . import helpers;
 
 app = Flask(__name__);
-host = "0.0.0.0";
-port = "5000";
 
 #==========================================================================
 #====================      DECORATORS     =========================================
@@ -84,7 +82,7 @@ def helperFolders(template_modificator = "catalogue"):
     /heplers/folders/<template_modificator>
     receives local folder path in POST request;
     shows the folder contents, if accessible for the user.
-    template_modificator choses the template to render the content into.
+    template_modificator chooses the template to render the content into.
     """
 
     folder_contents_templates = {
@@ -156,7 +154,7 @@ def addModel():
 #==========================================================================
 #==========================================================================
 
-def runUI(app, host = host, port = port):
+def runUI(app, host = helpers.configuration.host, port = helpers.configuration.port):
     """
     run_ui(app, host = host, port = port):  
     app is a Flask app

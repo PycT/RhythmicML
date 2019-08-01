@@ -37,10 +37,25 @@
         Active Version v. {{ model_static_data["properties"]["active_version"] }}
     </div>
     <div class = "dashboard_model_properties">
+
+        <input type="hidden"  id = "actual_deploy_destination" value = '{{model_static_data["properties"]["deploy_destination"]|escape()}}'>
+        <script type = "text/javascript">
+            window.actual_deploy_destination = popElement("actual_deploy_destination").value;
+        </script>
+
         <span class = "ui_caption">Deploy destination: </span>
         <br clear = all>
-        <input class = "dashboard_deploy_destination_input" type = text size = 80 value = "" placeholder=" URL..."
-        name = deploy_destination_url>
+        <input class = "dashboard_deploy_destination_input" type = text size = 80 value = "{{model_static_data.properties.deploy_destination}}" 
+        placeholder=" URL..."
+        name = "deploy_destination_url"
+        id = "deploy_destination_url"
+        onkeyup = "
+        if (elementIsDisabled('small') && inputValueHasChanged('deploy_destination_url', window.actual_deploy_destination))
+        {
+            enableElement('small');
+        }
+        ">
+        <button id = "small" disabled>save</button>
         <br>
         <br clear = all>
 
@@ -53,16 +68,31 @@
     <hr>
     <div class = "dashboard_versions_list">
         {% if model_static_data["model_versions"] %}
+        {% set active_version = model_static_data["properties"]["active_version"] %}
+            <input type="hidden" id = "current_model_metadata" 
+            value = '{{model_static_data["model_versions"][active_version]["version_properties"]["metadata"]|escape()}}'>
+            
+            <input type="hidden"  id = "active_model_version_files_data" 
+            value = '{{model_static_data["model_versions"][active_version]["version_files"]|tojson()}}'>
+            
+            <script type = "text/javascript">
+                var active_version_files_input = popElement("active_model_version_files_data").value;
+                window.active_version_files_data = JSON.parse(active_version_files_input);
+                window.active_version_files_data_tracker = JSON.parse(active_version_files_input);
+                window.actual_metadata = popElement("current_model_metadata").value;
+            </script>
+
             <ul class = "dashboard_versions_ol">
                 {% for model_version in model_static_data["model_versions"] %}
+                {% set the_model_version = model_static_data["model_versions"][model_version] %}
                 <li class = "dashboard_model_versions_item">
                     <a class = "dashboard_model_version_title" href = "#" 
-                    onclick = "toggleDisplay('model_version_static_data{{ model_version.version_properties.id }}', 'block');">
-                        Version {{ model_version["version_properties"]["version"] }}., created {{ model_version["version_properties"]["created_timestamp"] }}
+                    onclick = "toggleDisplay('model_version_static_data{{ the_model_version.version_properties.id }}', 'block');">
+                        Version {{ the_model_version["version_properties"]["version"] }}., created {{ the_model_version["version_properties"]["created_timestamp"] }}
                     </a>
-                    <div id = "model_version_static_data{{ model_version['version_properties']['id'] }}"
+                    <div id = "model_version_static_data{{ the_model_version['version_properties']['id'] }}"
                     style = "display: 
-                    {%- if model_static_data['properties']['active_version'] == model_version['version_properties']['version'] %}
+                    {%- if model_static_data['properties']['active_version'] == model_version %}
                     block;
                     {% else %}
                     none;
@@ -72,14 +102,36 @@
                         <span class = "ui_caption">Metadata:</span>
                         <div class = "dashboard_metadata_and_actions">
                             <textarea class = "dashboard_model_version_metadata"
-                            cols = "80" rows = "8">{{ model_version["version_properties"]["metadata"] }}</textarea>
+                            cols = "80" rows = "8" 
+
+                            {%- if model_static_data['properties']['active_version'] == model_version %}
+
+                                id = "active_model_version_metadata"
+                                onkeyup = "
+                                if ( elementIsDisabled('metadata_button') && inputValueHasChanged('active_model_version_metadata', window.actual_metadata))
+                                {
+                                    enableElement('metadata_button');
+                                }
+
+                                if ( elementIsDisabled('action') && inputValueHasChanged('active_model_version_metadata', window.actual_metadata))
+                                {
+                                    enableElement('action');
+                                }
+                                " 
+                            {% else %}
+                                disabled
+                            {% endif -%}
+                            >{{ the_model_version["version_properties"]["metadata"] }}</textarea>
                             &nbsp;
-                            <button>Update v. 0 Metadata</button>
-                            <button id = "action">Save All as v. 1</button>
+                            {%- if model_static_data['properties']['active_version'] == model_version %}
+                            <button id = "metadata_button" disabled>Update v. {{ model_version }} Metadata</button>
+                            <button id = "action" disabled>Save All as v. {{model_static_data["properties"]["last_version"] + 1}}</button>
                             <button id = "cancel" onclick = "window.location.reload(true);">Discard Unsaved Changes</button>
+                            {%- endif-%}
                         </div>
                         
-                        <div id = "model_folder" class = "dashboard_toolbox" width = "100%"></div>
+                        <div id = "model_folder" class = "dashboard_toolbox" width = "100%" ></div>
+                        <input type = "hidden" id = "model_folder_change_listener" value = "" onchange = "console.log('hey-hey!');">
 
                     </div> <!-- Static data ends here -->
 

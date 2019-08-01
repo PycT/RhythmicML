@@ -44,6 +44,7 @@ The Active Version (the version user works with currently, it is not neccessaril
 + Actions with active version static data (buttons):
     * Update metadata for v. {{active_version_number}} - rewrites metadata for current version.
     * Save all changes to v. {{last_version_number + 1}} - creates a new version.
+        This button is rendered for the active version only. By default it is disabled. It gets enabled when the metadata changes or any changes in tracked files detected.
     * Discard unsaved changes - reloads the page.
 
 + Actions with non-active modelversions:
