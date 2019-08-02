@@ -5,6 +5,15 @@
 // and other manipulations with DOM are defied in manipulations.js
 //
 //asyncPostRequest(), asyncPostRequestWithRefresh() are defined in async_requests.js
+// 
+// 
+//------
+//window.current_folder_contents - scanned folder contents
+//window.active_version_files_data - db snapshot
+//window.active_version_files_data_tracker - to track user made changes
+//------
+//<button id = "action" disabled>Save All as v. {{model_static_data["properties"]["last_version"] + 1}}</button> -
+// - activate it if any changes detected
 
 function markFileChange(absolute_path)
 {
@@ -32,13 +41,6 @@ function resetFileMark(absolute_path)
 
 function setFolderContentMarks()
 //color changes and set checkboxes in accordance with db records
-//------
-//window.current_folder_contents - scanned folder contents
-//window.active_version_files_data - db snapshot
-//window.active_version_files_data_tracker - to track user made changes
-//------
-//<button id = "action" disabled>Save All as v. {{model_static_data["properties"]["last_version"] + 1}}</button> -
-// - activate it if any changes detected
 {
     for (var item_record in window.current_folder_contents)
     {
@@ -70,7 +72,7 @@ function setFolderContentMarks()
                 }
 
                 if (window.active_version_files_data_tracker[item_record]["is_deployed"])
-                //if the file is marked as deployable - shiw it in UI   
+                //if the file is marked as deployable - show it in UI   
                 {
                     document.getElementById("is_deployed_" + item_record).checked = true;
 
@@ -149,12 +151,153 @@ function scanFolder(the_folder, ceiling = "")
     return true;
 }
 
-function isTrackedChange(absolute_path)
+function isTrackedCheckboxChange(absolute_path)
 {
-    the_checkbox = popElement("is_tracked_" + item_record); 
+    var the_checkbox = popElement("is_tracked_" + absolute_path); 
+    var change_detected = false;
 
     if (the_checkbox.checked)
     {
-
+        if (window.active_version_files_data.hasOwnProperty(absolute_path))
+        {
+            resetFileMark(absolute_path);
+            popElement("is_deployed_" + absolute_path).checked = window.active_version_files_data[absolute_path]["is_deployed"];
+        }
+        else
+        {
+            change_detected = true;
+        }
+        window.active_version_files_data_tracker[absolute_path] = window.current_folder_contents[absolute_path];
     }
+    else
+    {
+        var track_all_checkbox = popElement("trackAllCheckbox");
+        if (track_all_checkbox.checked)
+        {
+            track_all_checkbox.checked = false;
+        }
+
+        if (!window.active_version_files_data.hasOwnProperty(absolute_path))
+        {
+            resetFileMark(absolute_path);
+        }
+        else
+        {
+            change_detected = true;
+        }
+        delete window.active_version_files_data_tracker[absolute_path];
+        //and also clear "IsDeployed" checkbox:
+        popElement("is_deployed_" + absolute_path).checked = false;
+    }
+
+    if (change_detected)
+    {
+        markFileChange(absolute_path);
+        enableElement('action');
+    }
+}
+
+
+function isDeployedCheckboxChange(absolute_path)
+{
+    var the_checkbox = popElement("is_deployed_" + absolute_path); 
+    var change_detected = false;
+
+    if (the_checkbox.checked)
+    {
+        var is_tracked_checkbox = popElement("is_tracked_" + absolute_path);
+        if (is_tracked_checkbox.checked)
+        {
+            if (window.active_version_files_data.hasOwnProperty(absolute_path) && 
+                window.active_version_files_data[absolute_path]["is_deployed"])
+            {
+                resetFileMark(absolute_path);
+            }
+            else
+            {
+                change_detected = true;
+            }
+        }
+        else
+        {
+            is_tracked_checkbox.checked = true;
+            isTrackedCheckboxChange(absolute_path);
+        }
+    }
+    else
+    {
+        var mark_all_deploayble_checkbox = popElement("markAllDeployableCheckbox");
+        if (mark_all_deploayble_checkbox.checked)
+        {
+            mark_all_deploayble_checkbox.checked = false;
+        }
+
+        if (window.active_version_files_data.hasOwnProperty(absolute_path))
+        {
+            if (window.active_version_files_data[absolute_path]["is_deployed"])
+            {
+                change_detected = true;
+            }
+            else
+            {
+                resetFileMark(absolute_path);
+            }
+        }
+    }
+
+    if (change_detected)
+    {
+        markFileChange(absolute_path);
+        enableElement('action');
+    }
+}
+
+function onMarkAllDeployableCheckboxChange()
+{
+   var mark_all_deploayble_checkbox = popElement("markAllDeployableCheckbox");
+   
+   if (mark_all_deploayble_checkbox.checked)
+   {
+        for (var item in window.current_folder_contents)
+        {
+            if (window.current_folder_contents.hasOwnProperty(item))
+            {
+                if (!window.current_folder_contents[item]["is_dir"])
+                {
+                    var is_deployed_checkbox = popElement("is_deployed_" + item);
+
+                    if (!is_deployed_checkbox.checked)
+                    {
+                        is_deployed_checkbox.checked = true;
+                        isDeployedCheckboxChange(item);
+                    }
+                }
+            }
+        }
+   }  
+}
+
+function onTrackAllCheckboxChange()
+{
+   var track_all_checkbox = popElement("trackAllCheckbox");
+   
+   if (track_all_checkbox.checked)
+   {
+        for (var item in window.current_folder_contents)
+        {
+            if (window.current_folder_contents.hasOwnProperty(item))
+            {
+                if (!window.current_folder_contents[item]["is_dir"])
+                {
+                    var is_tracked_checkbox = popElement("is_tracked_" + item);
+
+                    if (!is_tracked_checkbox.checked)
+                    {
+                        is_tracked_checkbox.checked = true;
+                        isTrackedCheckboxChange(item);
+                    }
+                }
+            }
+        }
+   }  
 }

@@ -11,15 +11,21 @@
         <br>
         <table id = "the_folder_items_list" width = "100%">
             <tr>
-                <td width = "60%">
+                <th width = "60%">
                     <b>Name</b>
-                </td>
-                <td width = "20%" align = "center">
+                </th>
+                <th width = "20%" align = "center">
                     <b>Is Tracked</b>
-                </td>
-                <td width = "20%" align = "center">
+                    <br>
+                    <input type = "checkbox" id = "trackAllCheckbox"
+                    onchange = "onTrackAllCheckboxChange();">
+                </th>
+                <th width = "20%" align = "center">
                     <b>Deployable</b>
-                </td>
+                    <br>
+                    <input type = "checkbox" id = "markAllDeployableCheckbox"
+                    onchange = "onMarkAllDeployableCheckboxChange();">
+                </th>
             </tr>
 
         {% for item_path in folder_contents %}
@@ -33,7 +39,7 @@
                                 "
                                     scanFolder('{{ item_path|escape() }}', model_path); //model_path is defined in parental dashboard.html
                                 ">
-                                    <b>{{ item.base_name}}</b>
+                                    <b>{{ item.base_name }}</b>
                                 </a>
 
                         </td>
@@ -44,11 +50,13 @@
                         <td width = "20%" align = "center">
                             <input type = "checkbox"
                             id = "is_tracked_{{ item_path|escape() }}"
+                            onchange = "isTrackedCheckboxChange('{{ item_path|escape() }}');"
                             >
                         </td>
                         <td width = "20%" align = "center">
                             <input type = "checkbox"
                             id = "is_deployed_{{ item_path|escape() }}"
+                            onchange = "isDeployedCheckboxChange('{{ item_path|escape() }}');"
                             >
                         </td>
                     {% endif %}

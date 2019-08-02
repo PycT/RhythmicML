@@ -1,3 +1,15 @@
+th
+{
+    background-color: #dadada;
+    padding: 3px;
+    vertical-align: top;
+}
+
+td
+{
+    padding-left: 3px;
+}
+
 .dashboard_model_properties
 {
     margin-top: 16px;
