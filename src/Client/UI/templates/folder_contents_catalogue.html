@@ -8,7 +8,7 @@
                 var data_json = JSON.stringify(data);
                 asyncPostRequest('/helpers/folders/catalogue', data_json, 'new_model_folder');
             ">
-                &#x1F3E0;
+                go &#x1F3E0;
             </button>
 
             {% if the_folder == "~" %}
@@ -29,12 +29,11 @@
                 <li>
                     <a class = "local_folder" href = "#" onclick=
                     "
-                        var local_folder = '{{ local_folder|escape() }}';
-                        pickFolder(local_folder);
+                        pickFolder('{{ item_path|escape() }}');
                         var data = {'the_folder':'{{ item_path|escape() }}'};
                         var data_json = JSON.stringify(data);
                         asyncPostRequest('/helpers/folders/catalogue', data_json, 'new_model_folder');
-                        document.getElementById('new_model_path').value = local_folder;
+                        document.getElementById('new_model_path').value = '{{ item_path|escape() }}';
 
                     ">
                         <b>{{ item.base_name}}</b>

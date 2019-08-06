@@ -49,7 +49,13 @@ def filePropertiesDictionary(sql_raw_list):
     filePropertiesDictionary(sql_raw_list)
     transforms a row gotten via SQL request (list), to a dictionary
     """
-    
+
+    #SQLite does not have boolean, so here's type casting needed
+    if (sql_raw_list[5] == 0):
+        is_deployed = False;
+    else:
+        is_deployed = True;
+
     properties_dictionary = \
     {
         "id": sql_raw_list[0],
@@ -57,7 +63,7 @@ def filePropertiesDictionary(sql_raw_list):
         "file_path": sql_raw_list[2],
         "file_commit_state": sql_raw_list[3],
         "last_modified_time": sql_raw_list[4],
-        "is_deployed": sql_raw_list[5]
+        "is_deployed": is_deployed
     }
 
     return properties_dictionary;

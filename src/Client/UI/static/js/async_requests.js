@@ -69,7 +69,7 @@ function asyncPostRequestWithRefresh(request_url, data, dom_element_id, refresh_
             }
             else 
             {
-                the_element.value = this.responseText;
+                the_element.innerHTML = this.responseText;
             }
         }
     }

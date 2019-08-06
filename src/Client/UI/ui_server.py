@@ -93,11 +93,6 @@ def helperFolders(template_modificator = "catalogue"):
     data_json = request.data.decode();
     data = json.loads(data_json);
 
-    # print("{}, {}".format(__name__, "helperFolders"));
-    # print("==================");
-    # print(data);
-    # print("==================");
-
     the_folder = data["the_folder"];
 
     if "look_level_above" in data:

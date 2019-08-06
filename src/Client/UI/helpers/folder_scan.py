@@ -61,25 +61,22 @@ def scanFolder(folder_to_scan = "~", show_started_with_dot = False, look_level_a
     return folder_contents;
 
 @faultReturnHandler
-def scanModelFolder(folder, descend_level = 3):
+def scanModelFolder(folder, descend_level = configuration.model_folder_max_tracked_depth):
 
     if descend_level == 0:
         return False;
 
-    files_list = [];
+    files_list_dictionary = {};
     current_folder_contents = scanFolder(folder, show_started_with_dot = True, look_level_above = False, exclusions = [configuration.storage_folder_name]);
 
-    for item in current_folder_contents:
+    for item_path in current_folder_contents:
+        item = current_folder_contents[item_path];
+
         if item["is_dir"]:
             item_scan = scanModelFolder(item["absolute_path"], descend_level - 1);
             if item_scan:
-                files_list.extend(item_scan);
+                files_list_dictionary.update(item_scan);
         else:
-            files_list.append(
-                {
-                    "file_path": item["absolute_path"], 
-                    "last_modified_time": item["last_modified_time"]
-                }
-            );
+            files_list_dictionary[item_path] = item;
 
-    return files_list;
+    return files_list_dictionary;

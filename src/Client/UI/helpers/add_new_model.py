@@ -76,17 +76,17 @@ def addNewModel(model_name = None, model_dir = None):
             last_modified_time
         )
         VALUES
-
         """;
         new_model_files = scanModelFolder(model_path);
 
         if len(new_model_files) > 0:
             files_record_values = "";
 
-            for item in new_model_files:
-                files_record_values += "('{}', '{}', '{}'), \n".format(new_model_version_id, item["file_path"], item["last_modified_time"]);
+            for item_path in new_model_files:
+                item = new_model_files[item_path];
+                files_record_values += "('{}', '{}', '{}'), \n".format(new_model_version_id, item["absolute_path"], item["last_modified_time"]);
 
-            files_record_request += files_record_values[:len(files_record_values) -3] + ";";
+            files_record_request += files_record_values[:len(files_record_values) -3] + ";"; #truncating `, \n` from the end of request and adding `;`.
 
             db.execute(files_record_request);
 

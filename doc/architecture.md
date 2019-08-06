@@ -17,6 +17,10 @@ Client includes UI and is purposed to:
 All the model artifact are stored by Client side in an archive. Archive version contains the whole bunch of files, not changed only.
 That is for opportuniti to rollback to any of version and create a new version upon historic one without hustling of what was ever deleted or added and needs to be got rid of.
 
+###Notes of code organisation
++ Client/UI/helpers/ contains helpers purposed to fulfill client-side functions. 
+    Cross-used dictionaries (e.g. files list dictionary) structures might be seen in **db_record_to_dictionary.py**
+
 **Deployment** eventually is sending artifacts via *http[s]*, so the reseiving side might run any ML serving system, maintained to receive.
 
 ##Server

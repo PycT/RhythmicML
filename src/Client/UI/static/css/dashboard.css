@@ -47,3 +47,8 @@ td
     display: flex;
 }
 
+.dashboard_deleted_file
+{
+    font-style: italic;
+    color: #777777;
+}

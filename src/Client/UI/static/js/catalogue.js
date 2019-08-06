@@ -5,7 +5,7 @@
 
 function initOnLoad()
 {
-    document.folder_picked = false;
+    window.folder_picked = false;
     //document.getElementById('model_name_input_container').style.display = 'none';
     document.getElementById('new_model_name').value = "";
     document.getElementById('new_model_path').value = "~";
@@ -44,7 +44,7 @@ function pickFolder(local_folder)
     {
         asyncPostRequest('/helpers/folder_name_to_model_name', local_folder, 'new_model_name', false);
     }
-    document.folder_picked = true;
+    window.folder_picked = true;
 
     return true;
 }
@@ -52,7 +52,7 @@ function pickFolder(local_folder)
 function onAddModelButtonClick()
 {
     
-    if (!document.folder_picked)
+    if (!window.folder_picked)
     {
         alert("Pick a folder, containing your model!");
         return false;
@@ -67,15 +67,15 @@ function onAddModelButtonClick()
     var new_model_name = document.getElementById("new_model_name").value;
     var new_model_path = document.getElementById("new_model_path").value;
 
-    var data = {model_name: new_model_name, model_path: new_model_path};
+    var data = {"model_name": new_model_name, "model_path": new_model_path};
     var data_json = JSON.stringify(data);
 
     asyncPostRequestWithRefresh("/helpers/add_new_model", data_json, "status_bar");
 
-    toggleDisplay('catalogue_toolbox_regular');
-    toggleDisplay('catalogue_toolbox_add_model');
+    // toggleDisplay('catalogue_toolbox_regular');
+    // toggleDisplay('catalogue_toolbox_add_model');
 
-    initOnLoad();
+    // initOnLoad();
 
     return true;
 }

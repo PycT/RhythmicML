@@ -1,6 +1,6 @@
 "use strict";
 
-//toggleDisplay(), setVisible(), setInvisible(), popElement(), enableElement(), inputValueHasChanged()
+//toggleDisplay(), setVisible(), setInvisible(), document.getElementById(), enableElement(), inputValueHasChanged()
 // elementIsDisabled()
 // and other manipulations with DOM are defied in manipulations.js
 //
@@ -39,71 +39,109 @@ function resetFileMark(absolute_path)
     folder_item.style.color = "";
 }
 
+function setFolderItemMark(absolute_path)
+//color changes and set checkboxes in accordance with db records
+{
+    var change_detected = false;
+
+    if ( window.current_folder_contents.hasOwnProperty(absolute_path) && 
+        !window.current_folder_contents[absolute_path]["is_dir"])
+    //we are looking onto files here
+    {
+        var item = window.current_folder_contents[absolute_path];
+
+        if (window.active_version_files_data_tracker.hasOwnProperty(absolute_path))
+        //if the file is tracked
+        {
+            if (!window.active_version_files_data.hasOwnProperty(absolute_path))
+            //if the file was not tracked when the version was created - change happened
+            {
+                change_detected = true;
+            }
+            else
+            //if it was - let us check system 'last modfied' file attribute
+            {
+                if (item["last_modified_time"] != window.active_version_files_data_tracker[absolute_path]["last_modified_time"])
+                {
+                    change_detected = true;
+                }
+            }
+
+            if (window.active_version_files_data.hasOwnProperty(absolute_path) &&
+                window.active_version_files_data_tracker[absolute_path]["is_deployed"] != 
+                window.active_version_files_data[absolute_path]["is_deployed"])
+            //was it marked as deployable when the version was created?
+            {
+                change_detected = true;
+            }
+
+        }
+        else
+        //if the file is not tracked
+        {
+            if (window.active_version_files_data.hasOwnProperty(absolute_path))
+            //was it tracked when the version was created?
+            {
+                change_detected = true;
+            }
+        }
+
+        if (change_detected)
+        {
+            markFileChange(absolute_path);
+        }
+        else
+        {
+            resetFileMark(absolute_path);
+            if (!window.active_version_files_data.hasOwnProperty(absolute_path))
+            {
+                markNewFile(absolute_path);
+            }
+        }
+
+    }
+
+    return change_detected;
+}
+
 function setFolderContentMarks()
 //color changes and set checkboxes in accordance with db records
 {
+    if (window.active_version_deleted_files.hasOwnProperty(window.the_folder))
+    {
+        var folder_items_table = document.getElementById("the_folder_items_list");
+        window.active_version_deleted_files[window.the_folder].forEach(
+            function(deleted_file)
+            {
+                folder_items_table.innerHTML += "<tr><td colspan = '3' class = 'dashboard_deleted_file'>" + deleted_file + "</td></tr>";
+            });
+    }
+
     for (var item_record in window.current_folder_contents)
     {
-        if ( window.current_folder_contents.hasOwnProperty(item_record) && 
-            !window.current_folder_contents[item_record]["is_dir"])
-        //we are looking onto files here
+        if ( window.current_folder_contents.hasOwnProperty(item_record) )
         {
-            var item = window.current_folder_contents[item_record];
-            var change_detected = false;
-
-            if (window.active_version_files_data_tracker.hasOwnProperty(item_record))
-            //if the file is tracked
+            if (window.current_folder_contents[item_record]["is_dir"])
             {
-                document.getElementById("is_tracked_" + item_record).checked = true;
-                //show it in UI
-
-                if (!window.active_version_files_data.hasOwnProperty(item_record))
-                //if the file was not tracked when the version was created - change happened
+                if (window.active_version_changed_folders.includes(item_record))
                 {
-                    change_detected = true;
-                }
-                else
-                //if it was - let us check system 'last modfied' file attribute
-                {
-                    if (item["last_modified_time"] != window.active_version_files_data_tracker[item_record]["last_modified_time"])
-                    {
-                        change_detected = true;
-                    }
-                }
-
-                if (window.active_version_files_data_tracker[item_record]["is_deployed"])
-                //if the file is marked as deployable - show it in UI   
-                {
-                    document.getElementById("is_deployed_" + item_record).checked = true;
-
-                    if (!window.active_version_files_data[item_record]["is_deployed"])
-                    //was it marked as deployable when the version was created?
-                    {
-                        change_detected = true;
-                    }
+                    var base_name_cell = document.getElementById('base_name_' + item_record);
+                    var base_name = base_name_cell.innerHTML;
+                    base_name_cell.innerHTML +=  "<sup style = 'color: red;'> changes </sup>";
                 }
             }
             else
-            //if the file is not tracked
             {
-                if (window.active_version_files_data.hasOwnProperty(item_record))
-                //was it tracked when the version was created?
+                if (window.active_version_files_data_tracker.hasOwnProperty(item_record))
                 {
-                    change_detected = true;
+                    document.getElementById('is_tracked_' + item_record).checked = true;
+                    document.getElementById('is_deployed_' + item_record).checked = window.active_version_files_data_tracker[item_record]["is_deployed"];
                 }
-                else
-                //if not - it is a new file to the active version
+                if (setFolderItemMark(item_record))
                 {
-                    markNewFile(item_record);
+                    enableElement('action');
                 }
             }
-
-            if (change_detected)
-            {
-                markFileChange(item_record);
-                enableElement('action');
-            }
-
         }
     }
 }
@@ -136,6 +174,8 @@ function scanFolder(the_folder, ceiling = "")
 {
     var look_level_above = true;
 
+    window.the_folder = the_folder;
+
     if (the_folder == ceiling)
     {
         look_level_above = false;
@@ -151,48 +191,71 @@ function scanFolder(the_folder, ceiling = "")
     return true;
 }
 
+function restoreTrack(absolute_path)
+//when restoring the item into active_version_files_data_tracker
+//we need the separate entity, not the reference to initial snapshot
+//js is heartless bitch
+{
+    window.active_version_files_data_tracker[absolute_path] = {};
+
+    for (var field in window.active_version_files_data[absolute_path])
+    {
+        if (window.active_version_files_data[absolute_path].hasOwnProperty(field))
+        {
+            window.active_version_files_data_tracker[absolute_path][field] = 
+            window.active_version_files_data[absolute_path][field];
+        }
+    }
+}
+
 function isTrackedCheckboxChange(absolute_path)
 {
-    var the_checkbox = popElement("is_tracked_" + absolute_path); 
-    var change_detected = false;
+    var the_checkbox = document.getElementById("is_tracked_" + absolute_path); 
+    var is_deployed_checkbox = document.getElementById("is_deployed_" + absolute_path);
 
     if (the_checkbox.checked)
     {
-        if (window.active_version_files_data.hasOwnProperty(absolute_path))
+        if (window.active_version_files_data.hasOwnProperty(absolute_path) &&
+            is_deployed_checkbox.checked != window.active_version_files_data[absolute_path]["is_deployed"])
         {
-            resetFileMark(absolute_path);
-            popElement("is_deployed_" + absolute_path).checked = window.active_version_files_data[absolute_path]["is_deployed"];
+            is_deployed_checkbox.checked = window.active_version_files_data[absolute_path]["is_deployed"];
+            isDeployedCheckboxChange(absolute_path);
         }
-        else
-        {
-            change_detected = true;
+
+        if (!window.active_version_files_data_tracker.hasOwnProperty(absolute_path))
+        { //restoring tracking if possible or casting a new if not
+            if (window.active_version_files_data.hasOwnProperty(absolute_path))
+            {
+                restoreTrack(absolute_path);
+            }
+            else
+            {
+                window.active_version_files_data_tracker[absolute_path] = window.current_folder_contents[absolute_path];
+            }
         }
-        window.active_version_files_data_tracker[absolute_path] = window.current_folder_contents[absolute_path];
     }
     else
     {
-        var track_all_checkbox = popElement("trackAllCheckbox");
+        var track_all_checkbox = document.getElementById("track_all_checkbox");
         if (track_all_checkbox.checked)
         {
             track_all_checkbox.checked = false;
         }
 
-        if (!window.active_version_files_data.hasOwnProperty(absolute_path))
+        if (window.active_version_files_data_tracker.hasOwnProperty(absolute_path))
         {
-            resetFileMark(absolute_path);
+            delete window.active_version_files_data_tracker[absolute_path];
         }
-        else
-        {
-            change_detected = true;
-        }
-        delete window.active_version_files_data_tracker[absolute_path];
         //and also clear "IsDeployed" checkbox:
-        popElement("is_deployed_" + absolute_path).checked = false;
+        if (is_deployed_checkbox.checked)
+        {
+            is_deployed_checkbox.checked = false;
+            isDeployedCheckboxChange(absolute_path);
+        }
     }
 
-    if (change_detected)
+    if (setFolderItemMark(absolute_path))
     {
-        markFileChange(absolute_path);
         enableElement('action');
     }
 }
@@ -200,25 +263,12 @@ function isTrackedCheckboxChange(absolute_path)
 
 function isDeployedCheckboxChange(absolute_path)
 {
-    var the_checkbox = popElement("is_deployed_" + absolute_path); 
-    var change_detected = false;
+    var the_checkbox = document.getElementById("is_deployed_" + absolute_path); 
 
     if (the_checkbox.checked)
     {
-        var is_tracked_checkbox = popElement("is_tracked_" + absolute_path);
-        if (is_tracked_checkbox.checked)
-        {
-            if (window.active_version_files_data.hasOwnProperty(absolute_path) && 
-                window.active_version_files_data[absolute_path]["is_deployed"])
-            {
-                resetFileMark(absolute_path);
-            }
-            else
-            {
-                change_detected = true;
-            }
-        }
-        else
+        var is_tracked_checkbox = document.getElementById("is_tracked_" + absolute_path);
+        if (!is_tracked_checkbox.checked)
         {
             is_tracked_checkbox.checked = true;
             isTrackedCheckboxChange(absolute_path);
@@ -226,78 +276,65 @@ function isDeployedCheckboxChange(absolute_path)
     }
     else
     {
-        var mark_all_deploayble_checkbox = popElement("markAllDeployableCheckbox");
-        if (mark_all_deploayble_checkbox.checked)
+        var mark_all_deployable_checkbox = document.getElementById("mark_all_deployable_checkbox");
+        if (mark_all_deployable_checkbox.checked)
         {
-            mark_all_deploayble_checkbox.checked = false;
-        }
-
-        if (window.active_version_files_data.hasOwnProperty(absolute_path))
-        {
-            if (window.active_version_files_data[absolute_path]["is_deployed"])
-            {
-                change_detected = true;
-            }
-            else
-            {
-                resetFileMark(absolute_path);
-            }
+            mark_all_deployable_checkbox.checked = false;
         }
     }
 
-    if (change_detected)
+    if (window.active_version_files_data_tracker.hasOwnProperty(absolute_path))
     {
-        markFileChange(absolute_path);
+        window.active_version_files_data_tracker[absolute_path]["is_deployed"] = the_checkbox.checked;
+    }
+
+    if (setFolderItemMark(absolute_path))
+    {
         enableElement('action');
+        enableElement('metadata_button');
     }
 }
 
 function onMarkAllDeployableCheckboxChange()
 {
-   var mark_all_deploayble_checkbox = popElement("markAllDeployableCheckbox");
+   var mark_all_deployable_checkbox = document.getElementById("mark_all_deployable_checkbox");
    
-   if (mark_all_deploayble_checkbox.checked)
-   {
-        for (var item in window.current_folder_contents)
+    for (var item in window.current_folder_contents)
+    {
+        if (window.current_folder_contents.hasOwnProperty(item))
         {
-            if (window.current_folder_contents.hasOwnProperty(item))
+            if (!window.current_folder_contents[item]["is_dir"])
             {
-                if (!window.current_folder_contents[item]["is_dir"])
-                {
-                    var is_deployed_checkbox = popElement("is_deployed_" + item);
+                var is_deployed_checkbox = document.getElementById("is_deployed_" + item);
 
-                    if (!is_deployed_checkbox.checked)
-                    {
-                        is_deployed_checkbox.checked = true;
-                        isDeployedCheckboxChange(item);
-                    }
+                if (mark_all_deployable_checkbox.checked != is_deployed_checkbox.checked)
+                {
+                    is_deployed_checkbox.checked = mark_all_deployable_checkbox.checked;
+                    isDeployedCheckboxChange(item);
                 }
             }
         }
-   }  
+    }
 }
 
 function onTrackAllCheckboxChange()
 {
-   var track_all_checkbox = popElement("trackAllCheckbox");
+   var track_all_checkbox = document.getElementById("track_all_checkbox");
    
-   if (track_all_checkbox.checked)
-   {
-        for (var item in window.current_folder_contents)
+    for (var item in window.current_folder_contents)
+    {
+        if (window.current_folder_contents.hasOwnProperty(item))
         {
-            if (window.current_folder_contents.hasOwnProperty(item))
+            if (!window.current_folder_contents[item]["is_dir"])
             {
-                if (!window.current_folder_contents[item]["is_dir"])
-                {
-                    var is_tracked_checkbox = popElement("is_tracked_" + item);
+                var is_tracked_checkbox = document.getElementById("is_tracked_" + item);
 
-                    if (!is_tracked_checkbox.checked)
-                    {
-                        is_tracked_checkbox.checked = true;
-                        isTrackedCheckboxChange(item);
-                    }
+                if (track_all_checkbox.checked != is_tracked_checkbox.checked)
+                {
+                    is_tracked_checkbox.checked = track_all_checkbox.checked;
+                    isTrackedCheckboxChange(item);
                 }
             }
         }
-   }  
+    }
 }

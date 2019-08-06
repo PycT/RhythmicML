@@ -4,6 +4,7 @@
 
         <input type="hidden" name= "dashboard_folder_contents" 
         id = "dashboard_folder_contents" value = '{{ folder_contents|tojson() }}'>
+        {# this hidden input is handled in dashboard.js with asyncPostDashboardFoldersRequest() #}
 
         <div class = "folder_contents_box_current_folder" align = "left">
             {{ the_folder }}
@@ -17,13 +18,13 @@
                 <th width = "20%" align = "center">
                     <b>Is Tracked</b>
                     <br>
-                    <input type = "checkbox" id = "trackAllCheckbox"
+                    <input type = "checkbox" id = "track_all_checkbox"
                     onchange = "onTrackAllCheckboxChange();">
                 </th>
                 <th width = "20%" align = "center">
                     <b>Deployable</b>
                     <br>
-                    <input type = "checkbox" id = "markAllDeployableCheckbox"
+                    <input type = "checkbox" id = "mark_all_deployable_checkbox"
                     onchange = "onMarkAllDeployableCheckboxChange();">
                 </th>
             </tr>
@@ -33,7 +34,7 @@
 
                 <tr class = "folder_content_box_item" id = "folder_item_{{ item_path|escape() }}">
                     {% if item.is_dir %}
-                        <td colspan = "3">
+                        <td colspan = "3" id = "base_name_{{ item_path|escape() }}">
 
                                 <a class = "local_folder" href = "#" onclick=
                                 "
@@ -44,7 +45,7 @@
 
                         </td>
                     {% else %}
-                        <td width = "60%">
+                        <td width = "60%" id = "base_name_{{ item_path|escape() }}">
                                 {{ item.base_name }}
                         </td>
                         <td width = "20%" align = "center">

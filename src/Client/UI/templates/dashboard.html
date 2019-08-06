@@ -98,6 +98,18 @@
                     none;
                     {% endif -%}
                     ">
+                    {%- if model_static_data['properties']['active_version'] == model_version %}
+                        <input type = "hidden" name = "active_version_changed_folders" 
+                        id = "active_version_changed_folders" value = '{{ the_model_version["changed_folders"]|tojson() }}'>
+                        <input type = "hidden" name = "active_version_deleted_files" 
+                        id = "active_version_deleted_files" value = '{{ the_model_version["absent_files"]|tojson() }}'>
+                        <script type = "text/javascript">
+                            var active_version_changed_folders = popElement("active_version_changed_folders").value;
+                            var active_version_deleted_files = popElement("active_version_deleted_files").value;
+                            window.active_version_changed_folders = JSON.parse(active_version_changed_folders);
+                            window.active_version_deleted_files = JSON.parse(active_version_deleted_files);
+                        </script>
+                    {% endif %}
                         <br clear = "all">
                         <span class = "ui_caption">Metadata:</span>
                         <div class = "dashboard_metadata_and_actions">
@@ -124,8 +136,8 @@
                             >{{ the_model_version["version_properties"]["metadata"] }}</textarea>
                             &nbsp;
                             {%- if model_static_data['properties']['active_version'] == model_version %}
-                            <button id = "metadata_button" disabled>Update v. {{ model_version }} Metadata</button>
-                            <button id = "action" disabled>Save All as v. {{model_static_data["properties"]["last_version"] + 1}}</button>
+                            <button id = "metadata_button" disabled>Update v. {{ model_version }} <br>Metadata & Deployables</button>
+                            <button id = "action" disabled>Save All as <br> v. {{model_static_data["properties"]["last_version"] + 1}}</button>
                             <button id = "cancel" onclick = "window.location.reload(true);">Discard Unsaved Changes</button>
                             {%- endif-%}
                         </div>
