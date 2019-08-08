@@ -146,6 +146,29 @@ def addModel():
     return execution_status;
 
 #==========================================================================
+
+#==========================================================================
+
+@app.route("/helpers/confirmation_dialogue", methods = ["POST", "GET"])
+@checkPost
+def renderConfirmationDialogue():
+
+    data_json = request.data.decode();
+    data = json.loads(data_json);
+
+# confirmation dialogue parameters are the following (passed as an object):
+# confirmation_message - string, the statement to confirm
+# helper_url - string, an url to request if confirmation is positive
+# data_for_helper - string, data to send with that request
+# confirmation_result - string: 
+#      "refresh" - call asyncPostRequestWithRefresh
+#      "value" - call asyncPostRequest(..., to_innerHTML = false)
+#      "html" - call regular asyncPostRequest();
+# result_element_id - string, dom element id to use in "value" and "html" cases
+
+    return renderTemplate("confirmation_dialogue.html", confirmation_dialogue_parameters = data);
+
+#==========================================================================
 #==========================================================================
 #==========================================================================
 

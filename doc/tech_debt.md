@@ -1,3 +1,3 @@
 * Logging
 * Roles and access management
-* Deleted files restoration in active modelversion
+* Register changes of subfolders to mark folder as with changes

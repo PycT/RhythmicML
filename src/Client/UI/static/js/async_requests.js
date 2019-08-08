@@ -1,4 +1,4 @@
-function asyncGetRequest(request_url, dom_element_id, to_innerHTML = true)
+function asyncGetRequest(request_url, dom_element_id = "status_bar", to_innerHTML = true)
 {
     var the_element = document.getElementById(dom_element_id);
     var async_request = new XMLHttpRequest();
@@ -27,7 +27,7 @@ function asyncGetRequest(request_url, dom_element_id, to_innerHTML = true)
     async_request.send();
 }
 
-function asyncPostRequest(request_url, data, dom_element_id, to_innerHTML = true)
+function asyncPostRequest(request_url, data, dom_element_id = "status_bar", to_innerHTML = true)
 {
     var the_element = document.getElementById(dom_element_id);
     var async_request = new XMLHttpRequest();
@@ -55,7 +55,7 @@ function asyncPostRequest(request_url, data, dom_element_id, to_innerHTML = true
     async_request.send(data);
 }
 
-function asyncPostRequestWithRefresh(request_url, data, dom_element_id, refresh_ok = "Success")
+function asyncPostRequestWithRefresh(request_url, data, dom_element_id = "status_bar", refresh_ok = "Success")
 {
     var the_element = document.getElementById(dom_element_id);
     var async_request = new XMLHttpRequest();

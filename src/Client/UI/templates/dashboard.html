@@ -6,12 +6,6 @@
 
     <link rel = "stylesheet" type = "text/css" href = "{{ url_for('static', filename = 'css/dashboard.css') + anti_cache }}">
 
-    <script  type = "text/javascript" src = "{{ url_for('static', filename = 'js/async_requests.js') + anti_cache }}">
-    </script>
-
-    <script  type = "text/javascript" src = "{{ url_for('static', filename = 'js/manipulations.js') + anti_cache }}">
-    </script>
-
     <script  type = "text/javascript" src = "{{ url_for('static', filename = 'js/dashboard.js') + anti_cache }}">
     </script>
 
@@ -31,6 +25,10 @@
     <h1>
         {{ model_static_data["properties"]["name"] }}
     </h1>
+    <input type = "hidden" name = "the_model_name" id = "the_model_name" value = '{{ model_static_data["properties"]["name"] }}'>
+    <script type = "text/javascript">
+        window.the_model_name = popElement('the_model_name').value;
+    </script>
     <div class = "dashboard_model_path">
         {{ model_static_data["properties"]["path"] }};&nbsp;&nbsp;&nbsp; 
         Last Version v.{{ model_static_data["properties"]["last_version"] }}. / 
@@ -38,24 +36,23 @@
     </div>
     <div class = "dashboard_model_properties">
 
+        <span class = "ui_caption">Deploy destination: </span>
+        <br clear = all>
         <input type="hidden"  id = "actual_deploy_destination" value = '{{model_static_data["properties"]["deploy_destination"]|escape()}}'>
         <script type = "text/javascript">
             window.actual_deploy_destination = popElement("actual_deploy_destination").value;
         </script>
-
-        <span class = "ui_caption">Deploy destination: </span>
-        <br clear = all>
         <input class = "dashboard_deploy_destination_input" type = text size = 80 value = "{{model_static_data.properties.deploy_destination}}" 
-        placeholder=" URL..."
+        placeholder=" http(s)://..."
         name = "deploy_destination_url"
         id = "deploy_destination_url"
         onkeyup = "
-        if (elementIsDisabled('small') && inputValueHasChanged('deploy_destination_url', window.actual_deploy_destination))
+        if (elementIsDisabled('save_model_deploy_destination_button') && inputValueHasChanged('deploy_destination_url', window.actual_deploy_destination))
         {
-            enableElement('small');
+            enableElement('save_model_deploy_destination_button');
         }
         ">
-        <button id = "small" disabled>save</button>
+        <button id = "save_model_deploy_destination_button" class = "small_button" disabled onclick = "onSaveDeployDestinationClick();">save</button>
         <br>
         <br clear = all>
 
@@ -137,8 +134,8 @@
                             &nbsp;
                             {%- if model_static_data['properties']['active_version'] == model_version %}
                             <button id = "metadata_button" disabled>Update v. {{ model_version }} <br>Metadata & Deployables</button>
-                            <button id = "action" disabled>Save All as <br> v. {{model_static_data["properties"]["last_version"] + 1}}</button>
-                            <button id = "cancel" onclick = "window.location.reload(true);">Discard Unsaved Changes</button>
+                            <button id = "action" class = "action_button" disabled>Save All as <br> v. {{model_static_data["properties"]["last_version"] + 1}}</button>
+                            <button id = "cancel" class = "cancel_button" onclick = "window.location.reload(true);">Discard Unsaved Changes</button>
                             {%- endif-%}
                         </div>
                         

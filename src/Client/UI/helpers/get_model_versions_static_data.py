@@ -30,9 +30,9 @@ def differences(version_files, actual_folder_contents):
         if tracked_file not in actual_folder_contents:
 
             if parent_folder not in absent_files:
-                absent_files[parent_folder] = [baseName(tracked_file) + " <sup>deleted</sup>"];
+                absent_files[parent_folder] = [baseName(tracked_file)];
             else:
-                absent_files[parent_folder].append(baseName(tracked_file) + " <sup>deleted</sup>");
+                absent_files[parent_folder].append(baseName(tracked_file));
             
             change_detected = True;
 

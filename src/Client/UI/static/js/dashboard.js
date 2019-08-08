@@ -15,6 +15,11 @@
 //<button id = "action" disabled>Save All as v. {{model_static_data["properties"]["last_version"] + 1}}</button> -
 // - activate it if any changes detected
 
+
+//=======================================================================
+//=========================               UI             ==================================
+//=======================================================================
+
 function markFileChange(absolute_path)
 {
     var folder_item = document.getElementById("folder_item_"+absolute_path);
@@ -113,7 +118,13 @@ function setFolderContentMarks()
         window.active_version_deleted_files[window.the_folder].forEach(
             function(deleted_file)
             {
-                folder_items_table.innerHTML += "<tr><td colspan = '3' class = 'dashboard_deleted_file'>" + deleted_file + "</td></tr>";
+                var deleted_file_path = window.the_folder + '/' + deleted_file;
+                var item_row = "<tr class = 'folder_content_box_item'>\
+                <td class = 'dashboard_deleted_file'>" + deleted_file + " <sup>deleted</sup></td><td colspan = '2' align = 'center'>\
+                <button class = 'small_button' onclick = 'console.log(\"" + deleted_file_path + "\");'>restore</button>\
+                </td></tr>";
+
+                folder_items_table.innerHTML += item_row;
             });
     }
 
@@ -337,4 +348,21 @@ function onTrackAllCheckboxChange()
             }
         }
     }
+}
+
+
+//=======================================================================
+//=======================              ACTIONS             ================================
+//=======================================================================
+function onSaveDeployDestinationClick()
+{
+    var new_deploy_destination = popElement("deploy_destination_url").value;
+    var confirmation_dialogue_parameters = {};
+    var confirmation_message = "<h2> Change <span style = 'color: green;'>"+window.the_model_name+"</span> deploy destination?</h2>\
+    <br>\
+    <br><b style = 'color: green;'>`"+ window.actual_deploy_destination + 
+    "`</b> to `<b style = 'color: red;'>" + new_deploy_destination + "</b>`";
+    var helper_url = "/helpers/set_new_deploy_destination";
+    var data_for_helper = new_deploy_destination;
+    callConfirmationDialogue(confirmation_message, helper_url, data_for_helper);
 }

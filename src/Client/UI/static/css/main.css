@@ -22,27 +22,29 @@ button
     font-size: 18pt;
 }
 
+.small_button
+{
+    background-color: #fafafa;
+    color: #777777;
+    font-size: 12pt;
+}
+
 button:disabled
 {
     background-color: #ffffff!important;
     color: #dadada!important;
 }
 
-button#action
+.action_button
 {
     background-color: #77ff77;
     color: #007700;
 }
 
-button#cancel
+.cancel_button
 {
     background-color: #ff7777;
     color: #770000;
-}
-
-button#small
-{
-    font-size: 12pt;
 }
 
 .cross_logo
@@ -188,4 +190,26 @@ button#small
     opacity: 0;
     color: green;
   }
+}
+
+.confirmation_dialogue_canvas
+{
+    display: none;
+    opacity: 0.95;
+    z-index: 10;
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    align-items: center;
+    background-color: #ffffff;
+    border: solid 3px #000088;
+}
+
+.confirmation_dialogue
+{
+    position: relative;
+    width: 100%;
+    padding: 32px;
 }
