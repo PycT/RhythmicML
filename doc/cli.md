@@ -1,9 +1,9 @@
-#CLI - rhml
+# CLI - rhml
 
 Usage:
 `$ rhml [command]`
 
-##Commands available:
+## Commands available:
 
 + **init** - creates `!path.rhml` file storing current absolute path
 + **ui** - starts UI server locally

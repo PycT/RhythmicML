@@ -1,4 +1,4 @@
-#RhythmicML
+# RhythmicML
 
 This is a tool to deploy ML-models into production in simple and robust fashion, just make it work.
 
@@ -8,13 +8,13 @@ Each time model deployed, it gets versioned automatically and stored in models s
 
 Deploy might be prepared and performed via CLI tool with configuration defined in dedicated file or via web-UI.
 
-##Functionality
+## Functionality
 
 + Versioning
 + Deployment
 + Monitoring
 
-##Definitions
+## Definitions
 
 **Model** - an invocable entity making prediction or inference upon an input data. Might be binary artifact produced by ML framework, code, or a combination of both.
 
@@ -23,7 +23,7 @@ Deploy might be prepared and performed via CLI tool with configuration defined i
 **Deployment** - placing a Model into  a Production Instance
 
 
-##Preparations for Deployment
+## Preparations for Deployment
 
 Deployment takes a Model itself and a Configuration. 
 
@@ -37,7 +37,7 @@ Optional features:
 + Model description
 + key:value arbitrary metadata
 
-##Workflow
+## Workflow
 1. Save a model artifact(s) into a dedicated folder.
 2. Configure a model deployment:
     + Dependencies
@@ -45,7 +45,7 @@ Optional features:
 3. Upload to the scoring infrastructure
 
 
-##User Interface
+## User Interface
 
 UI implementation stack:
 * Flask
@@ -66,9 +66,9 @@ UI functionality includes:
     - status visualisation
     - productin version switch
 
-##General notes
+## General notes
 
-+ A model is added and deletet vi UI part named `Catalogue` (`catalogue.md`);
-+ Model metadata, configurations, versions, commits and deployment are made via UI part named `Dashboard` (`dashboard.md`);
++ A model is added and deletet vi UI part named `Catalogue` ([catalogue.md](catalogue.md));
++ Model metadata, configurations, versions, commits and deployment are made via UI part named `Dashboard` ([dashboard.md](dashboard.md));
 A model version `Dashboard` is entered from `Catalogue`
 + Monitoring is performed via `Monitoring` UI section; Deployed model status is also displayed in `Catalogue` and `Dashboard`

@@ -33,7 +33,13 @@ function markNewFile(absolute_path)
     var folder_item = document.getElementById("folder_item_"+absolute_path);
     folder_item.style.fontWeight = "bolder";
     folder_item.style.backgroundColor = "#fafada";
-    folder_item.style.color = "#00cc00";
+    folder_item.style.color = "#000000";
+    var delete_button_id = "delete_button_"+ absolute_path;
+    if (!document.getElementById(delete_button_id))
+    {
+        folder_item.innerHTML += "<button class = 'small_button' id = '"+ delete_button_id +
+        "' onclick = 'deleteFile(\"" + absolute_path + "\");'> Delete </button>";
+    }
 }
 
 function resetFileMark(absolute_path)
@@ -42,6 +48,18 @@ function resetFileMark(absolute_path)
     folder_item.style.fontWeight = "";
     folder_item.style.backgroundColor = "";
     folder_item.style.color = "";
+}
+
+function recordFolderTouch(the_folder)
+{
+    var is_fresh = false;
+    if (!window.touched_folders.includes(the_folder))
+    {
+        window.touched_folders.push(the_folder);
+        is_fresh = true;
+    }
+
+    return is_fresh;
 }
 
 function setFolderItemMark(absolute_path)
@@ -101,6 +119,7 @@ function setFolderItemMark(absolute_path)
             if (!window.active_version_files_data.hasOwnProperty(absolute_path))
             {
                 markNewFile(absolute_path);
+                //change_detected = true;
             }
         }
 
@@ -112,8 +131,10 @@ function setFolderItemMark(absolute_path)
 function setFolderContentMarks()
 //color changes and set checkboxes in accordance with db records
 {
+    var change_detected = false;
     if (window.active_version_deleted_files.hasOwnProperty(window.the_folder))
     {
+        change_detected = true;
         var folder_items_table = document.getElementById("the_folder_items_list");
         window.active_version_deleted_files[window.the_folder].forEach(
             function(deleted_file)
@@ -121,7 +142,7 @@ function setFolderContentMarks()
                 var deleted_file_path = window.the_folder + '/' + deleted_file;
                 var item_row = "<tr class = 'folder_content_box_item'>\
                 <td class = 'dashboard_deleted_file'>" + deleted_file + " <sup>deleted</sup></td><td colspan = '2' align = 'center'>\
-                <button class = 'small_button' onclick = 'console.log(\"" + deleted_file_path + "\");'>restore</button>\
+                <button class = 'small_button' onclick = 'restoreFile(\"" + deleted_file_path + "\");'>Restore</button>\
                 </td></tr>";
 
                 folder_items_table.innerHTML += item_row;
@@ -134,11 +155,18 @@ function setFolderContentMarks()
         {
             if (window.current_folder_contents[item_record]["is_dir"])
             {
+                var base_name_cell = document.getElementById('base_name_' + item_record);
+                var base_name = base_name_cell.innerHTML;
+
                 if (window.active_version_changed_folders.includes(item_record))
                 {
-                    var base_name_cell = document.getElementById('base_name_' + item_record);
-                    var base_name = base_name_cell.innerHTML;
-                    base_name_cell.innerHTML +=  "<sup style = 'color: red;'> changes </sup>";
+                    base_name_cell.innerHTML +=  "<sup style = 'color: red;'> untracked/modified </sup>";
+                    change_detected = true;0
+                }
+
+                if (window.touched_folders.includes(item_record))
+                {
+                    base_name_cell.innerHTML +=  "<sup style = 'color: red;'> * </sup>";
                 }
             }
             else
@@ -148,7 +176,7 @@ function setFolderContentMarks()
                     document.getElementById('is_tracked_' + item_record).checked = true;
                     document.getElementById('is_deployed_' + item_record).checked = window.active_version_files_data_tracker[item_record]["is_deployed"];
                 }
-                if (setFolderItemMark(item_record))
+                if (setFolderItemMark(item_record) || change_detected)
                 {
                     enableElement('action');
                 }
@@ -224,6 +252,8 @@ function isTrackedCheckboxChange(absolute_path)
     var the_checkbox = document.getElementById("is_tracked_" + absolute_path); 
     var is_deployed_checkbox = document.getElementById("is_deployed_" + absolute_path);
 
+    recordFolderTouch(window.the_folder);
+
     if (the_checkbox.checked)
     {
         if (window.active_version_files_data.hasOwnProperty(absolute_path) &&
@@ -242,6 +272,10 @@ function isTrackedCheckboxChange(absolute_path)
             else
             {
                 window.active_version_files_data_tracker[absolute_path] = window.current_folder_contents[absolute_path];
+                window.active_version_files_data_tracker[absolute_path]["file_commit_state"] = "emerged";
+                window.active_version_files_data_tracker[absolute_path]["is_deployed"] = false;
+                delete window.active_version_files_data_tracker[absolute_path]["is_dir"];
+                delete window.active_version_files_data_tracker[absolute_path]["base_name"];
             }
         }
     }
@@ -275,6 +309,8 @@ function isTrackedCheckboxChange(absolute_path)
 function isDeployedCheckboxChange(absolute_path)
 {
     var the_checkbox = document.getElementById("is_deployed_" + absolute_path); 
+
+    recordFolderTouch(window.the_folder);
 
     if (the_checkbox.checked)
     {
@@ -350,6 +386,11 @@ function onTrackAllCheckboxChange()
     }
 }
 
+function onDashboardLoad()
+{
+    window.touched_folders = [];
+    scanFolder(window.model_path, window.model_path); //model_path defined in the beginning of the Jinja2 block in dashboard.html
+}
 
 //=======================================================================
 //=======================              ACTIONS             ================================
@@ -363,6 +404,143 @@ function onSaveDeployDestinationClick()
     <br><b style = 'color: green;'>`"+ window.actual_deploy_destination + 
     "`</b> to `<b style = 'color: red;'>" + new_deploy_destination + "</b>`";
     var helper_url = "/helpers/set_new_deploy_destination";
-    var data_for_helper = new_deploy_destination;
+    var data = 
+    {
+        "new_deploy_destination": new_deploy_destination,
+        "the_model_id": the_model_id
+    };
+    var data_for_helper = JSON.stringify(data);
     callConfirmationDialogue(confirmation_message, helper_url, data_for_helper);
 }
+
+function onSaveMetadataClick()
+{
+
+    var data = 
+    {
+        "metadata_changed": false,
+        "actual_metadata": "",
+        "deployables_changed": false,
+        "changed_items": {}
+    };
+
+    data["metadata_changed"] = inputValueHasChanged('active_model_version_metadata', window.actual_metadata);
+
+    if (data["metadata_changed"])
+    {
+        var actual_metadata = popElement('active_model_version_metadata').value.replace(/'/g, "`");
+        data["actual_metadata"] = encodeURI(actual_metadata);
+        data["active_version_id"] = window.active_version_id;
+    }
+    for (var item in window.active_version_files_data)
+    {
+        if (window.active_version_files_data.hasOwnProperty(item))
+        {
+            if (window.active_version_files_data[item]["is_deployed"] != window.active_version_files_data_tracker[item]["is_deployed"])
+            {
+                data["deployables_changed"] = true;
+                var changed_item_id = window.active_version_files_data_tracker[item]["id"];
+                data["changed_items"][changed_item_id] = window.active_version_files_data_tracker[item]["is_deployed"];
+            }
+        }
+    }
+
+    if (!data["metadata_changed"] && !data["deployables_changed"])
+    {
+        alert("You did change nothing, nothing to save.");
+        return false;
+    }
+    
+    var data_for_helper = JSON.stringify(data);
+    var confirmation_message = "<h2> Update metadata and deployables for <b style = 'color: red;'>v. "+ window.the_active_version + 
+    "</b> of <b style = 'color: red;'>"+ window.the_model_name+"</b>?</h2>";
+    var helper_url = "/helpers/new_metadata_and_deployables";
+
+    callConfirmationDialogue(confirmation_message, helper_url, data_for_helper);
+}
+
+function createNewVersion()
+{
+    var actual_metadata = popElement('active_model_version_metadata').value.replace(/'/g, "`");
+    var passed_files_data = {};
+    var deleted_absolute = [];
+
+    for (var folder in active_version_deleted_files)
+    {
+        if (active_version_deleted_files.hasOwnProperty(folder))
+        {
+            deleted_absolute.push(folder + '/' + active_version_deleted_files[folder]);
+        }
+    }
+
+    for (var item in active_version_files_data_tracker)
+    {
+        if (active_version_files_data_tracker.hasOwnProperty(item))
+        {
+            if (!deleted_absolute.includes(item))
+            {
+                passed_files_data[item] = active_version_files_data_tracker[item];
+            }
+        }
+    }
+
+    var data = 
+    {
+        "model_path": window.model_path,
+        "files_tracker": passed_files_data,
+        "modified_files": window.active_version_modified_files,
+        "model_id": window.the_model_id,
+        "new_version_number": parseInt(window.last_version) + 1,
+        "the_active_version": window.the_active_version,
+        "metadata": encodeURI(actual_metadata)
+    }
+
+    var data_for_helper = JSON.stringify(data);
+    var helper_url = "/helpers/create_new_version";
+    var confirmation_message = "<h2>This will create a new model version. Are all the modifications needed made (e.g. metadata)?</h2>";
+    callConfirmationDialogue(confirmation_message, helper_url, data_for_helper);
+}
+
+function deleteFile(absolute_path)
+{
+    var helper_url = "/helpers/delete_file";
+    var confirmation_message = "<h2> <span style = 'color:red'>DELETE phisically</span> " + absolute_path + "?";
+    callConfirmationDialogue(confirmation_message, helper_url, absolute_path);
+}
+
+function makeVersionActive(desired_version_id, desired_version_number)
+{
+    var data = 
+    {
+        "model_id": window.the_model_id,
+        "model_path": window.model_path,
+        "desired_version_id": desired_version_id,
+        "desired_version_number": desired_version_number
+    }
+
+    var data_for_helper = JSON.stringify(data);
+    var helper_url = "/helpers/change_active_version";
+    var confirmation_message = "<h2>This will phisically <span style = 'color:red;'>DELETE</span> the files and subfolders of \
+    <span style = 'color:red;'>" + window.the_model_name + 
+    "</span> and unpack files of version you choose as active.<br>Files untracked in currently actvie version will be <span style = 'color:red;'>LOST</span>\
+    <br><span style = 'color:red;'>PROCEED?</span> </h2>\
+    (the db record and archive will remain and possible to activate)<br><br><b style = 'color:red'>" + window.model_path +
+    "</b> will be <b style = 'color:red'>purged</b> and refilled with v. " + desired_version_number + " files";
+
+    callConfirmationDialogue(confirmation_message, helper_url, data_for_helper);
+}
+
+function restoreFile(absolute_path)
+{
+    var data = 
+    {
+        "file_absolute_path": absolute_path,
+        "model_path": window.model_path,
+        "model_id": window.the_model_id,
+        "version_number": window.active_version_number,
+        "version_id": window.active_version_id
+    }
+    var data_for_helper = JSON.stringify(data);
+
+    asyncPostRequestWithRefresh("/helpers/restore_file", data_for_helper);
+ }

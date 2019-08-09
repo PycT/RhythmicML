@@ -1,15 +1,15 @@
-#Catalogue - index.html
+# Catalogue - index.html
 
 The dashboard is a list of all the models tracked by the system [RhythmicML]
 
-##Functions:
+## Functions:
 
 + Add a model to the tracking list
 + Delete a model from the tracking list
 + Display the tracking list
 
 
-##UI elements:
+## UI elements:
 
 + Button "Add".
 + "Search" field to search a model.
@@ -24,7 +24,7 @@ Model names and model versions in sublist are clickable, leading to the dashboar
 Click on the model's name leads to the dashboard of the last version of the model.
 Dashboards of all the versions except the last one are read-only.
 
-##Tracking list
+## Tracking list
 
 Enumerated list of tracked model.
 
@@ -37,9 +37,9 @@ Enumerated list of tracked model.
 + Each list item has UI-element to delete model from the list.
 + Each list item has a UI element to rename the model.
 
-##Workflow
+## Workflow
 
-###Adding a model to the tracking list
+### Adding a model to the tracking list
 To add a model to the tracker, User presses **the "Add" button** on the dashboard. A dialogue appears to select a folder, containing a model with all the accompanying files to track. The model inititally named after the containing folder. If there is already a model with such a name in hte base, a number **1** is added to the name, then checked again. This repeats with increasing the number until the unique name is figured. 
 
 0. The path is checked to be already present in the database. If true, the according status returned, workflow stops.
@@ -49,11 +49,17 @@ To add a model to the tracker, User presses **the "Add" button** on the dashboar
 4. The `.rhml_storage` folder created within specified model directory.
 5. The initial, 0-version archive is created.
 
-###Managing the model files tracking and versions: see the `dashboard.md`
+File naming: "model_" + `model_id` + "_ver" + `version_number` + ".zip"
 
-###Deleting a model from tracking list
-When User wishes to delete a model, he is prompted to input model's name to confirm deleteion. The deletion is irreversible.
 
-After confirmation `models_table`, `versions_table` and `files_table` are cleaned accordingly.
+### Managing the model files tracking and versions: see the [dashboard.md](dashboard.md)
 
-Cleaning Server side is up to User.
+### Removing a model from tracking list
+
+Leting alone serving side, for now the work flow is as follows:
+
+0. Confirmation Dialogue
+1. Clean records in `models_table`; `versions_table` and `files_table` will get cleaned by SQL cascding rules.
+2. Delete all the files in the storage folder
+3. Delete the storage folder.
+

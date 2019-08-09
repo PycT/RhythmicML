@@ -27,6 +27,7 @@ button
     background-color: #fafafa;
     color: #777777;
     font-size: 12pt;
+    margin-left: 8px;
 }
 
 button:disabled
@@ -183,12 +184,28 @@ button:disabled
   font-weight: bolder;
 }
 
+.warning_blinker
+{
+  animation: warning_blinker 1s linear infinite;
+  color: red;
+  font-weight: bolder;
+}
+
 @keyframes blinker 
 {
   50%
   {
     opacity: 0;
     color: green;
+  }
+}
+
+@keyframes warning_blinker 
+{
+  50%
+  {
+    //opacity: 0;
+    color: black;
   }
 }
 

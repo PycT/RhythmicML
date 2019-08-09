@@ -1,6 +1,8 @@
 from flask import Flask, render_template as renderTemplate, request;
 from functools import wraps;
+from urllib.parse import unquote;
 import json;
+from os import remove;
 from . import helpers;
 
 app = Flask(__name__);
@@ -45,7 +47,7 @@ def index():
     """
     models_list = helpers.getModelsList();
     
-    print("{}/{}".format(__name__, "index"));
+    #print("{}/{}".format(__name__, "index"));
     #print(models_list);
 
     return renderTemplate("index.html", title = "Catalogue", ui_caption = "Catalogue", models_list = models_list);
@@ -64,7 +66,7 @@ def dashboard(model_id = None):
 
     model_static_data = helpers.modelAllStaticData(model_id);
 
-    print("{}/{}".format(__name__, "dashboard"));
+    #print("{}/{}".format(__name__, "dashboard"));
     # print(model_static_data);
 
     return renderTemplate("dashboard.html", title = "Model Dashboard", ui_caption = "Model Dashboard", model_static_data = model_static_data);
@@ -135,7 +137,6 @@ def addModel():
     # the_folder = request.data.model_path.decode();
 
     data_json = request.data.decode();
-
     data = json.loads(data_json);
 
     new_model_name = data["model_name"];
@@ -155,7 +156,6 @@ def renderConfirmationDialogue():
 
     data_json = request.data.decode();
     data = json.loads(data_json);
-
 # confirmation dialogue parameters are the following (passed as an object):
 # confirmation_message - string, the statement to confirm
 # helper_url - string, an url to request if confirmation is positive
@@ -167,6 +167,102 @@ def renderConfirmationDialogue():
 # result_element_id - string, dom element id to use in "value" and "html" cases
 
     return renderTemplate("confirmation_dialogue.html", confirmation_dialogue_parameters = data);
+
+
+#==========================================================================
+
+#==========================================================================
+
+@app.route("/helpers/set_new_deploy_destination", methods = ["POST", "GET"])
+@checkPost
+def setNewDeployDestination():
+    
+    data_json = request.data.decode();
+    data = json.loads(data_json);
+
+    return helpers.setNewModelDeployDestination(data["the_model_id"], data["new_deploy_destination"]);
+
+#==========================================================================
+
+#==========================================================================
+
+@app.route("/helpers/new_metadata_and_deployables", methods = ["POST", "GET"])
+@checkPost
+def updateActiveVersionMetadataAndDeployables():
+
+    data_json = request.data.decode();
+    data = json.loads(data_json);
+    data["actual_metadata"] = unquote(data["actual_metadata"]);
+
+    return helpers.updateMetadataAndDeployables(data);
+
+#==========================================================================
+
+#==========================================================================
+
+@app.route("/helpers/create_new_version", methods = ["POST", "GET"])
+@checkPost
+def createNewVersion():
+
+    data_json = request.data.decode();
+    data = json.loads(data_json);
+    data["metadata"] = unquote(data["metadata"]); 
+
+    return helpers.createNewVersion(data);
+
+
+#==========================================================================
+
+#==========================================================================
+
+@app.route("/helpers/change_active_version", methods = ["POST", "GET"])
+@checkPost
+def changeActiveVersion():
+
+    data_json = request.data.decode();
+    data = json.loads(data_json);
+
+    return helpers.setModelVersionActive(data);
+
+#==========================================================================
+
+#==========================================================================
+
+@app.route("/helpers/restore_file", methods = ["POST", "GET"])
+@checkPost
+def restoreFile():
+    data_json = request.data.decode();
+    data = json.loads(data_json);
+
+    return helpers.restoreFile(data);
+#==========================================================================
+
+#==========================================================================
+
+@app.route("/helpers/delete_file", methods = ["POST", "GET"])
+@checkPost
+def deleteFile():
+    file_path = request.data.decode();
+
+    try:
+        remove(file_path);
+    except Exception as error_message:
+        return "Fault: {}".format(error_message);
+        
+    return "Success";
+#==========================================================================
+
+#==========================================================================
+
+@app.route("/helpers/remove_model", methods = ["POST", "GET"])
+@checkPost
+def removeModel():
+
+    data_json = request.data.decode();
+    data = json.loads(data_json)
+
+    return helpers.removeModel(data);
+
 
 #==========================================================================
 #==========================================================================

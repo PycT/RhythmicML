@@ -98,12 +98,17 @@
                 Active v. {{ item["active_version"] }}  / Last v. {{ item["last_version"] }} 
             </td>
             <td class = "catalogue_model_list_item_timestamp">
-                {{ item["timestamp"] }}
+                <button class = "small_button"
+                onclick = "onRemoveButtonClick('{{ item.id }}', '{{ item.path }}', '{{ item.name }}');"
+                >
+                    Remove
+                </button>
             </td>
         </tr>
         <tr id = "model_path{{ item['id'] }}">
             <td colspan="3" class = "catalogue_model_list_item_path">
-                {{item["path"]}}
+                {{item["path"]}}<br>
+                last version created:{{ item["last_version_timestamp"][:-7] }}
             </td>
         </tr>
         {% endfor %}

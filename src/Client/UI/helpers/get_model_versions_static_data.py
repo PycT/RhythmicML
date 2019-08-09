@@ -20,6 +20,7 @@ def differences(version_files, actual_folder_contents):
     #absent_files = {"folder_path":["file_1_path .. file_n_path"];
 
     changed_folders = [];
+    modified_files = {};
 
     #first looking for changes relative to tracked data
     for tracked_file in version_files:
@@ -39,6 +40,7 @@ def differences(version_files, actual_folder_contents):
         else:
             if str(version_files[tracked_file]["last_modified_time"]) != str(actual_folder_contents[tracked_file]["last_modified_time"]):
                 change_detected = True;
+                modified_files[tracked_file] = actual_folder_contents[tracked_file]["last_modified_time"];
 
         if change_detected:
             if parent_folder not in changed_folders:
@@ -51,7 +53,7 @@ def differences(version_files, actual_folder_contents):
             if parent_folder not in changed_folders:
                 changed_folders.append(parent_folder);
 
-    return absent_files, changed_folders;
+    return absent_files, changed_folders, modified_files;
 
 @faultReturnHandler
 def modelAllStaticData(model_id):
@@ -86,7 +88,7 @@ def modelAllStaticData(model_id):
 
             version_tracked_files = db.execute(
                 """
-                SELECT * FROM files_table WHERE model_version_id = '{}' ORDER BY file_path ASC;
+                SELECT * FROM files_table WHERE model_version_id = '{}' ORDER BY absolute_path ASC;
                 """.format(version_properties["id"])
                 );
 
@@ -94,7 +96,7 @@ def modelAllStaticData(model_id):
 
                 version_tracked_file_data = filePropertiesDictionary(version_tracked_file);
 
-                version_files_key = version_tracked_file_data["file_path"];
+                version_files_key = version_tracked_file_data["absolute_path"];
                 version_files[ version_files_key ] = version_tracked_file_data;
 
             model_versions_key = version_properties["version"];
@@ -108,13 +110,13 @@ def modelAllStaticData(model_id):
                 #let us check for changes and prepare them for display, for active modelversion only
                 actual_folder_contents = scanModelFolder(all_model_info["properties"]["path"]);
 
-                absent_files, changed_folders = differences(version_files, actual_folder_contents);
+                absent_files, changed_folders, modified_files = differences(version_files, actual_folder_contents);
 
                 all_model_info["model_versions"][model_versions_key].update(
                     {
                         "changed_folders": changed_folders,
-                        "absent_files": absent_files
+                        "absent_files": absent_files,
+                        "modified_files": modified_files
                     });
-
 
     return all_model_info;
