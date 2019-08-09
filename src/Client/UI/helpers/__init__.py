@@ -7,3 +7,4 @@ from .add_new_model import addNewModel;
 from .packer import packFiles;
 from .db_record_to_dictionary import modelPropertiesDictionary, versionPropertiesDictionary, filePropertiesDictionary;
 from .get_model_versions_static_data import modelAllStaticData;
+from .set_new_deploy_destination import setNewModelDeployDestination;

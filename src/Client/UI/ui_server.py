@@ -135,7 +135,6 @@ def addModel():
     # the_folder = request.data.model_path.decode();
 
     data_json = request.data.decode();
-
     data = json.loads(data_json);
 
     new_model_name = data["model_name"];
@@ -155,7 +154,6 @@ def renderConfirmationDialogue():
 
     data_json = request.data.decode();
     data = json.loads(data_json);
-
 # confirmation dialogue parameters are the following (passed as an object):
 # confirmation_message - string, the statement to confirm
 # helper_url - string, an url to request if confirmation is positive
@@ -167,6 +165,24 @@ def renderConfirmationDialogue():
 # result_element_id - string, dom element id to use in "value" and "html" cases
 
     return renderTemplate("confirmation_dialogue.html", confirmation_dialogue_parameters = data);
+
+
+#==========================================================================
+
+#==========================================================================
+
+@app.route("/helpers/set_new_deploy_destination", methods = ["POST", "GET"])
+@checkPost
+def setNewDeployDestination():
+    
+    data_json = request.data.decode();
+    data = json.loads(data_json);
+
+    return helpers.setNewModelDeployDestination(data["the_model_id"], data["new_deploy_destination"]);
+
+#==========================================================================
+
+#==========================================================================
 
 #==========================================================================
 #==========================================================================

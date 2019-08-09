@@ -1,37 +1,32 @@
 {% if confirmation_dialogue_parameters %}
-<script type="text/javascript">
-    function performConfirmedAction()
-    {
-        setInvisible("confirmation_dialogue_canvas");
-        {% if confirmation_dialogue_parameters["confirmation_result"] == "html" %}
-            asyncPostRequest(
-                '{{confirmation_dialogue_parameters["helper_url"]}}',
-                '{{confirmation_dialogue_parameters["data_for_helper"]}}',
-                '{{confirmation_dialogue_parameters["result_element_id"]}}');
-        {% elif confirmation_dialogue_parameters["confirmation_result"] == "value" %}
-            asyncPostRequest(
-                '{{confirmation_dialogue_parameters["helper_url"]}}',
-                '{{confirmation_dialogue_parameters["data_for_helper"]}}',
-                '{{confirmation_dialogue_parameters["result_element_id"]}}',
-                false);
-        {% else %}
-            asyncPostRequestWithRefresh(
-                '{{confirmation_dialogue_parameters["helper_url"]}}',
-                '{{confirmation_dialogue_parameters["data_for_helper"]}}'
-        {% endif %}
-
-    }
-</script>
 <div align = "center">
-    <h1>Think Twice!</h1>
+    <h1 class="warning_blinker">Think Twice!</h1>
     <br clear = "All">
     {{ confirmation_dialogue_parameters["confirmation_message"]|safe }}
     <div style = "margin: 32px;">
         <button id = "dialogue_button_cancel" class = "action_button" onclick = "setInvisible('confirmation_dialogue_canvas');">
-        NO
+            NO
         </button> 
-        <button id = "dialogue_button_confirm" class = "cancel_button" onclick = "performConfirmedAction();">
-        YES
+         <button id = "dialogue_button_confirm" class = "cancel_button" onclick = "
+            setInvisible('confirmation_dialogue_canvas');
+            {% if confirmation_dialogue_parameters['confirmation_result'] == 'html' %}
+                asyncPostRequest(
+                    '{{confirmation_dialogue_parameters.helper_url}}',
+                    '{{confirmation_dialogue_parameters.data_for_helper}}',
+                    '{{confirmation_dialogue_parameters.result_element_id}}');
+            {% elif confirmation_dialogue_parameters['confirmation_result'] == 'value' %}
+                asyncPostRequest(
+                    '{{confirmation_dialogue_parameters.helper_url}}',
+                    '{{confirmation_dialogue_parameters.data_for_helper}}',
+                    '{{confirmation_dialogue_parameters.result_element_id}}',
+                    false);
+            {% else %}
+                asyncPostRequestWithRefresh(
+                    '{{confirmation_dialogue_parameters.helper_url}}',
+                    '{{confirmation_dialogue_parameters.data_for_helper}}');
+            {% endif %}
+        ">
+            YES
         </button>
     </div>
 </div>

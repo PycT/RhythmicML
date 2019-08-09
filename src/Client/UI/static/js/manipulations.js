@@ -106,11 +106,11 @@ function callConfirmationDialogue(confirmation_message, helper_url, data_for_hel
 // result_element_id - string, dom element id to use in "value" and "html" cases
 {
     var dialogue_data = {
-        confirmation_message: confirmation_message,
-        helper_url: helper_url,
-        data_for_helper: data_for_helper,
-        confirmation_result: confirmation_result,
-        result_element_id: result_element_id
+        "confirmation_message": confirmation_message,
+        "helper_url": helper_url,
+        "data_for_helper": data_for_helper,
+        "confirmation_result": confirmation_result,
+        "result_element_id": result_element_id
     }
     setVisible("confirmation_dialogue_canvas");
     var data_json = JSON.stringify(dialogue_data);

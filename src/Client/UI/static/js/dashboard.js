@@ -101,6 +101,7 @@ function setFolderItemMark(absolute_path)
             if (!window.active_version_files_data.hasOwnProperty(absolute_path))
             {
                 markNewFile(absolute_path);
+                change_detected = true;
             }
         }
 
@@ -112,8 +113,10 @@ function setFolderItemMark(absolute_path)
 function setFolderContentMarks()
 //color changes and set checkboxes in accordance with db records
 {
+    var change_detected = false;
     if (window.active_version_deleted_files.hasOwnProperty(window.the_folder))
     {
+        change_detected = true;
         var folder_items_table = document.getElementById("the_folder_items_list");
         window.active_version_deleted_files[window.the_folder].forEach(
             function(deleted_file)
@@ -139,6 +142,7 @@ function setFolderContentMarks()
                     var base_name_cell = document.getElementById('base_name_' + item_record);
                     var base_name = base_name_cell.innerHTML;
                     base_name_cell.innerHTML +=  "<sup style = 'color: red;'> changes </sup>";
+                    change_detected = true;
                 }
             }
             else
@@ -148,7 +152,7 @@ function setFolderContentMarks()
                     document.getElementById('is_tracked_' + item_record).checked = true;
                     document.getElementById('is_deployed_' + item_record).checked = window.active_version_files_data_tracker[item_record]["is_deployed"];
                 }
-                if (setFolderItemMark(item_record))
+                if (setFolderItemMark(item_record) || change_detected)
                 {
                     enableElement('action');
                 }
@@ -363,6 +367,11 @@ function onSaveDeployDestinationClick()
     <br><b style = 'color: green;'>`"+ window.actual_deploy_destination + 
     "`</b> to `<b style = 'color: red;'>" + new_deploy_destination + "</b>`";
     var helper_url = "/helpers/set_new_deploy_destination";
-    var data_for_helper = new_deploy_destination;
+    var data = 
+    {
+        "new_deploy_destination": new_deploy_destination,
+        "the_model_id": the_model_id
+    };
+    var data_for_helper = JSON.stringify(data);
     callConfirmationDialogue(confirmation_message, helper_url, data_for_helper);
 }

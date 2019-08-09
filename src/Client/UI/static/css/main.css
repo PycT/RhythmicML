@@ -183,12 +183,28 @@ button:disabled
   font-weight: bolder;
 }
 
+.warning_blinker
+{
+  animation: warning_blinker 1s linear infinite;
+  color: red;
+  font-weight: bolder;
+}
+
 @keyframes blinker 
 {
   50%
   {
     opacity: 0;
     color: green;
+  }
+}
+
+@keyframes warning_blinker 
+{
+  50%
+  {
+    //opacity: 0;
+    color: black;
   }
 }
 

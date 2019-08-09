@@ -19,7 +19,6 @@ Version is updated here either.
 For each version:
 
 + Metadata text
-+ Commit comment
 
 + Tracked files list
     * Each item accompanied with a check box, if checked - file is tracked.
@@ -56,3 +55,60 @@ The Active Version (the version user works with currently, it is not neccessaril
 
 + When older version is made current, all tracked files are deleted and version archive is unpacked.
     A mark of current active version written to a model record. If any changes performed and commited, a new eldest version is created.
+
+
+## Data structure of modele static data
+
+model_static_data
+{
+    properties:
+    {
+        id: "...",
+        name: "...",
+        path: "...",
+        last_version_timestamp: "...",
+        last_version: "...",
+        active_version: "...",
+        deploy_destination: "...",
+        deploy_status: "..."
+    },
+
+    model_versions:
+    {
+        `version_number`: 
+        {
+            version_properties:
+            {
+                id: "...",
+                model_id: "...",
+                version: "...",
+                metadata: "...",
+                commit_comment: "...", //(not used currently)
+                created_timestamp: "..."
+            },
+
+            version_files:
+            {
+                `file_absolute_path`:
+                {
+                    id: "...",
+                    model_version_id: "...",
+                    file_path: "...",
+                    file_commit_state: "...",
+                    last_modified_time: "...",
+                    is_deployed: "..."
+                },
+                ..
+                `file_absolute_path`:
+                {
+                    ..
+                }
+            }
+        },
+        ..
+        `version_number`:
+        {
+            ..
+        }
+    }
+}
