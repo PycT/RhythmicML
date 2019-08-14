@@ -8,3 +8,5 @@ from .packer import packFiles;
 from .db_record_to_dictionary import modelPropertiesDictionary, versionPropertiesDictionary, filePropertiesDictionary;
 from .get_model_versions_static_data import modelAllStaticData;
 from .set_new_deploy_destination import setNewModelDeployDestination;
+from .update_metadata_and_deployables import updateMetadataAndDeployables;
+from .create_new_version import createNewVersion;

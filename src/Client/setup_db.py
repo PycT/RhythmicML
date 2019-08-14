@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS files_table
 );
 """;
 
-# file_commit_state a state of file by commit moment; soptions: new, same, changed, deleted
+# file_commit_state a state of file by commit moment; options: new, same, modified
 
 def main():
 

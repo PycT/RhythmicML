@@ -1,5 +1,6 @@
 from flask import Flask, render_template as renderTemplate, request;
 from functools import wraps;
+from urllib.parse import unquote;
 import json;
 from . import helpers;
 
@@ -183,6 +184,31 @@ def setNewDeployDestination():
 #==========================================================================
 
 #==========================================================================
+
+@app.route("/helpers/new_metadata_and_deployables", methods = ["POST", "GET"])
+@checkPost
+def updateActiveVersionMetadataAndDeployables():
+
+    print(request.data);
+    data_json = request.data.decode();
+    data = json.loads(data_json);
+    data["actual_metadata"] = unquote(data["actual_metadata"]);
+
+    return helpers.updateMetadataAndDeployables(data);
+#==========================================================================
+
+#==========================================================================
+
+@app.route("/helpers/create_new_version", methods = ["POST", "GET"])
+@checkPost
+def createNewVersion():
+
+    data_json = request.data.decode();
+    data = json.loads(data_json);
+    data["metadata"] = unquote(data["metadata"]);    
+    print(data);
+
+    return helpers.createNewVersion(data);
 
 #==========================================================================
 #==========================================================================

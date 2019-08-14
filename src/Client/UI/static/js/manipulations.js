@@ -95,7 +95,7 @@ function disableElement(dom_element_id)
 }
 
 function callConfirmationDialogue(confirmation_message, helper_url, data_for_helper, confirmation_result = "refresh", result_element_id = "status_bar")
-// confirmation dialogue parameters are the following (passed as an object):
+// confirmation dialogue parameters are the following:
 // confirmation_message - string, the statement to confirm
 // helper_url - string, an url to request if confirmation is positive
 // data_for_helper - string, data to send with that request

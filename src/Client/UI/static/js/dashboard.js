@@ -246,6 +246,10 @@ function isTrackedCheckboxChange(absolute_path)
             else
             {
                 window.active_version_files_data_tracker[absolute_path] = window.current_folder_contents[absolute_path];
+                window.active_version_files_data_tracker[absolute_path]["file_commit_state"] = "emerged";
+                window.active_version_files_data_tracker[absolute_path]["is_deployed"] = false;
+                delete window.active_version_files_data_tracker[absolute_path]["is_dir"];
+                delete window.active_version_files_data_tracker[absolute_path]["base_name"];
             }
         }
     }
@@ -373,5 +377,91 @@ function onSaveDeployDestinationClick()
         "the_model_id": the_model_id
     };
     var data_for_helper = JSON.stringify(data);
+    callConfirmationDialogue(confirmation_message, helper_url, data_for_helper);
+}
+
+function onSaveMetadataClick()
+{
+
+    var data = 
+    {
+        "metadata_changed": false,
+        "actual_metadata": "",
+        "deployables_changed": false,
+        "changed_items": {}
+    };
+
+    data["metadata_changed"] = inputValueHasChanged('active_model_version_metadata', window.actual_metadata);
+
+    if (data["metadata_changed"])
+    {
+        var actual_metadata = popElement('active_model_version_metadata').value;
+        data["actual_metadata"] = encodeURI(actual_metadata);
+        data["active_version_id"] = window.active_version_id;
+    }
+    for (var item in window.active_version_files_data)
+    {
+        if (window.active_version_files_data.hasOwnProperty(item))
+        {
+            if (window.active_version_files_data[item]["is_deployed"] != window.active_version_files_data_tracker[item]["is_deployed"])
+            {
+                data["deployables_changed"] = true;
+                var changed_item_id = window.active_version_files_data_tracker[item]["id"];
+                data["changed_items"][changed_item_id] = window.active_version_files_data_tracker[item]["is_deployed"];
+            }
+        }
+    }
+
+    if (!data["metadata_changed"] && !data["deployables_changed"])
+    {
+        alert("You did change nothing, nothing to save.");
+        return false;
+    }
+    
+    var data_for_helper = JSON.stringify(data);
+    var confirmation_message = "<h2> Update metadata and deployables for <b style = 'color: red;'>v. "+ window.the_active_version + 
+    "</b> of <b style = 'color: red;'>"+ window.the_model_name+"</b>?</h2>";
+    var helper_url = "/helpers/new_metadata_and_deployables";
+
+    callConfirmationDialogue(confirmation_message, helper_url, data_for_helper);
+}
+
+function createNewVersion()
+{
+    var actual_metadata = popElement('active_model_version_metadata').value;
+    var passed_files_data = {};
+    var deleted_absolute = [];
+
+    for (var folder in active_version_deleted_files)
+    {
+        if (active_version_deleted_files.hasOwnProperty(folder))
+        {
+            deleted_absolute.push(folder + '/' + active_version_deleted_files[folder]);
+        }
+    }
+
+    for (var item in active_version_files_data_tracker)
+    {
+        if (active_version_files_data_tracker.hasOwnProperty(item))
+        {
+            if (!deleted_absolute.includes(item))
+            {
+                passed_files_data[item] = active_version_files_data_tracker[item];
+            }
+        }
+    }
+    var data = 
+    {
+        "model_path": window.model_path,
+        "files_tracker": passed_files_data,
+        "modified_files": window.active_version_modified_files,
+        "model_id": window.the_model_id,
+        "current_version": window.the_active_version,
+        "metadata": encodeURI(actual_metadata)
+    }
+
+    var data_for_helper = JSON.stringify(data);
+    var helper_url = "/helpers/create_new_version";
+    var confirmation_message = "<h2>This will create a new model version. Are all the modifications needed made (e.g. metadata)?</h2>";
     callConfirmationDialogue(confirmation_message, helper_url, data_for_helper);
 }

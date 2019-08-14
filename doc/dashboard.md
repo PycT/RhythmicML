@@ -5,6 +5,8 @@ parameters are configured.
 
 Version is updated here either.
 
+**All [meta]data changes are possible for active model version only.**
+
 
 ##Displayed properties:
 
@@ -57,7 +59,7 @@ The Active Version (the version user works with currently, it is not neccessaril
     A mark of current active version written to a model record. If any changes performed and commited, a new eldest version is created.
 
 
-## Data structure of modele static data
+## Data structure of model static data
 
 model_static_data
 {
@@ -72,7 +74,6 @@ model_static_data
         deploy_destination: "...",
         deploy_status: "..."
     },
-
     model_versions:
     {
         `version_number`: 
@@ -86,7 +87,6 @@ model_static_data
                 commit_comment: "...", //(not used currently)
                 created_timestamp: "..."
             },
-
             version_files:
             {
                 `file_absolute_path`:
@@ -94,7 +94,7 @@ model_static_data
                     id: "...",
                     model_version_id: "...",
                     file_path: "...",
-                    file_commit_state: "...",
+                    file_commit_state: "...", //file_commit_state is a state of file by commit moment; options: new, same, modified
                     last_modified_time: "...",
                     is_deployed: "..."
                 },
@@ -103,7 +103,22 @@ model_static_data
                 {
                     ..
                 }
-            }
+            },
+            changed_folders: *//this field is present for active model version only*
+            [
+                '`folder_absolute_path`', .., '`folder_absolute_path`'
+            ]
+            absent_files:  *//this field is present for active model version only*
+            {
+                `folder_absolute_path`:
+                [
+                    '`file_base_name`', .., '`file_base_name`'
+                ]
+            },
+            modified_files: *//this field is present for active model version only*; used when creating incremented version;
+            [
+                '`file_absolute_path`', .., '`file_absolute_path`'
+            ]
         },
         ..
         `version_number`:
@@ -112,3 +127,37 @@ model_static_data
         }
     }
 }
+
+## Global UI page variables
+
+window.model_path = "{{model_static_data['properties']['path']|escape() }}";
+window.the_model_id = "{{model_static_data['properties']['id']}}";
+window.the_model_name = '{{ model_static_data["properties"]["name"] }}';
+window.the_active_version = '{{ model_static_data["properties"]["active_version"] }}';
+window.actual_deploy_destination = '{{model_static_data["properties"]["deploy_destination"]|escape()}}';
+
+```
+<input type="hidden" id = "current_model_metadata" 
+value = '{{model_static_data["model_versions"][active_version]["version_properties"]["metadata"]|escape()}}'>
+```
+window.active_version_files_json = '{{model_static_data["model_versions"][active_version]["version_files"]|tojson()}}';
+window.active_version_files_data = JSON.parse(active_version_files_json);
+window.active_version_files_data_tracker = JSON.parse(active_version_files_json);
+window.actual_metadata = popElement("current_model_metadata").value;
+
+window.active_version_changed_folders_json = popElement("active_version_changed_folders").value;
+window.active_version_deleted_files_json = popElement("active_version_deleted_files").value;
+window.active_version_modified_files_json = popElement("active_version_modified_files").value;
+window.active_version_changed_folders = JSON.parse(active_version_changed_folders_json);
+window.active_version_deleted_files = JSON.parse(active_version_deleted_files_json);
+window.active_version_modified_files = JSON.parse(active_version_modified_files_json);
+window.active_version_id = '{{the_model_version["version_properties"]["id"]}}';
+
+
+##IMPORTANT NOTES
+
+* **All [meta]data changes are possible for active model version only.**
+
+* All multiline fields in UI are to be encoded with js `URIencode()` before packing into JSON and sending to backend scripts.
+    There those data fields are to be decoded with `urllib.parse.unquote()` after unpacking the JSON.
+    That is for avoiding troubles with control characters when executing `json.loads()`.

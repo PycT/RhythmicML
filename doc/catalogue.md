@@ -48,6 +48,7 @@ To add a model to the tracker, User presses **the "Add" button** on the dashboar
 3. The model folder is scanned recursiveliy, adding all the files found to the `files_table` (absolute paths). 
 4. The `.rhml_storage` folder created within specified model directory.
 5. The initial, 0-version archive is created.
+    File naming: "model_" + `model_id` + "_ver" + `version_number` + ".zip" 
 
 ###Managing the model files tracking and versions: see the `dashboard.md`
 

@@ -19,16 +19,17 @@
     {% if model_static_data["properties"] %}
     
     <script type = "text/javascript">
-            var model_path = "{{model_static_data['properties']['path']|escape() }}";
-            var the_model_id = "{{model_static_data['properties']['id']}}";
+        window.model_path = "{{model_static_data['properties']['path']|escape() }}";
+        window.the_model_id = "{{model_static_data['properties']['id']}}";
+        window.the_model_name = '{{ model_static_data["properties"]["name"] }}';
+        window.the_active_version = '{{ model_static_data["properties"]["active_version"] }}';
+        window.actual_deploy_destination = '{{model_static_data["properties"]["deploy_destination"]|escape()}}';
     </script>
 
     <h1>
         {{ model_static_data["properties"]["name"] }}
     </h1>
-    <input type = "hidden" name = "the_model_name" id = "the_model_name" value = '{{ model_static_data["properties"]["name"] }}'>
     <script type = "text/javascript">
-        window.the_model_name = popElement('the_model_name').value;
     </script>
     <div class = "dashboard_model_path">
         {{ model_static_data["properties"]["path"] }};&nbsp;&nbsp;&nbsp; 
@@ -39,16 +40,12 @@
 
         <span class = "ui_caption">Deploy destination: </span>
         <br clear = all>
-        <input type="hidden"  id = "actual_deploy_destination" value = '{{model_static_data["properties"]["deploy_destination"]|escape()}}'>
-        <script type = "text/javascript">
-            window.actual_deploy_destination = popElement("actual_deploy_destination").value;
-        </script>
         <input class = "dashboard_deploy_destination_input" type = text size = 80 value = "{{model_static_data.properties.deploy_destination}}" 
         placeholder=" http(s)://..."
         name = "deploy_destination_url"
         id = "deploy_destination_url"
         onkeyup = "
-        if (elementIsDisabled('save_model_deploy_destination_button') && inputValueHasChanged('deploy_destination_url', window.actual_deploy_destination))
+        if (elementIsDisabled('save_model_deploy_destination_button') && inputValueHasChanged('deploy_destination_url', actual_deploy_destination))
         {
             enableElement('save_model_deploy_destination_button');
         }
@@ -70,14 +67,12 @@
             <input type="hidden" id = "current_model_metadata" 
             value = '{{model_static_data["model_versions"][active_version]["version_properties"]["metadata"]|escape()}}'>
             
-            <input type="hidden"  id = "active_model_version_files_data" 
-            value = '{{model_static_data["model_versions"][active_version]["version_files"]|tojson()}}'>
-            
             <script type = "text/javascript">
-                var active_version_files_input = popElement("active_model_version_files_data").value;
-                window.active_version_files_data = JSON.parse(active_version_files_input);
-                window.active_version_files_data_tracker = JSON.parse(active_version_files_input);
-                window.actual_metadata = popElement("current_model_metadata").value;
+                window.active_version_files_json = '{{model_static_data["model_versions"][active_version]["version_files"]|tojson()}}';
+                window.active_version_files_data = JSON.parse(active_version_files_json);
+                window.active_version_files_data_tracker = JSON.parse(active_version_files_json);
+                var encoded_metadata = popElement("current_model_metadata").value;
+                window.actual_metadata = decodeURI(encoded_metadata);
             </script>
 
             <ul class = "dashboard_versions_ol">
@@ -101,11 +96,16 @@
                         id = "active_version_changed_folders" value = '{{ the_model_version["changed_folders"]|tojson() }}'>
                         <input type = "hidden" name = "active_version_deleted_files" 
                         id = "active_version_deleted_files" value = '{{ the_model_version["absent_files"]|tojson() }}'>
+                        <input type = "hidden" name = "active_version_modified_files" 
+                        id = "active_version_modified_files" value = '{{ the_model_version["modified_files"]|tojson() }}'>
                         <script type = "text/javascript">
-                            var active_version_changed_folders = popElement("active_version_changed_folders").value;
-                            var active_version_deleted_files = popElement("active_version_deleted_files").value;
-                            window.active_version_changed_folders = JSON.parse(active_version_changed_folders);
-                            window.active_version_deleted_files = JSON.parse(active_version_deleted_files);
+                            window.active_version_changed_folders_json = popElement("active_version_changed_folders").value;
+                            window.active_version_deleted_files_json = popElement("active_version_deleted_files").value;
+                            window.active_version_modified_files_json = popElement("active_version_modified_files").value;
+                            window.active_version_changed_folders = JSON.parse(active_version_changed_folders_json);
+                            window.active_version_deleted_files = JSON.parse(active_version_deleted_files_json);
+                            window.active_version_modified_files = JSON.parse(active_version_modified_files_json);
+                            window.active_version_id = '{{the_model_version["version_properties"]["id"]}}';
                         </script>
                     {% endif %}
                         <br clear = "all">
@@ -134,14 +134,18 @@
                             >{{ the_model_version["version_properties"]["metadata"] }}</textarea>
                             &nbsp;
                             {%- if model_static_data['properties']['active_version'] == model_version %}
-                            <button id = "metadata_button" disabled>Update v. {{ model_version }} <br>Metadata & Deployables</button>
-                            <button id = "action" class = "action_button" disabled>Save All as <br> v. {{model_static_data["properties"]["last_version"] + 1}}</button>
+                            <button id = "metadata_button" disabled onclick = "onSaveMetadataClick();">
+                                Update v. {{ model_version }} <br>Metadata & Deployables
+                            </button>
+                            <button id = "action" class = "action_button" disabled
+                            onclick = "createNewVersion();">
+                                Save All as <br> v. {{model_static_data["properties"]["last_version"] + 1}}
+                            </button>
                             <button id = "cancel" class = "cancel_button" onclick = "window.location.reload(true);">Discard Unsaved Changes</button>
                             {%- endif-%}
                         </div>
                         
                         <div id = "model_folder" class = "dashboard_toolbox" width = "100%" ></div>
-                        <input type = "hidden" id = "model_folder_change_listener" value = "" onchange = "console.log('hey-hey!');">
 
                     </div> <!-- Static data ends here -->
 
@@ -158,7 +162,7 @@
 {% endif %}
 
 <script type="text/javascript">
-    scanFolder(model_path, model_path); //model_path defined in the beginning of the Jinja2 block
+    scanFolder(window.model_path, window.model_path); //model_path defined in the beginning of the Jinja2 block
 </script>
 
 {% endblock %}
