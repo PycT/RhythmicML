@@ -58,21 +58,20 @@ def addNewModel(model_name = None, model_dir = None):
             INSERT INTO versions_table
             (
                 model_id,
-                commit_comment,
                 created_timestamp
             )
             VALUES
             (
-                '{}', '{}', '{}'
+                '{}', '{}'
             );
-            """.format(new_model_id, "initial commit", timestamp));
+            """.format(new_model_id, timestamp));
 
         files_record_request = \
         """
         INSERT INTO files_table
         (
             model_version_id,
-            file_path,
+            absolute_path,
             last_modified_time
         )
         VALUES

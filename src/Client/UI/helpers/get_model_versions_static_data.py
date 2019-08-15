@@ -88,7 +88,7 @@ def modelAllStaticData(model_id):
 
             version_tracked_files = db.execute(
                 """
-                SELECT * FROM files_table WHERE model_version_id = '{}' ORDER BY file_path ASC;
+                SELECT * FROM files_table WHERE model_version_id = '{}' ORDER BY absolute_path ASC;
                 """.format(version_properties["id"])
                 );
 
@@ -96,7 +96,7 @@ def modelAllStaticData(model_id):
 
                 version_tracked_file_data = filePropertiesDictionary(version_tracked_file);
 
-                version_files_key = version_tracked_file_data["file_path"];
+                version_files_key = version_tracked_file_data["absolute_path"];
                 version_files[ version_files_key ] = version_tracked_file_data;
 
             model_versions_key = version_properties["version"];
@@ -118,6 +118,5 @@ def modelAllStaticData(model_id):
                         "absent_files": absent_files,
                         "modified_files": modified_files
                     });
-
 
     return all_model_info;

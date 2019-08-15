@@ -46,7 +46,7 @@ def index():
     """
     models_list = helpers.getModelsList();
     
-    print("{}/{}".format(__name__, "index"));
+    #print("{}/{}".format(__name__, "index"));
     #print(models_list);
 
     return renderTemplate("index.html", title = "Catalogue", ui_caption = "Catalogue", models_list = models_list);
@@ -65,7 +65,7 @@ def dashboard(model_id = None):
 
     model_static_data = helpers.modelAllStaticData(model_id);
 
-    print("{}/{}".format(__name__, "dashboard"));
+    #print("{}/{}".format(__name__, "dashboard"));
     # print(model_static_data);
 
     return renderTemplate("dashboard.html", title = "Model Dashboard", ui_caption = "Model Dashboard", model_static_data = model_static_data);
@@ -189,7 +189,6 @@ def setNewDeployDestination():
 @checkPost
 def updateActiveVersionMetadataAndDeployables():
 
-    print(request.data);
     data_json = request.data.decode();
     data = json.loads(data_json);
     data["actual_metadata"] = unquote(data["actual_metadata"]);
@@ -198,7 +197,6 @@ def updateActiveVersionMetadataAndDeployables():
 #==========================================================================
 
 #==========================================================================
-
 @app.route("/helpers/create_new_version", methods = ["POST", "GET"])
 @checkPost
 def createNewVersion():
@@ -206,7 +204,6 @@ def createNewVersion():
     data_json = request.data.decode();
     data = json.loads(data_json);
     data["metadata"] = unquote(data["metadata"]);    
-    print(data);
 
     return helpers.createNewVersion(data);
 

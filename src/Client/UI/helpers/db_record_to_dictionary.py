@@ -60,7 +60,7 @@ def filePropertiesDictionary(sql_raw_list):
     {
         "id": sql_raw_list[0],
         "model_version_id": sql_raw_list[1],
-        "file_path": sql_raw_list[2],
+        "absolute_path": sql_raw_list[2],
         "file_commit_state": sql_raw_list[3],
         "last_modified_time": sql_raw_list[4],
         "is_deployed": is_deployed

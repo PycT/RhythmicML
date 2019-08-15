@@ -395,7 +395,7 @@ function onSaveMetadataClick()
 
     if (data["metadata_changed"])
     {
-        var actual_metadata = popElement('active_model_version_metadata').value;
+        var actual_metadata = popElement('active_model_version_metadata').value.replace(/'/g, "`");
         data["actual_metadata"] = encodeURI(actual_metadata);
         data["active_version_id"] = window.active_version_id;
     }
@@ -428,7 +428,7 @@ function onSaveMetadataClick()
 
 function createNewVersion()
 {
-    var actual_metadata = popElement('active_model_version_metadata').value;
+    var actual_metadata = popElement('active_model_version_metadata').value.replace(/'/g, "`");
     var passed_files_data = {};
     var deleted_absolute = [];
 
@@ -450,13 +450,14 @@ function createNewVersion()
             }
         }
     }
+
     var data = 
     {
         "model_path": window.model_path,
         "files_tracker": passed_files_data,
         "modified_files": window.active_version_modified_files,
         "model_id": window.the_model_id,
-        "current_version": window.the_active_version,
+        "new_version_number": parseInt(window.last_version) + 1,
         "metadata": encodeURI(actual_metadata)
     }
 

@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS versions_table
     model_id integer NOT NULL,
     version integer NOT NULL DEFAULT 0,
     metadata text DEFAULT 'Description: \nDataset: \nTraining Epochs: \nLearning Rate: \nBatch Size: ',
-    commit_comment text NOT NULL,
+    commit_comment text,
     created_timestamp text NOT NULL,
     FOREIGN KEY (model_id) REFERENCES models_table (id)
     ON DELETE CASCADE
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS files_table
 (
     id integer PRIMARY KEY,
     model_version_id integer NOT NULL,
-    file_path text NOT NULL,
+    absolute_path text NOT NULL,
     file_commit_state text NOT NULL DEFAULT 'new',
     last_modified_time text NOT NULL,
     is_deployed integer NOT NULL DEFAULT 1,
