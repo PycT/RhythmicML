@@ -1,4 +1,4 @@
-#DB Tables
+# DB Tables
 general_table = \
 """
 CREATE TABLE IF NOT EXISTS general
@@ -56,8 +56,8 @@ CREATE TABLE IF NOT EXISTS files_table
 );
 """;
 
-#Properties of entities
-##Model
+# Properties of entities
+## Model
 properties_dictionary = \
     {
         "id": sql_raw_list[0],
@@ -70,7 +70,7 @@ properties_dictionary = \
         "deploy_status": sql_raw_list[7]
     };
 
-##Version
+## Version
 properties_dictionary = \
     {
         "id": sql_raw_list[0],
@@ -82,18 +82,18 @@ properties_dictionary = \
     };
 
 
-##File
+## File
 properties_dictionary = \
     {
         "id": sql_raw_list[0],
         "model_version_id": sql_raw_list[1],
         "absolute_path": sql_raw_list[2],
-        "file_commit_state": sql_raw_list[3],
+        "file_commit_state": sql_raw_list[3], //file_commit_state is a state of file by commit moment; options: new, same, modified
         "last_modified_time": sql_raw_list[4],
         "is_deployed": is_deployed
     }
 
-#Model static data (Dashboard)
+# Model static data (Dashboard)
 
 model_static_data
 {
@@ -162,7 +162,7 @@ model_static_data
     }
 }
 
-#Version Update
+# Version Update
 var data = 
 {
     "model_path": window.model_path,
