@@ -95,6 +95,7 @@ properties_dictionary = \
 
 # Model static data (Dashboard)
 
+```
 model_static_data
 {
     properties:
@@ -161,6 +162,7 @@ model_static_data
         }
     }
 }
+```
 
 # Version Update
 var data = 
