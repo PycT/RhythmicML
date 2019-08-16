@@ -1,4 +1,5 @@
 # DB Tables
+```
 general_table = \
 """
 CREATE TABLE IF NOT EXISTS general
@@ -55,9 +56,11 @@ CREATE TABLE IF NOT EXISTS files_table
     ON UPDATE CASCADE 
 );
 """;
+```
 
 # Properties of entities
 ## Model
+```
 properties_dictionary = \
     {
         "id": sql_raw_list[0],
@@ -69,8 +72,10 @@ properties_dictionary = \
         "deploy_destination": sql_raw_list[6],
         "deploy_status": sql_raw_list[7]
     };
+```
 
 ## Version
+```
 properties_dictionary = \
     {
         "id": sql_raw_list[0],
@@ -80,9 +85,10 @@ properties_dictionary = \
         "commit_comment": sql_raw_list[4],
         "created_timestamp": sql_raw_list[5]
     };
-
+```
 
 ## File
+```
 properties_dictionary = \
     {
         "id": sql_raw_list[0],
@@ -92,6 +98,7 @@ properties_dictionary = \
         "last_modified_time": sql_raw_list[4],
         "is_deployed": is_deployed
     }
+```
 
 # Model static data (Dashboard)
 
@@ -165,6 +172,7 @@ model_static_data
 ```
 
 # Version Update
+```
 var data = 
 {
     "model_path": window.model_path,
@@ -174,3 +182,4 @@ var data =
     "new_version_number": window.last_version + 1,
     "metadata": encodeURI(actual_metadata)
 }
+```
