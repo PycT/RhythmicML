@@ -1,10 +1,10 @@
-#Confirmation Dialogue
+# Confirmation Dialogue
 
 For sensitive actions requiring confirmation, there is a `confirmation_dialogue_canvas` and `confirmaition_dialogue` containers  designated in general layout template.
 
-##Workflow
+## Workflow
 
-When a confirmation required for action, you call `callConfirmationDialogue()` defined in `manipulations.js`.
+When a confirmation required for action, you call `callConfirmationDialogue()` defined in [manipulations.js](../src/Client/static/js/manipulations.js).
 This method requires the following parameters:
 
 + confirmation_message - string with a message to show in dialogue. E.g. "are you sure?"
@@ -17,5 +17,6 @@ This method requires the following parameters:
 + result_element_id - string, dom element id to use in "value" and "html" cases.
 
 
-```function callConfirmationDialogue(confirmation_message, helper_url, data_for_helper, confirmation_result = "refresh", result_element_id = "status_bar")
+```
+function callConfirmationDialogue(confirmation_message, helper_url, data_for_helper, confirmation_result = "refresh", result_element_id = "status_bar")
 ```

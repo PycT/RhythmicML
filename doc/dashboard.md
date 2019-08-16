@@ -1,4 +1,4 @@
-#Dashboard
+# Dashboard
 
 The dashboard of a models is an interface section, where a model's properties are displayed and
 parameters are configured.
@@ -8,7 +8,7 @@ Version is updated here either.
 **All [meta]data changes are possible for active model version only.**
 
 
-##Displayed properties:
+## Displayed properties:
 
 + Model Name
 + Model Path
@@ -31,7 +31,7 @@ For each version:
 + [ delete version ] button
 
 
-##Workflows
+## Workflows
 
 + All the model version are displayed as a list. All the static data - properties, files list - are folded under according version list item.
 The Active Version (the version user works with currently, it is not neccessarily the last version) is displayed unfolded.
@@ -60,7 +60,7 @@ The Active Version (the version user works with currently, it is not neccessaril
 
 
 ## Global UI page variables
-
+```
 window.model_path = "{{model_static_data['properties']['path']|escape() }}";
 window.the_model_id = "{{model_static_data['properties']['id']}}";
 window.the_model_name = '{{ model_static_data["properties"]["name"] }}';
@@ -68,10 +68,10 @@ window.the_active_version = '{{ model_static_data["properties"]["active_version"
 window.last_version = '{{ model_static_data["properties"]["last_version"] }}';
 window.actual_deploy_destination = '{{model_static_data["properties"]["deploy_destination"]|escape()}}';
 
-```
+
 <input type="hidden" id = "current_model_metadata" 
 value = '{{model_static_data["model_versions"][active_version]["version_properties"]["metadata"]|escape()}}'>
-```
+
 window.active_version_files_json = '{{model_static_data["model_versions"][active_version]["version_files"]|tojson()}}';
 window.active_version_files_data = JSON.parse(active_version_files_json);
 window.active_version_files_data_tracker = JSON.parse(active_version_files_json);
@@ -84,9 +84,9 @@ window.active_version_changed_folders = JSON.parse(active_version_changed_folder
 window.active_version_deleted_files = JSON.parse(active_version_deleted_files_json);
 window.active_version_modified_files = JSON.parse(active_version_modified_files_json);
 window.active_version_id = '{{the_model_version["version_properties"]["id"]}}';
+```
 
-
-##IMPORTANT NOTES
+## IMPORTANT NOTES
 
 * **All [meta]data changes are possible for active model version only.**
 
