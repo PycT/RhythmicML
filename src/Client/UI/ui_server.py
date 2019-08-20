@@ -194,19 +194,34 @@ def updateActiveVersionMetadataAndDeployables():
     data["actual_metadata"] = unquote(data["actual_metadata"]);
 
     return helpers.updateMetadataAndDeployables(data);
+
 #==========================================================================
 
 #==========================================================================
+
 @app.route("/helpers/create_new_version", methods = ["POST", "GET"])
 @checkPost
 def createNewVersion():
 
     data_json = request.data.decode();
     data = json.loads(data_json);
-    data["metadata"] = unquote(data["metadata"]);    
+    data["metadata"] = unquote(data["metadata"]); 
 
     return helpers.createNewVersion(data);
 
+
+#==========================================================================
+
+#==========================================================================
+
+@app.route("/helpers/change_active_version", methods = ["POST", "GET"])
+@checkPost
+def changeActiveVersion():
+
+    data_json = request.data.decode();
+    data = json.loads(data_json);
+
+    return helpers.setModelVersionActive(data);
 #==========================================================================
 #==========================================================================
 #==========================================================================

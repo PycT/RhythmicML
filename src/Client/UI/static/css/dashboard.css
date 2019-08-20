@@ -38,7 +38,6 @@ td
 {
     border: solid 1px #888888;
     background-color: #efefef;
-    margin-top: 16px;
     margin-bottom: 16px;
     padding-left: 16px;
     padding-right: 16px;
@@ -51,4 +50,42 @@ td
 {
     font-style: italic;
     color: #777777;
+}
+
+.dashboard_version_file_commit_state
+{
+    font-size: 10pt;
+    font-weight: bolder;
+    border-bottom: solid 1px #888888;
+    vertical-align: middle;
+}
+
+.dashboard_version_file_path_new,
+.dashboard_version_file_path_modified,
+.dashboard_version_file_path_same
+{
+    font-size: 12pt;
+    border-bottom: solid 1px #888888;
+}
+
+.dashboard_version_file_path_new
+{
+    color: green;
+}
+
+.dashboard_version_file_path_modified
+{
+    color: blue;
+}
+
+.dashboard_version_file_path_same
+{
+    color: #888888;
+}
+
+.dashboard_version_commit_comment
+{
+    padding-left: 16px;
+    font-size: 10pt;
+    color: #888888;
 }

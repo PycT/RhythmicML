@@ -6,9 +6,9 @@ def packFiles(folder_path, archive_absolute_path, files_list_dictionary):
     """
     packFiles(folder_path, archive_absolute_path, files_list_dictionary)
 
-    folder_path - a folder scanned with folder_scan.scanModelFolder to get files_list;
+    folder_path - a folder scanned with scan_folder.scanModelFolder to get files_list;
     files_list_dictionary - dictionaries, containing "file_path" items with "absolute_path" field: {"file-path": path [,... ]}
-    (see helpers/folder_scan.py)
+    (see helpers/os_files_operations.py)
     """
     relative_index = len(folder_path) + 1;
 
@@ -19,3 +19,19 @@ def packFiles(folder_path, archive_absolute_path, files_list_dictionary):
             version_zip.write(item["absolute_path"], item["absolute_path"][relative_index:]);
 
     return "[ {} ] packed to [ {} ]".format(folder_path, archive_absolute_path);
+
+@faultReturnHandler
+def unpackSingleFile(archive_absolute_path, archive_member_to_unpack, model_path):
+    
+    with ZipFile(archive_absolute_path) as version_package:
+        version_package.extract(archive_member_to_unpack, model_path)
+
+    return True;
+
+@faultReturnHandler
+def unpackVersion(archive_absolute_path, model_path):
+
+    with ZipFile(archive_absolute_path) as version_package:
+        version_package.extractall(model_path)
+
+    return True;

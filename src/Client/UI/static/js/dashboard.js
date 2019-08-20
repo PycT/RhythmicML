@@ -33,7 +33,8 @@ function markNewFile(absolute_path)
     var folder_item = document.getElementById("folder_item_"+absolute_path);
     folder_item.style.fontWeight = "bolder";
     folder_item.style.backgroundColor = "#fafada";
-    folder_item.style.color = "#00cc00";
+    folder_item.style.color = "#000000";
+    folder_item.innerHTML += "<button class = 'small_button' onclick = 'deleteFile(\"" + absolute_path + "\");'> Delete </button>";
 }
 
 function resetFileMark(absolute_path)
@@ -42,6 +43,18 @@ function resetFileMark(absolute_path)
     folder_item.style.fontWeight = "";
     folder_item.style.backgroundColor = "";
     folder_item.style.color = "";
+}
+
+function recordFolderTouch(the_folder)
+{
+    var is_fresh = false;
+    if (!window.touched_folders.includes(the_folder))
+    {
+        window.touched_folders.push(the_folder);
+        is_fresh = true;
+    }
+
+    return is_fresh;
 }
 
 function setFolderItemMark(absolute_path)
@@ -137,12 +150,18 @@ function setFolderContentMarks()
         {
             if (window.current_folder_contents[item_record]["is_dir"])
             {
+                var base_name_cell = document.getElementById('base_name_' + item_record);
+                var base_name = base_name_cell.innerHTML;
+
                 if (window.active_version_changed_folders.includes(item_record))
                 {
-                    var base_name_cell = document.getElementById('base_name_' + item_record);
-                    var base_name = base_name_cell.innerHTML;
-                    base_name_cell.innerHTML +=  "<sup style = 'color: red;'> changes </sup>";
-                    change_detected = true;
+                    base_name_cell.innerHTML +=  "<sup style = 'color: red;'> untracked/modified </sup>";
+                    change_detected = true;0
+                }
+
+                if (window.touched_folders.includes(item_record))
+                {
+                    base_name_cell.innerHTML +=  "<sup style = 'color: red;'> * </sup>";
                 }
             }
             else
@@ -228,6 +247,8 @@ function isTrackedCheckboxChange(absolute_path)
     var the_checkbox = document.getElementById("is_tracked_" + absolute_path); 
     var is_deployed_checkbox = document.getElementById("is_deployed_" + absolute_path);
 
+    recordFolderTouch(window.the_folder);
+
     if (the_checkbox.checked)
     {
         if (window.active_version_files_data.hasOwnProperty(absolute_path) &&
@@ -283,6 +304,8 @@ function isTrackedCheckboxChange(absolute_path)
 function isDeployedCheckboxChange(absolute_path)
 {
     var the_checkbox = document.getElementById("is_deployed_" + absolute_path); 
+
+    recordFolderTouch(window.the_folder);
 
     if (the_checkbox.checked)
     {
@@ -358,6 +381,11 @@ function onTrackAllCheckboxChange()
     }
 }
 
+function onDashboardLoad()
+{
+    window.touched_folders = [];
+    scanFolder(window.model_path, window.model_path); //model_path defined in the beginning of the Jinja2 block in dashboard.html
+}
 
 //=======================================================================
 //=======================              ACTIONS             ================================
@@ -458,11 +486,38 @@ function createNewVersion()
         "modified_files": window.active_version_modified_files,
         "model_id": window.the_model_id,
         "new_version_number": parseInt(window.last_version) + 1,
+        "the_active_version": window.the_active_version,
         "metadata": encodeURI(actual_metadata)
     }
 
     var data_for_helper = JSON.stringify(data);
     var helper_url = "/helpers/create_new_version";
     var confirmation_message = "<h2>This will create a new model version. Are all the modifications needed made (e.g. metadata)?</h2>";
+    callConfirmationDialogue(confirmation_message, helper_url, data_for_helper);
+}
+
+function deleteFile(absolute_path)
+{
+    console.log(absolute_path);
+}
+
+function makeVersionActive(desired_version_id, desired_version_number)
+{
+    var data = 
+    {
+        "model_id": window.the_model_id,
+        "model_path": window.model_path,
+        "desired_version_id": desired_version_id,
+        "desired_version_number": desired_version_number
+    }
+
+    var data_for_helper = JSON.stringify(data);
+    var helper_url = "/helpers/change_active_version";
+    var confirmation_message = "<h2>This will phisically <span style = 'color:red;'>DELETE</span> the files and subfolders of \
+    <span style = 'color:red;'>" + window.the_model_name + 
+    "</span> and unpack files of version you choose as active.<br><span style = 'color:red;'>PROCEED?</span> </h2>\
+    (the db record and archive will remain and possible to activate)<br><br><b style = 'color:red'>" + window.model_path +
+    "</b> will be <b style = 'color:red'>purged</b> and refilled with v. " + desired_version_number + " files";
+
     callConfirmationDialogue(confirmation_message, helper_url, data_for_helper);
 }

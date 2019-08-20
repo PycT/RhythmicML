@@ -76,14 +76,27 @@
                 window.actual_metadata = decodeURI(encoded_metadata);
             </script>
 
-            <ul class = "dashboard_versions_ol">
+            <ul class = "dashboard_versions_ul">
                 {% for model_version in model_static_data["model_versions"] %}
                 {% set the_model_version = model_static_data["model_versions"][model_version] %}
                 <li class = "dashboard_model_versions_item">
                     <a class = "dashboard_model_version_title" href = "#" 
                     onclick = "toggleDisplay('model_version_static_data{{ the_model_version.version_properties.id }}', 'block');">
-                        Version {{ the_model_version["version_properties"]["version"] }}., created {{ the_model_version["version_properties"]["created_timestamp"] }}
+                        Version {{ model_version }}. Created {{ the_model_version["version_properties"]["created_timestamp"][:-7] }}
                     </a>
+                    {%- if model_static_data['properties']['active_version'] != model_version %}
+                    <button class = "small_button" onclick = "makeVersionActive({{ the_model_version["version_properties"]["id"] }}, 
+                    {{ model_version }});">
+                        Make v. {{ model_version }} active
+                    </button>
+                    {% else %}
+                    (active)
+                    {% endif %}
+                    <div class = "dashboard_version_commit_comment">
+                        {% if the_model_version["version_properties"]["commit_comment"] %}
+                        {{ the_model_version["version_properties"]["commit_comment"] }}
+                        {% endif %}
+                    </div>
                     <div id = "model_version_static_data{{ the_model_version['version_properties']['id'] }}"
                     style = "display: 
                     {%- if model_static_data['properties']['active_version'] == model_version %}
@@ -145,8 +158,33 @@
                             <button id = "cancel" class = "cancel_button" onclick = "window.location.reload(true);">Discard Unsaved Changes</button>
                             {%- endif-%}
                         </div>
-                        
+                        <br clear = "all">
+                        <span class = "ui_caption">Files:</span>
+                        {%- if model_static_data['properties']['active_version'] == model_version -%}
                         <div id = "model_folder" class = "dashboard_toolbox" width = "100%" ></div>
+                        {% else %}
+                        <div id = "model_version_files_list{{ the_model_version['version_properties']['id'] }}" class = "dashboard_toolbox" width = "100%" >
+                            <table width = 90%>
+                                {% for the_file in the_model_version['version_files']%}
+                                <tr>
+                                    <td class = "dashboard_version_file_commit_state">
+                                        {{ the_model_version['version_files'][the_file]['file_commit_state'] }}
+                                    </td>
+                                    <td class = "dashboard_version_file_commit_state">
+                                        {% if the_model_version['version_files'][the_file]['is_deployed'] %}
+                                        d
+                                        {% else %}
+                                        _
+                                        {% endif %}
+                                    </td>
+                                    <td class = "dashboard_version_file_path_{{ the_model_version['version_files'][the_file]['file_commit_state'] }}">
+                                        {{ the_file }}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>                        
+                        {% endif %}
 
                     </div> <!-- Static data ends here -->
 
@@ -163,7 +201,7 @@
 {% endif %}
 
 <script type="text/javascript">
-    scanFolder(window.model_path, window.model_path); //model_path defined in the beginning of the Jinja2 block
+    onDashboardLoad();
 </script>
 
 {% endblock %}

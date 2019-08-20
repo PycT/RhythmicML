@@ -3,7 +3,7 @@ from rhythmic.db import SQLiteDB;
 from os.path import exists, isdir as isDir;
 from datetime import datetime;
 from . import configuration;
-from .packer import packFiles;
+from . import packFiles;
 
 # var data = 
 # {
@@ -11,7 +11,8 @@ from .packer import packFiles;
 #     "files_tracker": passed_files_data,
 #     "modified_files": window.active_version_modified_files,
 #     "model_id": window.the_model_id,
-#     "new_version_number": window.the_active_version,
+#     "new_version_number": parseInt(window.last_version) + 1,
+#     "the_active_version": window.the_active_version,
 #     "metadata": encodeURI(actual_metadata)
 # }
 
@@ -32,7 +33,12 @@ def createNewVersion(data):
             last_version = '{}',
             active_version = '{}'
         WHERE id = '{}';
-        """.format(timestamp, data["new_version_number"], data["new_version_number"], data["model_id"]);
+        """.format(
+                            timestamp,
+                            data["new_version_number"],
+                            data["new_version_number"],
+                            data["model_id"]
+                        );
 
         db.execute(update_model_parameters_request);
 
@@ -43,10 +49,17 @@ def createNewVersion(data):
             model_id,
             version,
             metadata,
+            commit_comment,
             created_timestamp
         )
-        VALUES ('{}', '{}', '{}', '{}');
-        """.format(data["model_id"], data["new_version_number"], data["metadata"], timestamp);
+        VALUES ('{}', '{}', '{}', '{}', '{}');
+        """.format(
+                            data["model_id"],
+                            data["new_version_number"],
+                            data["metadata"],
+                            "Derives from version " + data["the_active_version"] + ".",
+                            timestamp
+                        );
 
         new_version_id = db.execute(add_new_version_request);
 
@@ -68,9 +81,12 @@ def createNewVersion(data):
 
             for the_file in data["files_tracker"]:
                 file_properties = data["files_tracker"][the_file];
+                last_modified_time = file_properties["last_modified_time"];
 
                 if (the_file in data["modified_files"]):
                     file_commit_state = "modified";
+                    last_modified_time = data["modified_files"][the_file];
+
                 elif file_properties["file_commit_state"] == "emerged":
                     file_commit_state = "new";
                 else:
@@ -83,7 +99,7 @@ def createNewVersion(data):
                     is_deployed = 0;
 
                 files_record_values += "('{}', '{}', '{}', '{}', '{}'), \n".format(new_version_id, the_file, file_commit_state,\
-                                                        file_properties["last_modified_time"], is_deployed);
+                                                        last_modified_time, is_deployed);
 
             record_files_data_request +=  files_record_values[:len(files_record_values) -3] + ";"; #truncating `, \n` from the end of request and adding `;`.
 

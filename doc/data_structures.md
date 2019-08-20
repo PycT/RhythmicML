@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS versions_table
     model_id integer NOT NULL,
     version integer NOT NULL DEFAULT 0,
     metadata text DEFAULT 'Description: \nDataset: \nTraining Epochs: \nLearning Rate: \nBatch Size: ',
-    commit_comment text NOT NULL,
+    commit_comment text,
     created_timestamp text NOT NULL,
     FOREIGN KEY (model_id) REFERENCES models_table (id)
     ON DELETE CASCADE
@@ -88,6 +88,8 @@ properties_dictionary = \
 ```
 
 ## File
+
+### Stored in DB:
 ```
 properties_dictionary = \
     {
@@ -98,6 +100,17 @@ properties_dictionary = \
         "last_modified_time": sql_raw_list[4],
         "is_deployed": is_deployed
     }
+```
+
+### Read locally:
+```
+folder_contents[ item.path ] = \
+    {
+        "absolute_path": item.path,
+        "base_name": item.name,
+        "is_dir": item.is_dir(),
+        "last_modified_time": item.stat().st_mtime
+    };
 ```
 
 # Model static data (Dashboard)
@@ -126,7 +139,7 @@ model_static_data
                 model_id: "...",
                 version: "...",
                 metadata: "...",
-                commit_comment: "...", //(not used currently)
+                commit_comment: "...",
                 created_timestamp: "..."
             },
             version_files:
@@ -136,7 +149,7 @@ model_static_data
                     id: "...",
                     model_version_id: "...",
                     file_path: "...",
-                    file_commit_state: "...", //file_commit_state is a state of file by commit moment; options: new, same, modified
+                    file_commit_state: "...", //file_commit_state is a state of file by a commit moment; options: new, same, modified
                     last_modified_time: "...",
                     is_deployed: "..."
                 },
@@ -158,9 +171,11 @@ model_static_data
                 ]
             },
             modified_files: *//this field is present for active model version only*; used when creating incremented version;
-            [
-                '`file_absolute_path`', .., '`file_absolute_path`'
-            ]
+            {
+                '`file_absolute_path`':`last_modified_time`, 
+                ..,
+                '`file_absolute_path`':`last_modified_time`
+            }
         },
         ..
         `version_number`:
@@ -179,7 +194,8 @@ var data =
     "files_tracker": passed_files_data,
     "modified_files": window.active_version_modified_files,
     "model_id": window.the_model_id,
-    "new_version_number": window.last_version + 1,
+    "new_version_number": parseInt(window.last_version) + 1,
+    "the_active_version": window.the_active_version,
     "metadata": encodeURI(actual_metadata)
 }
 ```
