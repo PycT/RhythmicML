@@ -2,6 +2,7 @@ from flask import Flask, render_template as renderTemplate, request;
 from functools import wraps;
 from urllib.parse import unquote;
 import json;
+from os import remove;
 from . import helpers;
 
 app = Flask(__name__);
@@ -222,6 +223,37 @@ def changeActiveVersion():
     data = json.loads(data_json);
 
     return helpers.setModelVersionActive(data);
+
+#==========================================================================
+
+#==========================================================================
+
+@app.route("/helpers/restore_file", methods = ["POST", "GET"])
+@checkPost
+def restoreFile():
+    data_json = request.data.decode();
+    data = json.loads(data_json);
+
+    return helpers.restoreFile(data);
+#==========================================================================
+
+#==========================================================================
+
+@app.route("/helpers/delete_file", methods = ["POST", "GET"])
+@checkPost
+def deleteFile():
+    file_path = request.data.decode();
+
+    try:
+        remove(file_path);
+    except Exception as error_message:
+        return "Fault: {}".format(error_message);
+        
+    return "Success";
+#==========================================================================
+
+#==========================================================================
+
 #==========================================================================
 #==========================================================================
 #==========================================================================

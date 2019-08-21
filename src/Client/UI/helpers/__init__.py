@@ -11,3 +11,4 @@ from .set_new_deploy_destination import setNewModelDeployDestination;
 from .update_metadata_and_deployables import updateMetadataAndDeployables;
 from .create_new_version import createNewVersion;
 from .set_model_version_active import setModelVersionActive;
+from .restore_file import restoreFile;

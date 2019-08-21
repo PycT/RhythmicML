@@ -21,12 +21,14 @@ def packFiles(folder_path, archive_absolute_path, files_list_dictionary):
     return "[ {} ] packed to [ {} ]".format(folder_path, archive_absolute_path);
 
 @faultReturnHandler
-def unpackSingleFile(archive_absolute_path, archive_member_to_unpack, model_path):
+def unpackSingleFile(archive_absolute_path, file_to_unpack_absolute_path, model_path):
+    
+    archive_member_to_unpack = file_to_unpack_absolute_path[ len(model_path) + 1: ];
     
     with ZipFile(archive_absolute_path) as version_package:
         version_package.extract(archive_member_to_unpack, model_path)
 
-    return True;
+    return archive_member_to_unpack;
 
 @faultReturnHandler
 def unpackVersion(archive_absolute_path, model_path):

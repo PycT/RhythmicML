@@ -34,7 +34,12 @@ function markNewFile(absolute_path)
     folder_item.style.fontWeight = "bolder";
     folder_item.style.backgroundColor = "#fafada";
     folder_item.style.color = "#000000";
-    folder_item.innerHTML += "<button class = 'small_button' onclick = 'deleteFile(\"" + absolute_path + "\");'> Delete </button>";
+    var delete_button_id = "delete_button_"+ absolute_path;
+    if (!document.getElementById(delete_button_id))
+    {
+        folder_item.innerHTML += "<button class = 'small_button' id = '"+ delete_button_id +
+        "' onclick = 'deleteFile(\"" + absolute_path + "\");'> Delete </button>";
+    }
 }
 
 function resetFileMark(absolute_path)
@@ -114,7 +119,7 @@ function setFolderItemMark(absolute_path)
             if (!window.active_version_files_data.hasOwnProperty(absolute_path))
             {
                 markNewFile(absolute_path);
-                change_detected = true;
+                //change_detected = true;
             }
         }
 
@@ -137,7 +142,7 @@ function setFolderContentMarks()
                 var deleted_file_path = window.the_folder + '/' + deleted_file;
                 var item_row = "<tr class = 'folder_content_box_item'>\
                 <td class = 'dashboard_deleted_file'>" + deleted_file + " <sup>deleted</sup></td><td colspan = '2' align = 'center'>\
-                <button class = 'small_button' onclick = 'console.log(\"" + deleted_file_path + "\");'>restore</button>\
+                <button class = 'small_button' onclick = 'restoreFile(\"" + deleted_file_path + "\");'>Restore</button>\
                 </td></tr>";
 
                 folder_items_table.innerHTML += item_row;
@@ -498,7 +503,9 @@ function createNewVersion()
 
 function deleteFile(absolute_path)
 {
-    console.log(absolute_path);
+    var helper_url = "/helpers/delete_file";
+    var confirmation_message = "<h2> <span style = 'color:red'>DELETE phisically</span> " + absolute_path + "?";
+    callConfirmationDialogue(confirmation_message, helper_url, absolute_path);
 }
 
 function makeVersionActive(desired_version_id, desired_version_number)
@@ -515,9 +522,25 @@ function makeVersionActive(desired_version_id, desired_version_number)
     var helper_url = "/helpers/change_active_version";
     var confirmation_message = "<h2>This will phisically <span style = 'color:red;'>DELETE</span> the files and subfolders of \
     <span style = 'color:red;'>" + window.the_model_name + 
-    "</span> and unpack files of version you choose as active.<br><span style = 'color:red;'>PROCEED?</span> </h2>\
+    "</span> and unpack files of version you choose as active.<br>Files untracked in currently actvie version will be <span style = 'color:red;'>LOST</span>\
+    <br><span style = 'color:red;'>PROCEED?</span> </h2>\
     (the db record and archive will remain and possible to activate)<br><br><b style = 'color:red'>" + window.model_path +
     "</b> will be <b style = 'color:red'>purged</b> and refilled with v. " + desired_version_number + " files";
 
     callConfirmationDialogue(confirmation_message, helper_url, data_for_helper);
 }
+
+function restoreFile(absolute_path)
+{
+    var data = 
+    {
+        "file_absolute_path": absolute_path,
+        "model_path": window.model_path,
+        "model_id": window.the_model_id,
+        "version_number": window.active_version_number,
+        "version_id": window.active_version_id
+    }
+    var data_for_helper = JSON.stringify(data);
+
+    asyncPostRequestWithRefresh("/helpers/restore_file", data_for_helper);
+ }

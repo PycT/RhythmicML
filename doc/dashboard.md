@@ -84,6 +84,7 @@ window.active_version_changed_folders = JSON.parse(active_version_changed_folder
 window.active_version_deleted_files = JSON.parse(active_version_deleted_files_json);
 window.active_version_modified_files = JSON.parse(active_version_modified_files_json);
 window.active_version_id = '{{the_model_version["version_properties"]["id"]}}';
+window.active_version_number = '{{ model_version }}';
 ```
 
 ## IMPORTANT NOTES
