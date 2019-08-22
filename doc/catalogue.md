@@ -54,9 +54,12 @@ File naming: "model_" + `model_id` + "_ver" + `version_number` + ".zip"
 
 ### Managing the model files tracking and versions: see the [dashboard.md](dashboard.md)
 
-### Deleting a model from tracking list
-When User wishes to delete a model, he is prompted to input model's name to confirm deleteion. The deletion is irreversible.
+### Removing a model from tracking list
 
-After confirmation `models_table`, `versions_table` and `files_table` are cleaned accordingly.
+Leting alone serving side, for now the work flow is as follows:
 
-Cleaning Server side is up to User.
+0. Confirmation Dialogue
+1. Clean records in `models_table`; `versions_table` and `files_table` will get cleaned by SQL cascding rules.
+2. Delete all the files in the storage folder
+3. Delete the storage folder.
+

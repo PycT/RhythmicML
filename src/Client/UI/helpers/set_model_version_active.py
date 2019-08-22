@@ -48,10 +48,16 @@ def setModelVersionActive(data):
 
         for the_record in existing_files_records:
             version_file_properties = filePropertiesDictionary(the_record);
+            
+            if (version_file_properties["is_deployed"]):
+                is_deployed = 1;
+            else:
+                is_deployed = 0;
+
             version_files_data[ version_file_properties["absolute_path"] ] = \
                 {
                     "file_commit_state": version_file_properties["file_commit_state"],
-                    "is_deployed": version_file_properties["is_deployed"]
+                    "is_deployed": is_deployed
                 }
 
         db.execute(

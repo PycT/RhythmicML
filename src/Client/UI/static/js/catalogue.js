@@ -108,3 +108,21 @@ function onSearchInputChange(the_value)
         }
     });
 }
+
+function onRemoveButtonClick(the_id, model_path, model_name)
+{
+    var data_for_helper =
+    {
+        "model_id": the_id,
+        "model_path": model_path
+    }
+
+    var data_for_helper_json = JSON.stringify(data_for_helper);
+    var helper_url = "/helpers/remove_model";
+
+    var confirmation_message = "<h2> This will <span style = 'color: red;'>remove `"+ model_name+"`</span> from catalogue. <br>\
+    All the tracking data and versions will be <span style = 'color: red;'>LOST</span>.<br>\
+    Model files will remain as they are now.</h2>";
+
+    callConfirmationDialogue(confirmation_message, helper_url, data_for_helper_json);
+}

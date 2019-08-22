@@ -12,3 +12,4 @@ from .update_metadata_and_deployables import updateMetadataAndDeployables;
 from .create_new_version import createNewVersion;
 from .set_model_version_active import setModelVersionActive;
 from .restore_file import restoreFile;
+from .remove_model import removeModel;
