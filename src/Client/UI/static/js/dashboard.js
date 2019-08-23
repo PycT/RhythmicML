@@ -469,7 +469,14 @@ function createNewVersion()
     {
         if (active_version_deleted_files.hasOwnProperty(folder))
         {
-            deleted_absolute.push(folder + '/' + active_version_deleted_files[folder]);
+            active_version_deleted_files[folder].forEach
+            (
+                function(deleted_file)
+                {
+                    deleted_absolute.push(folder + '/' + deleted_file);        
+                }
+            );
+            
         }
     }
 

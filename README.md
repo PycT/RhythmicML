@@ -1,8 +1,6 @@
 # RhythmicML
 A tool for ML models deployment and versioning.
 
-## found some bugs with version re-activation and model removal - some files get lost. Investigating
-
 Client-side preparation:
 ```
 cd ... /src/Client

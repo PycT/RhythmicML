@@ -5,7 +5,15 @@ from os import remove;
 from . import configuration, unpackVersion, scanModelFolder, filePropertiesDictionary;
 
 def setModelVersionActive(data):
-
+    """
+    var data = 
+    {
+        "model_id": window.the_model_id,
+        "model_path": window.model_path,
+        "desired_version_id": desired_version_id,
+        "desired_version_number": desired_version_number
+    }
+    """
     model_version_archive_file_name = "{}/{}/model_{}_ver{}.zip".\
     format(
                     data["model_path"],
@@ -44,22 +52,6 @@ def setModelVersionActive(data):
                             )
             );
 
-        version_files_data = {};
-
-        for the_record in existing_files_records:
-            version_file_properties = filePropertiesDictionary(the_record);
-            
-            if (version_file_properties["is_deployed"]):
-                is_deployed = 1;
-            else:
-                is_deployed = 0;
-
-            version_files_data[ version_file_properties["absolute_path"] ] = \
-                {
-                    "file_commit_state": version_file_properties["file_commit_state"],
-                    "is_deployed": is_deployed
-                }
-
         db.execute(
             """
             DELETE FROM files_table WHERE model_version_id = '{}';
@@ -82,23 +74,35 @@ def setModelVersionActive(data):
         """;
         active_version_files = scanModelFolder(data["model_path"]);
 
-        if len(active_version_files) > 0:
-            files_record_values = "";
+        files_record_values = "";
 
-            for item_path in active_version_files:
-                item = active_version_files[item_path];
-                files_record_values += \
-                "('{}', '{}', '{}', '{}', '{}'), \n".format(
-                                                                data["desired_version_id"],
-                                                                item_path,
-                                                                version_files_data[item_path]["file_commit_state"],
-                                                                item["last_modified_time"],
-                                                                version_files_data[item_path]["is_deployed"]
-                                                            );
+        for the_record in existing_files_records:
+            version_file_properties = filePropertiesDictionary(the_record);
+            
+            file_absolute_path = version_file_properties["absolute_path"];
 
-            files_record_request += files_record_values[:len(files_record_values) -3] + ";"; #truncating `, \n` from the end of request and adding `;`.
+            if (version_file_properties["is_deployed"]):
+                is_deployed = 1;
+            else:
+                is_deployed = 0;
 
-            db.execute(files_record_request);
+
+            if  file_absolute_path in active_version_files:
+                last_modified_time = active_version_files[ file_absolute_path ]["last_modified_time"];
+            else:
+                last_modified_time = version_file_properties["last_modified_time"];
+            
+            files_record_values += \
+            "('{}', '{}', '{}', '{}', '{}'), \n".format(
+                                                            data["desired_version_id"],
+                                                            file_absolute_path,
+                                                            version_file_properties["file_commit_state"],
+                                                            last_modified_time,
+                                                            is_deployed
+                                                        );
+
+        files_record_request += files_record_values[:len(files_record_values) -3] + ";"; #truncating `, \n` from the end of request and adding `;`.
+        db.execute(files_record_request);
         
 
 

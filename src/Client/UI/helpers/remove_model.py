@@ -27,7 +27,6 @@ def removeModel(data):
     model_storage_path = data["model_path"] + "/{}".format(configuration.storage_folder_name);
 
     versions_packages = scanFolder(model_storage_path, look_level_above = False);
-    print(versions_packages);
 
     for version_package in versions_packages:
              remove(version_package);
