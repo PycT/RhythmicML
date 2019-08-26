@@ -1,3 +1,5 @@
+![Architecture](images/architecture0.jpg)
+
 # Architecture description
 
 RhythmicML is going to consist of two core parts - client and server parts.

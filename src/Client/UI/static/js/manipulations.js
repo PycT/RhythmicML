@@ -52,6 +52,15 @@ function setVisible(dom_element_id, display = "flex")
     return the_element.style.display;
 }
 
+function scrollIntoView(dom_element_id)
+{
+    var the_element = popElement(dom_element_id);
+
+    the_element.scrollIntoView();
+
+    return true;
+}
+
 function setInvisible(dom_element_id)
 {
     var the_element = popElement(dom_element_id);
@@ -113,6 +122,7 @@ function callConfirmationDialogue(confirmation_message, helper_url, data_for_hel
         "result_element_id": result_element_id
     }
     setVisible("confirmation_dialogue_canvas");
+    scrollIntoView("confirmation_dialogue_canvas");
     var data_json = JSON.stringify(dialogue_data);
     asyncPostRequest("/helpers/confirmation_dialogue", data_json, "confirmation_dialogue");
 }

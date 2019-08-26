@@ -511,7 +511,7 @@ function createNewVersion()
 function deleteFile(absolute_path)
 {
     var helper_url = "/helpers/delete_file";
-    var confirmation_message = "<h2> <span style = 'color:red'>DELETE phisically</span> " + absolute_path + "?";
+    var confirmation_message = "<h2> <span style = 'color:red'>DELETE physically</span> " + absolute_path + "?";
     callConfirmationDialogue(confirmation_message, helper_url, absolute_path);
 }
 
@@ -527,7 +527,7 @@ function makeVersionActive(desired_version_id, desired_version_number)
 
     var data_for_helper = JSON.stringify(data);
     var helper_url = "/helpers/change_active_version";
-    var confirmation_message = "<h2>This will phisically <span style = 'color:red;'>DELETE</span> the files and subfolders of \
+    var confirmation_message = "<h2>This will physically <span style = 'color:red;'>DELETE</span> the files and subfolders of \
     <span style = 'color:red;'>" + window.the_model_name + 
     "</span> and unpack files of version you choose as active.<br>Files untracked in currently actvie version will be <span style = 'color:red;'>LOST</span>\
     <br><span style = 'color:red;'>PROCEED?</span> </h2>\
