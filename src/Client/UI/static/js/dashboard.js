@@ -561,3 +561,23 @@ function restoreFile(absolute_path)
 
     asyncPostRequestWithRefresh("/helpers/restore_file", data_for_helper);
  }
+
+function deployActiveVersion()
+{
+    var data = 
+    {
+        "deploy_url": window.actual_deploy_destination,
+        "model_name": window.the_model_name,
+        "model_id": window.the_model_id,
+        "version_number": window.active_version_number,
+        "version_id": window.active_version_id,
+        "files_data": window.active_version_files_data
+    }
+    var data_for_helper = JSON.stringify(data);
+
+    var helper_url = "/helpers/deploy";
+    var confirmation_message = "<h2>Deploy <span style = 'color: green'> "+ window.the_model_name +
+    "</span> v. " + window.active_version_number + "?"
+
+    callConfirmationDialogue(confirmation_message, helper_url, data_for_helper);
+ }

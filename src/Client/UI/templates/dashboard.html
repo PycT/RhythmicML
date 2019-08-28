@@ -52,7 +52,13 @@
         }
         ">
         <button id = "save_model_deploy_destination_button" class = "small_button" disabled onclick = "onSaveDeployDestinationClick();">save</button>
-        <br>
+        <br><br>
+        <div class = "dashboard_toolbox">
+            <button id = "deploy_active_version_button" class = "action_button"
+            title = "Deploy Active Version" onclick = "deployActiveVersion();">
+                Deploy
+            </button>
+        </div>
         <br clear = all>
 
     {% else %}

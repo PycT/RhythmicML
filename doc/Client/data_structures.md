@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS models_table
     last_version integer NOT NULL DEFAULT 0,
     active_version integer NOT NULL DEFAULT 0,
     deploy_destination text DEFAULT "http://localhost:5008",
-    deploy_status integer DEFAULT 0
+    deploy_id integer DEFAULT 0
 );
 """;
 
@@ -70,7 +70,7 @@ properties_dictionary = \
         "last_version": sql_raw_list[4],
         "active_version": sql_raw_list[5],
         "deploy_destination": sql_raw_list[6],
-        "deploy_status": sql_raw_list[7]
+        "deploy_id": sql_raw_list[7]
     };
 ```
 
@@ -127,7 +127,7 @@ model_static_data
         last_version: "...",
         active_version: "...",
         deploy_destination: "...",
-        deploy_status: "..."
+        deploy_id: "..."
     },
     model_versions:
     {

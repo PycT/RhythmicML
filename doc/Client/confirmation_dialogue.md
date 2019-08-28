@@ -4,7 +4,7 @@ For sensitive actions requiring confirmation, there is a `confirmation_dialogue_
 
 ## Workflow
 
-When a confirmation required for action, you call `callConfirmationDialogue()` defined in [manipulations.js](../src/Client/static/js/manipulations.js).
+When a confirmation required for action, you call `callConfirmationDialogue()` defined in [manipulations.js](../../src/Client/static/js/manipulations.js).
 This method requires the following parameters:
 
 + confirmation_message - string with a message to show in dialogue. E.g. "are you sure?"
