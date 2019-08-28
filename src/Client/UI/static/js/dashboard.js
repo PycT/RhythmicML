@@ -153,11 +153,11 @@ function setFolderContentMarks()
     {
         if ( window.current_folder_contents.hasOwnProperty(item_record) )
         {
+            var base_name_cell = document.getElementById('base_name_' + item_record);
+            var base_name = base_name_cell.innerHTML;
+
             if (window.current_folder_contents[item_record]["is_dir"])
             {
-                var base_name_cell = document.getElementById('base_name_' + item_record);
-                var base_name = base_name_cell.innerHTML;
-
                 if (window.active_version_changed_folders.includes(item_record))
                 {
                     base_name_cell.innerHTML +=  "<sup style = 'color: red;'> untracked/modified </sup>";
@@ -170,7 +170,17 @@ function setFolderContentMarks()
                 }
             }
             else
-            {
+            { 
+                if (window.the_active_version != 0 && window.active_version_files_data.hasOwnProperty(item_record))
+                {
+                    var file_commit_state = window.active_version_files_data[item_record]["file_commit_state"];
+
+                    if (file_commit_state != "same")
+                    {
+                        base_name_cell.innerHTML +=  "<sup style = 'color: blue;'>"+ file_commit_state +"</sup>";
+                    }
+                }
+
                 if (window.active_version_files_data_tracker.hasOwnProperty(item_record))
                 {
                     document.getElementById('is_tracked_' + item_record).checked = true;
