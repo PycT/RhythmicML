@@ -70,6 +70,7 @@ The workflow after confirmation is as follows:
 ```
 window.model_path = "{{model_static_data['properties']['path']|escape() }}";
 window.the_model_id = "{{model_static_data['properties']['id']}}";
+window.the_model_deploy_id = "{{model_static_data['properties']['deploy_id']}}";
 window.the_model_name = '{{ model_static_data["properties"]["name"] }}';
 window.the_active_version = '{{ model_static_data["properties"]["active_version"] }}';
 window.last_version = '{{ model_static_data["properties"]["last_version"] }}';

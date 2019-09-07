@@ -567,11 +567,13 @@ function deployActiveVersion()
     var data = 
     {
         "deploy_url": window.actual_deploy_destination,
+        "deploy_id": window.the_model_deploy_id,
+        "model_path": window.model_path,
         "model_name": window.the_model_name,
         "model_id": window.the_model_id,
         "version_number": window.active_version_number,
-        "version_id": window.active_version_id,
-        "files_data": window.active_version_files_data
+        "files_data": window.active_version_files_data,
+        "model_metadata": encodeURI(window.actual_metadata)
     }
     var data_for_helper = JSON.stringify(data);
 

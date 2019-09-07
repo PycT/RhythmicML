@@ -18,21 +18,7 @@ CREATE TABLE IF NOT EXISTS models_table
     model_name text NOT NULL UNIQUE,
     last_deploy_timestamp text NOT NULL,
     active_version integer NOT NULL DEFAULT 0,
-    deploy_id integer DEFAULT 0
-);
-""";
-
-model_files_table = \
-"""
-CREATE TABLE IF NOT EXISTS files_table
-(
-    id integer PRIMARY KEY,
-    model_id integer NOT NULL,
-    relative_path text NOT NULL,
-    is_deployed integer NOT NULL DEFAULT 1,
-    FOREIGN KEY (model_id) REFERENCES models_table (id)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE 
+    build_id integer DEFAULT 0
 );
 """;
 

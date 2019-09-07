@@ -9,7 +9,7 @@
     <script  type = "text/javascript" src = "{{ url_for('static', filename = 'js/dashboard.js') + anti_cache }}">
     </script>
 
- {% endblock %}
+{% endblock %}
 
 {% block main_content %}
 {{ super() }}
@@ -21,6 +21,7 @@
     <script type = "text/javascript">
         window.model_path = "{{model_static_data['properties']['path']|escape() }}";
         window.the_model_id = "{{model_static_data['properties']['id']}}";
+        window.the_model_deploy_id = "{{model_static_data['properties']['deploy_id']}}";
         window.the_model_name = '{{ model_static_data["properties"]["name"] }}';
         window.the_active_version = '{{ model_static_data["properties"]["active_version"] }}';
         window.last_version = '{{ model_static_data["properties"]["last_version"] }}';
@@ -86,7 +87,8 @@
                 {% for model_version in model_static_data["model_versions"] %}
                 {% set the_model_version = model_static_data["model_versions"][model_version] %}
                 <li class = "dashboard_model_versions_item">
-                    <a class = "dashboard_model_version_title" href = "#" 
+                    <a class = "dashboard_model_version_title" href = "#version_anchor{{ model_version }}"
+                    id = "version_anchor{{ model_version }}"
                     onclick = "toggleDisplay('model_version_static_data{{ the_model_version.version_properties.id }}', 'block');">
                         Version {{ model_version }}. Created {{ the_model_version["version_properties"]["created_timestamp"][:-7] }}
                     </a>
