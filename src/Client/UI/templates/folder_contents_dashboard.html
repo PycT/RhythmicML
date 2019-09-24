@@ -52,12 +52,18 @@
                             <input type = "checkbox"
                             id = "is_tracked_{{ item_path|escape() }}"
                             onchange = "isTrackedCheckboxChange('{{ item_path|escape() }}');"
+                            {% if item.base_name == model_wrapper %}
+                            disabled
+                            {% endif %} 
                             >
                         </td>
                         <td width = "20%" align = "center">
                             <input type = "checkbox"
                             id = "is_deployed_{{ item_path|escape() }}"
                             onchange = "isDeployedCheckboxChange('{{ item_path|escape() }}');"
+                            {% if item.base_name == model_wrapper %}
+                            disabled
+                            {% endif %} 
                             >
                         </td>
                     {% endif %}

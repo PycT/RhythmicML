@@ -30,7 +30,9 @@ There is a bit of hustle implied if going with handling and integrating on the o
 Same about encding file into base64 string and sending as data field. Currently I would look at writing necessary data into separate file
 ans sending all the files with a single request. 
 
-## Running the scoring instance
+Only marked as "deployable" files are packed and sent. **Important**: the "deployable" state has to be saved for the active model version (there is a special button for that in UI).
+
+## Preparing and running the scoring instance
 
 There are following common stages possible to highlight in scoring sequence:
 
@@ -38,3 +40,5 @@ There are following common stages possible to highlight in scoring sequence:
 + receive a data via API request and prepare it for scoring, if neccessary
 + score a data through the model
 + prepare, if necessary, and send the prediction back where API request came from
+
+On a client side a template-based serving script is prepared and uploaded with all the other artifacts.

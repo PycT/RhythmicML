@@ -1,5 +1,4 @@
-from rhythmic.general import faultReturnHandler;
-from rhythmic.db import SQLiteDB;
+from rhythmic import rhythmicDB, faultReturnHandler;
 from os.path import exists;
 from os import remove;
 from . import configuration, unpackVersion, scanModelFolder, filePropertiesDictionary;
@@ -34,7 +33,7 @@ def setModelVersionActive(data):
     # we have now to udate last_modified timestamps so system would not identify freshly unpacked files as modified.
     # to minimize db queries, we'll just rewrite existinf rows in files_table.
     # but first we'll set proper active_version for the model to perform al db operations in one ocntext.
-    with SQLiteDB(configuration.db_file_name) as db:
+    with rhythmicDB(configuration.db_name, configuration.db_file_name) as db:
         db.execute(
             """
             UPDATE models_table SET active_version = '{}' WHERE id = '{}';

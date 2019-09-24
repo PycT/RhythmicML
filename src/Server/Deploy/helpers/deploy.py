@@ -2,7 +2,7 @@ from . import configuration;
 import json;
 from os import mkdir as makeDir, getcwd as getCurrentWorkingDir;
 from os.path import exists, isdir as isDir;
-from rhythmic.db import SQLiteDB;
+from rhythmic import rhythmicDB;
 from datetime import datetime;
 from zipfile import ZipFile;
 
@@ -52,7 +52,7 @@ def deployModel(deploy_files):
 
     # got the metadata here, putting data to db:
 
-    with SQLiteDB(configuration.db_file_name) as db:
+    with rhythmicDB(configuration.db_name, configuration.db_file_name) as db:
 
         if metadata["deploy_id"] != 0:
 

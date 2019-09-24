@@ -1,5 +1,4 @@
-from rhythmic.general import faultReturnHandler;
-from rhythmic.db import SQLiteDB;
+from rhythmic import rhythmicDB, faultReturnHandler;
 from . import configuration, scanFolder, unpackSingleFile;
 
 def restoreFile(data):
@@ -32,7 +31,7 @@ def restoreFile(data):
     folder_contents = scanFolder(file_containing_folder);
 
     if data["file_absolute_path"] in folder_contents:
-        with SQLiteDB(configuration.db_file_name) as db:
+        with rhythmicDB(configuration.db_name, configuration.db_file_name) as db:
             db.execute(
                 """
                 UPDATE files_table SET last_modified_time ='{}' WHERE model_version_id = '{}' AND absolute_path = '{}';

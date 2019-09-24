@@ -3,7 +3,7 @@ from .packer import packFiles;
 from . import configuration;
 import json;
 import requests;
-from rhythmic.db import SQLiteDB;
+from rhythmic import rhythmicDB;
 
 def deployModel(data):
     """
@@ -73,7 +73,7 @@ def deployModel(data):
     deploy_status = deploy_execution_data["status"];
 
     if deploy_id != data["deploy_id"]:
-        with SQLiteDB(configuration.db_file_name) as db:
+        with rhythmicDB(configuration.db_name, configuration.db_file_name) as db:
             db.execute(
                 """
                 UPDATE models_table SET

@@ -107,7 +107,17 @@ def helperFolders(template_modificator = "catalogue"):
     if folder_contents.__class__ == str: #the decorator returns an error message, if folderScan() execution fails
         return folder_contents;
 
-    return renderTemplate(folder_contents_templates[template_modificator], folder_contents = folder_contents, the_folder = the_folder);
+    if template_modificator == "dashboard":
+        template_parameters = \
+        {
+            "model_wrapper": helpers.configuration.model_wrapper_class_file_name
+        }
+
+    else:
+        template_parameters = {};
+
+    return renderTemplate(folder_contents_templates[template_modificator], folder_contents = folder_contents, the_folder = the_folder,\
+                                            **template_parameters);
 #==========================================================================
 
 #==========================================================================

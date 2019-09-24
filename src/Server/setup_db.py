@@ -1,8 +1,6 @@
-from rhythmic.db import SQLiteDB;
+from rhythmic import rhythmicDB;
 from datetime import datetime;
 from Deploy import configuration;
-
-db_file_name = configuration.db_file_name;
 
 general_table = \
 """
@@ -29,7 +27,7 @@ CREATE TABLE IF NOT EXISTS models_table
 
 def main():
 
-    with SQLiteDB(db_file_name) as db:
+    with rhythmicDB(configuration.db_name, configuration.db_file_name) as db:
 
         db.runScript(
             general_table +
