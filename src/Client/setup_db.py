@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS models_table
     last_version integer NOT NULL DEFAULT 0,
     active_version integer NOT NULL DEFAULT 0,
     deploy_destination text DEFAULT "http://localhost:5008",
-    deploy_status integer DEFAULT 0
+    deploy_id integer DEFAULT 0
 );
 """;
 

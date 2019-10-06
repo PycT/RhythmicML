@@ -8,7 +8,11 @@ import json;
 # ======== imports end =============
 # =============================
 
-class modelWrapper:
+class ModelWrapper:
+    """
+    Important: no method should write to stdout.
+    Do not use print() or any other methods, that do.
+    """
 
     artifact_file_base_name = "model1";
     # here you mention all the artifacts you are going to use for predicting names
@@ -22,28 +26,40 @@ class modelWrapper:
         """
         path_to_artifacts is a compulsory argument, never omit it in the __init__() declaration;
         it will convey a path to all files deployed to a server;
+        if a model needed to be loaded to memory before scroring, do it here.
         """
 
         path_to_model = "{}/{}".format(path_to_artifacts, self.artifact_file_base_name);
         self.status = "Alive and kicking";
+
+        #######################
+        ###  hot log lists are to be used for monitoring and as sources of data to store
+        ### for general purposes
+        #######################
         self.inputs_hot_log = [];
         self.outputs_hot_log = [];
         self.hot_log_timestamps_stack = [];
+        #######################
 
         return None;
 
-    def __call__(self, data):
+    def __call__(self, data_json):
 
-        preprocessed_data = self.preprocess(data);
+        preprocessed_data = self.preprocess(data_json);
         score = self.predict(preprocessed_data);
         prediction = self.postprocess(score);
 
         return prediction;
 
-    def preprocess(self, data):
+    def preprocess(self, data_json):
+        """
+        Code here data preprocessing to be consumed by the model.
+        e.g. unpacking json, base64-encoded data and so on.
+        """
 
         the_timestamp = datetime.datetime.now();
         timestamp_string = str(the_timestamp);
+        data = json.loads(data_json);
 
         preprocessing_result = data; # here some transformations on the data might go
 
@@ -61,12 +77,19 @@ class modelWrapper:
         return preprocessing_result
 
     def predict(self, inputs):
+        """
+        Code here a model invocation to score prepared input data
+        """
         
         score = repr(inputs);
 
         return score;
 
     def postprocess(self, data):
+        """
+        Code here model's prediction preparation before sending it back to requester
+        or to anywhere else (e.g. to the next model of a scoring pipeline)
+        """
         
         prediction = {"prediction": data};
 

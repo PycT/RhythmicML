@@ -33,7 +33,9 @@ def addNewModel(model_name = None, model_dir = None):
 #####################################################33##########3#####
     templateSource = configuration.model_wrapper_class_file_name;
     templateDestination =  "{}/{}".format(model_path, configuration.model_wrapper_class_file_name);
-    copyFile(templateSource, templateDestination);
+
+    if not exists(templateDestination):
+        copyFile(templateSource, templateDestination);
 #######################################################################33
     #=================starting DB work =====================================
 

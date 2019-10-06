@@ -1,4 +1,4 @@
-from . import deploy_api;
+from . import deploy_api, helpers;
 
 deploy_api.runAPI(deploy_api.app);
 
