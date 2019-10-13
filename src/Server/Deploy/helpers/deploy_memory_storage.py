@@ -13,7 +13,8 @@ class DeployMemoryStorage:
     def deployCell(self, model_deploy_id):
 
         deploy_dir = "{}/model{}".format(self.storage_dir, model_deploy_id);
-        wrapper_path = "{}/{}".format(deploy_dir, configuration.model_wrapper_class_file_name);
+        wrapper_path = "{}/files/{}".format(deploy_dir, configuration.model_wrapper_class_file_name);
+        print(wrapper_path);
         module_name = "RhmlModelWrapper{}".format(model_deploy_id);
 
         if module_name in self.specs:
@@ -34,6 +35,6 @@ class DeployMemoryStorage:
 
         if module_name in self.specs:
             return self.specs[module_name]["instance"];
-            
+
         else:
             return None;

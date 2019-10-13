@@ -7,9 +7,10 @@ from os import getcwd as getCurrentWorkingDir;
 
 app = Flask(__name__);
 
-models_cells = {};
-working_dir_path = getCurrentWorkingDir();
-storage_dir = "{}/{}".format(working_dir_path,configuration.storage_folder_name);
+# working_dir_path = getCurrentWorkingDir();
+# storage_dir = "{}/{}".format(working_dir_path, helpers.configuration.storage_folder_name);
+
+deploy_storage = helpers.DeployMemoryStorage();
 
 #==========================================================================
 #====================      DECORATORS     =========================================
@@ -29,20 +30,6 @@ def checkPost(entry_point):
     return wrapper;
 
 #==========================================================================
-#====================     LOCAL HELPERS    =========================================
-#==========================================================================
-
-def redeploy(model_deploy_id, model_cells = model_cells, storage_dir = storage_dir):
-    """
-
-    """
-    deploy_dir = "{}/model{}".format(storage_dir, model_deploy_id);
-    if model_deploy_id in model_cells:
-        pass;
-
-    return None;
-
-#==========================================================================
 #====================      SERVER ROUTES     ========================================
 #==========================================================================
 
@@ -50,13 +37,15 @@ def redeploy(model_deploy_id, model_cells = model_cells, storage_dir = storage_d
 @checkPost
 def deployModelData():
 
-    global models_processes;
+    global deploy_storage;
 
     result = helpers.deployModel(request.files);
     request.close();
     result_json = json.dumps(result);
 
     model_deploy_id = result["model_deploy_id"];
+
+    deploy_storage.deployCell(model_deploy_id);
 
     ###########!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     # importlib.reload! https://docs.python.org/3/library/importlib.html#importlib.import_module
@@ -71,21 +60,13 @@ def deployModelData():
 
 @app.route("/score/<model_deploy_id>", methods = ["POST"])
 @checkPost
-def scoreModel(model_deploy_id, data_json):
+def scoreModel(model_deploy_id):
 
-    global models_processes;
+    global deploy_storage;
 
-    if model_deploy_id in models_processes:
-        result = {"1": "pew"};
-        # outs, errs = proc.communicate(input = data_json)
-    else:
-        try:
-            models_processes[model_deploy_id] = Popen(["python", "model_cell.py", str(model_deploy_id)], stdin = PIPE, stdout = PIPE, stderr = PIPE);
-            result = {"1": "pew"};
-        except Exception as error_message:
-            result = {"Status": "{}".format(error_message)} 
-
-    result_json = json.dumps(result);
+    data_json = request.data.decode();
+    the_model = deploy_storage.fetchCell(model_deploy_id);
+    result_json = the_model(data_json);
 
     return result_json;
 
