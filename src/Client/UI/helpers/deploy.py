@@ -58,10 +58,15 @@ def deployModel(data):
     
     deploy_files = {data_file_name: data_file, package_name: package_file};
 
-    files_deploy_result = requests.post(deploy_url, files = deploy_files);
-    
+    try:
+        files_deploy_result = requests.post(deploy_url, files = deploy_files);
+    except Exception as e:
+        return "Deploy failed: {}".format(e);
+
     package_file.close();
     data_file.close();
+
+
 
     deploy_execution_data_json = files_deploy_result.content;
     deploy_execution_data = json.loads(deploy_execution_data_json);
@@ -86,4 +91,4 @@ def deployModel(data):
             );
 
 
-    return deploy_status + str(deploy_id);
+    return deploy_status;

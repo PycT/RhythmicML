@@ -36,7 +36,11 @@
     <div class = "dashboard_model_path">
         {{ model_static_data["properties"]["path"] }};&nbsp;&nbsp;&nbsp; 
         Last Version v.{{ model_static_data["properties"]["last_version"] }}. / 
-        Active Version v. {{ model_static_data["properties"]["active_version"] }}
+        Active Version v. {{ model_static_data["properties"]["active_version"] }};
+        {% if model_static_data["properties"]["deploy_id"] !=0 %}
+        &nbsp;&nbsp;&nbsp; 
+        API: {{model_static_data["properties"]["deploy_destination"]|escape()}}/score/{{model_static_data['properties']['deploy_id']}}
+        {% endif %}
     </div>
     <div class = "dashboard_model_properties">
 
@@ -54,11 +58,11 @@
         ">
         <button id = "save_model_deploy_destination_button" class = "small_button" disabled onclick = "onSaveDeployDestinationClick();">save</button>
         <br><br>
-        <div class = "dashboard_toolbox">
+        <div class = "dashboard_toolbox" align = "center">
             <button id = "deploy_active_version_button" class = "action_button"
             title = "Deploy Active Version" onclick = "deployActiveVersion();">
                 Deploy
-            </button>
+            </button>&nbsp;
         </div>
         <br clear = all>
 

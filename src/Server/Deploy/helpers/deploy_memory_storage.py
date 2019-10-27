@@ -1,5 +1,6 @@
 from . import configuration;
 from os import getcwd as getCurrentWorkingDir;
+from os.path import exists;
 from importlib import util;
 
 class DeployMemoryStorage:
@@ -14,7 +15,10 @@ class DeployMemoryStorage:
 
         deploy_dir = "{}/model{}".format(self.storage_dir, model_deploy_id);
         wrapper_path = "{}/files/{}".format(deploy_dir, configuration.model_wrapper_class_file_name);
-        print(wrapper_path);
+
+        if not exists(wrapper_path):
+            return None;
+
         module_name = "RhmlModelWrapper{}".format(model_deploy_id);
 
         if module_name in self.specs:
@@ -28,6 +32,8 @@ class DeployMemoryStorage:
         self.specs[module_name]["spec"].loader.exec_module(self.specs[module_name]["module"]);
 
         self.specs[module_name]["instance"] = self.specs[module_name]["module"].ModelWrapper(deploy_dir);
+
+        return True;
 
     def fetchCell(self, model_deploy_id):
 

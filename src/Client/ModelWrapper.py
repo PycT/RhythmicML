@@ -57,7 +57,7 @@ class ModelWrapper:
         e.g. unpacking json, base64-encoded data and so on.
         """
 
-        the_timestamp = datetime.datetime.now();
+        the_timestamp = datetime.now();
         timestamp_string = str(the_timestamp);
         data = json.loads(data_json);
 

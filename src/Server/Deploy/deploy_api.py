@@ -2,8 +2,8 @@ from flask import Flask, request;
 from . import helpers;
 from functools import wraps;
 import json;
-# from subprocess import Popen, PIPE;
 from os import getcwd as getCurrentWorkingDir;
+from rhythmic import rhythmicDB;
 
 app = Flask(__name__);
 
@@ -11,6 +11,11 @@ app = Flask(__name__);
 # storage_dir = "{}/{}".format(working_dir_path, helpers.configuration.storage_folder_name);
 
 deploy_storage = helpers.DeployMemoryStorage();
+with rhythmicDB(db_name = "SQLite", db_filename = helpers.configuration.db_file_name) as db:
+    predeployed_ids = db.execute("SELECT id FROM models_table WHERE 1");
+    if len(predeployed_ids) > 0:
+        for predeployed_id in predeployed_ids:
+            deploy_storage.deployCell(predeployed_id[0]);
 
 #==========================================================================
 #====================      DECORATORS     =========================================
@@ -47,15 +52,6 @@ def deployModelData():
 
     deploy_storage.deployCell(model_deploy_id);
 
-    ###########!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    # importlib.reload! https://docs.python.org/3/library/importlib.html#importlib.import_module
-    ###########!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    
-    # --if model_deploy_id in models_processes:
-    # --   models_processes[model_deploy_id].kill();
-
-    # -- models_processes[model_deploy_id] = Popen(["python", "model_cell.py", str(model_deploy_id)], stdin = PIPE, stdout = PIPE, stderr = PIPE);
-
     return result_json;
 
 @app.route("/score/<model_deploy_id>", methods = ["POST"])
@@ -66,7 +62,11 @@ def scoreModel(model_deploy_id):
 
     data_json = request.data.decode();
     the_model = deploy_storage.fetchCell(model_deploy_id);
-    result_json = the_model(data_json);
+
+    if the_model:
+        result_json = the_model(data_json);
+    else:
+        result_json = json.dumps({"Error":"model with deploy id = {} not found".format(model_deploy_id)});
 
     return result_json;
 
