@@ -11,12 +11,37 @@ Launching UI:
 
 ```
 cd ... /src/Client
+./run.sh
+```
+or
+```
+cd ... /src/Client
 python -m UI
 ```
 
-by Aug 22nd 2019:
+Server-side preparation:
+```
+cd ... /src/Server
+python setup_db.py
+```
+
+Launching Server:
+
+```
+cd ... /src/Server
+./run.sh
+```
+or
+```
+cd ... /src/Server
+python -m Deploy
+```
+
+
+by Oct 27th 2019:
  - UI-based Catalogue (models versioning) ready
+ - Serving side ready
 
  Planned:
- - Serving and deployment
+ - Docker wrapper for serving side
  - Client side CLI Catalogue
