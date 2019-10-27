@@ -1,5 +1,4 @@
-from rhythmic.general import faultReturnHandler;
-from rhythmic.db import SQLiteDB;
+from rhythmic import rhythmicDB, faultReturnHandler;
 from os.path import exists, isdir as isDir;
 from datetime import datetime;
 from . import configuration;
@@ -24,7 +23,7 @@ def createNewVersion(data):
 
     #=================starting DB work =====================================
 
-    with SQLiteDB(configuration.db_file_name) as db:
+    with rhythmicDB(configuration.db_name, configuration.db_file_name) as db:
 
         update_model_parameters_request = \
         """

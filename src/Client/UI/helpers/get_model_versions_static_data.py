@@ -3,8 +3,7 @@ This helper  returns dictionaries of all versions and all the files of all versi
 In other words it returns the whole tree of model related static entities.
 """
 
-from rhythmic.db import SQLiteDB;
-from rhythmic.general import faultReturnHandler;
+from rhythmic import rhythmicDB, faultReturnHandler;
 from . import configuration;
 from . import modelPropertiesDictionary, versionPropertiesDictionary, filePropertiesDictionary;
 from . import scanModelFolder;
@@ -64,7 +63,7 @@ def modelAllStaticData(model_id):
         "model_versions": {}
     };
 
-    with SQLiteDB(configuration.db_file_name) as db:
+    with rhythmicDB(configuration.db_name, configuration.db_file_name) as db:
         
         model_properties = db.execute(
             """

@@ -18,7 +18,7 @@ def modelPropertiesDictionary(sql_raw_list):
         "last_version": sql_raw_list[4],
         "active_version": sql_raw_list[5],
         "deploy_destination": sql_raw_list[6],
-        "deploy_status": sql_raw_list[7]
+        "deploy_id": sql_raw_list[7]
     };
 
     return properties_dictionary;

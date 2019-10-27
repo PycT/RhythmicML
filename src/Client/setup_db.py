@@ -6,11 +6,9 @@ helpers.db_record_to_dictionary
 
 """
 
-from rhythmic.db import SQLiteDB;
+from rhythmic import rhythmicDB;
 from datetime import datetime;
 from UI import configuration;
-
-db_file_name = configuration.db_file_name;
 
 general_table = \
 """
@@ -33,7 +31,7 @@ CREATE TABLE IF NOT EXISTS models_table
     last_version integer NOT NULL DEFAULT 0,
     active_version integer NOT NULL DEFAULT 0,
     deploy_destination text DEFAULT "http://localhost:5008",
-    deploy_status integer DEFAULT 0
+    deploy_id integer DEFAULT 0
 );
 """;
 
@@ -75,7 +73,7 @@ CREATE TABLE IF NOT EXISTS files_table
 
 def main():
 
-    with SQLiteDB(db_file_name) as db:
+    with rhythmicDB(configuration.db_name, configuration.db_file_name) as db:
 
         db.runScript(
             general_table +

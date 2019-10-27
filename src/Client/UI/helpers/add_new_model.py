@@ -1,9 +1,9 @@
-from rhythmic.general import faultReturnHandler;
-from rhythmic.db import SQLiteDB;
+from rhythmic import rhythmicDB, faultReturnHandler;
 from . import configuration, scanModelFolder;
 from .packer import packFiles;
 from os.path import exists, isdir as isDir, expanduser as expandUser;
 from os import mkdir as makeDir;
+from shutil import copyfile as copyFile;
 from datetime import datetime;
 from zipfile import ZipFile, ZIP_DEFLATED;
 
@@ -13,11 +13,12 @@ def addNewModel(model_name = None, model_dir = None):
     addNewModel(model_name = None, model_dir = None, db_file_name = ".rhml_db.sqlite3")
 
     0. The path is checked to be already present in the database. If true, the according status returned, workflow stops.
-    1. The record containing model name, model path is added to `models_table`.
-    2. The record of version 0 is added to `versions_table`.
-    3. The model folder is scanned recursiveliy, adding all the files found to the `files_table` (absolute paths). 
-    4. The `.rhml_storage` folder created within specified model directory.
-    5. The initial, 0-version archive is created.
+    1. Model wrapper script template copied to the model's directory.
+    2. The record containing model name, model path is added to `models_table`.
+    3. The record of version 0 is added to `versions_table`.
+    4. The model folder is scanned recursiveliy, adding all the files found to the `files_table` (absolute paths). 
+    5. The `.rhml_storage` folder created within specified model directory.
+    6. The initial, 0-version archive is created.
 
     """
     if model_dir == "~":
@@ -29,10 +30,16 @@ def addNewModel(model_name = None, model_dir = None):
         return "Can't add the model: model name or model path is missing."
 
     timestamp = str(datetime.now());
+#####################################################33##########3#####
+    templateSource = configuration.model_wrapper_class_file_name;
+    templateDestination =  "{}/{}".format(model_path, configuration.model_wrapper_class_file_name);
 
+    if not exists(templateDestination):
+        copyFile(templateSource, templateDestination);
+#######################################################################33
     #=================starting DB work =====================================
 
-    with SQLiteDB(configuration.db_file_name) as db:
+    with rhythmicDB(configuration.db_name, configuration.db_file_name) as db:
 
         probe = db.execute("SELECT model_name FROM models_table WHERE model_path = '{}'".format(model_path));
 
@@ -76,6 +83,7 @@ def addNewModel(model_name = None, model_dir = None):
         )
         VALUES
         """;
+
         new_model_files = scanModelFolder(model_path);
 
         if len(new_model_files) > 0:

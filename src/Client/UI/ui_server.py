@@ -107,7 +107,17 @@ def helperFolders(template_modificator = "catalogue"):
     if folder_contents.__class__ == str: #the decorator returns an error message, if folderScan() execution fails
         return folder_contents;
 
-    return renderTemplate(folder_contents_templates[template_modificator], folder_contents = folder_contents, the_folder = the_folder);
+    if template_modificator == "dashboard":
+        template_parameters = \
+        {
+            "model_wrapper": helpers.configuration.model_wrapper_class_file_name
+        }
+
+    else:
+        template_parameters = {};
+
+    return renderTemplate(folder_contents_templates[template_modificator], folder_contents = folder_contents, the_folder = the_folder,\
+                                            **template_parameters);
 #==========================================================================
 
 #==========================================================================
@@ -262,6 +272,20 @@ def removeModel():
     data = json.loads(data_json)
 
     return helpers.removeModel(data);
+
+
+#==========================================================================
+
+#==========================================================================
+
+@app.route("/helpers/deploy", methods = ["POST", "GET"])
+@checkPost
+def deployActiveVersion():
+
+    data_json = request.data.decode();
+    data = json.loads(data_json)
+
+    return helpers.deployModel(data);
 
 
 #==========================================================================

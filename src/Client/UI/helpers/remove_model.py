@@ -1,5 +1,4 @@
-from rhythmic.general import faultReturnHandler;
-from rhythmic.db import SQLiteDB;
+from rhythmic import rhythmicDB, faultReturnHandler;
 from . import configuration, scanFolder;
 from os import remove, rmdir as rmDir;
 
@@ -13,7 +12,7 @@ def removeModel(data):
     }
     """
 
-    with SQLiteDB(configuration.db_file_name) as db:
+    with rhythmicDB(configuration.db_name, configuration.db_file_name) as db:
 
         db.execute("PRAGMA foreign_keys = ON;");
         db.execute(

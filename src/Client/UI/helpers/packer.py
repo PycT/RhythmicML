@@ -6,7 +6,7 @@ def packFiles(folder_path, archive_absolute_path, files_list_dictionary):
     """
     packFiles(folder_path, archive_absolute_path, files_list_dictionary)
 
-    folder_path - a folder scanned with scan_folder.scanModelFolder to get files_list;
+    folder_path - a folder with all the files to pack, used to resolve relative path of each file;
     files_list_dictionary - dictionaries, containing "file_path" items with "absolute_path" field: {"file-path": path [,... ]}
     (see helpers/os_files_operations.py)
     """

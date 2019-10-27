@@ -58,11 +58,19 @@ The Active Version (the version user works with currently, it is not neccessaril
 + When older version is made current, all tracked files are deleted and version archive is unpacked.
     A mark of current active version written to a model record. If any changes performed and commited, a new eldest version is created.
 
+### Deploying actve version
+
+The `Deploy` button deploys the active version of the model.
+The workflow after confirmation is as follows:
++ Pack all files tracked in actvie version and marked as deployed
++ Send the package and model metadata to deployment URL
++ Get an answer with deployment id nad record it to Client DB.
 
 ## Global UI page variables
 ```
 window.model_path = "{{model_static_data['properties']['path']|escape() }}";
 window.the_model_id = "{{model_static_data['properties']['id']}}";
+window.the_model_deploy_id = "{{model_static_data['properties']['deploy_id']}}";
 window.the_model_name = '{{ model_static_data["properties"]["name"] }}';
 window.the_active_version = '{{ model_static_data["properties"]["active_version"] }}';
 window.last_version = '{{ model_static_data["properties"]["last_version"] }}';

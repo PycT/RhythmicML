@@ -84,6 +84,9 @@
                         {{ item["name"] }}
                     </a>
                 </li>
+                {% if item["deploy_id"] != 0 %}
+                {{item["deploy_destination"]}}/score/{{ item["deploy_id"] }} 
+                {% endif %}
                 <script type="text/javascript">
                     var model_item = 
                     {
@@ -95,7 +98,7 @@
                 </script>
             </td>
             <td class = "catalogue_model_list_item_version" align = "right">
-                Active v. {{ item["active_version"] }}  / Last v. {{ item["last_version"] }} 
+                Active v. {{ item["active_version"] }}  / Last v. {{ item["last_version"] }} <br>
             </td>
             <td class = "catalogue_model_list_item_timestamp">
                 <button class = "small_button"
