@@ -34,7 +34,7 @@ setup(
     # There are some restrictions on what makes a valid project name
     # specification here:
     # https://packaging.python.org/specifications/core-metadata/#name
-    name='RhythmicML',  # Required
+    name='rhml_server',  # Required
 
     # Versions should comply with PEP 440:
     # https://www.python.org/dev/peps/pep-0440/
@@ -47,7 +47,7 @@ setup(
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
     # https://packaging.python.org/specifications/core-metadata/#summary
-    description='A tool for ML models deployment and versioning',  # Optional
+    description='RhytmicML: A tool for ML models deployment and versioning - server side',  # Optional
 
     # This is an optional longer description of your project that represents
     # the body of text which users will see when they visit PyPI.
@@ -93,7 +93,7 @@ setup(
         #   3 - Alpha
         #   4 - Beta
         #   5 - Production/Stable
-        'Development Status :: 1 - Planning',
+        'Development Status :: 2 - Pre-Alpha',
 
         # Indicate who your project is intended for
         'Intended Audience :: Science/Research',
