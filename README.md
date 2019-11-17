@@ -3,37 +3,37 @@ A tool for ML models deployment and versioning.
 
 Client-side preparation:
 ```
-cd ... /src/Client
+cd ... /src/rhml_client/rhml_client
 python setup_db.py
 ```
 
 Launching UI:
 
 ```
-cd ... /src/Client
+cd ... /src/rhml_client/rhml_client
 ./run.sh
 ```
 or
 ```
-cd ... /src/Client
+cd ... /src/rhml_client/rhml_client
 python -m UI
 ```
 
 Server-side preparation:
 ```
-cd ... /src/Server
+cd ... /src/rhml_server/rhml_server
 python setup_db.py
 ```
 
 Launching Server:
 
 ```
-cd ... /src/Server
+cd ... /src/rhml_server/rhml_server
 ./run.sh
 ```
 or
 ```
-cd ... /src/Server
+cd ... /src/rhml_server/rhml_server
 python -m Deploy
 ```
 
