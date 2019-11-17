@@ -1,6 +1,5 @@
 Close:
 * Status request
-* Error when updating deploy status from within subfolder
 
 
 Planned:

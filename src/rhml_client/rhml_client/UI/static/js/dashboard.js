@@ -446,7 +446,12 @@ function onSaveMetadataClick()
     {
         if (window.active_version_files_data.hasOwnProperty(item))
         {
-            if (window.active_version_files_data[item]["is_deployed"] != window.active_version_files_data_tracker[item]["is_deployed"])
+
+            if  (   
+                    (window.active_version_files_data_tracker[item])
+                    &&
+                    (window.active_version_files_data[item]["is_deployed"] != window.active_version_files_data_tracker[item]["is_deployed"])
+                )
             {
                 data["deployables_changed"] = true;
                 var changed_item_id = window.active_version_files_data_tracker[item]["id"];
@@ -457,7 +462,7 @@ function onSaveMetadataClick()
 
     if (!data["metadata_changed"] && !data["deployables_changed"])
     {
-        alert("You did change nothing, nothing to save.");
+        alert("No trackable metadata changes, nothing to save.");
         return false;
     }
     
