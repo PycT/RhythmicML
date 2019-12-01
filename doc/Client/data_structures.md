@@ -73,6 +73,7 @@ properties_dictionary = \
         "deploy_id": sql_raw_list[7]
     };
 ```
+the "deploy_status" field is added live, after request to the db.
 
 ## Version
 ```
@@ -127,7 +128,8 @@ model_static_data
         last_version: "...",
         active_version: "...",
         deploy_destination: "...",
-        deploy_id: "..."
+        deploy_id: "...",
+        deploy_status: "..."
     },
     model_versions:
     {

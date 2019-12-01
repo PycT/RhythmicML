@@ -86,7 +86,12 @@
                 </li>
                 {% if item["deploy_id"] != 0 %}
                 {{item["deploy_destination"]}}/score/{{ item["deploy_id"] }} 
+                <br>
+                <a class="guideline" href="#" onclick = "onStatusClick({{item.id}}, {{item.deploy_id}}, '{{item.deploy_destination}}');">Deploy Status:</a>
+                {% else %}
+                <span class="guideline">Deploy Status:</span>
                 {% endif %}
+                &nbsp;<b id="catalogue_status_display{{item.id}}">{{item["deploy_status"]}}</b>
                 <script type="text/javascript">
                     var model_item = 
                     {

@@ -64,6 +64,13 @@
                 Deploy
             </button>&nbsp;
         </div>
+        {% if model_static_data["properties"]["deploy_id"] !=0 %}
+        <a class="guideline" href="#" onclick = "onStatusClick({{model_static_data['properties']['id']}}, {{model_static_data['properties']['deploy_id']}},
+        '{{model_static_data.properties.deploy_destination}}');">Deploy Status:</a>
+        {% else %}
+        <span class="guideline">Deploy Status:</span>
+        {% endif %}
+        &nbsp;<b id="dashboard_status_display{{model_static_data['properties']['id']}}">{{model_static_data["properties"]["deploy_status"]}}</b>
         <br clear = all>
 
     {% else %}

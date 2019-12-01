@@ -126,3 +126,17 @@ function onRemoveButtonClick(the_id, model_path, model_name)
 
     callConfirmationDialogue(confirmation_message, helper_url, data_for_helper_json);
 }
+
+function onStatusClick(model_id, deploy_id, deploy_destination)
+{
+    var data_for_helper =
+    {
+        "deploy_id": deploy_id,
+        "deploy_destination": deploy_destination
+    }
+
+    var data_for_helper_json = JSON.stringify(data_for_helper);
+
+    var helper_url = "/helpers/deploy_status"
+    asyncPostRequest(helper_url, data_for_helper_json, "catalogue_status_display" + model_id);
+}

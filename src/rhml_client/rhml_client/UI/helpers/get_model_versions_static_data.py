@@ -7,6 +7,7 @@ from rhythmic import rhythmicDB, faultReturnHandler;
 from . import configuration;
 from . import modelPropertiesDictionary, versionPropertiesDictionary, filePropertiesDictionary;
 from . import scanModelFolder;
+from . import getModelDeployStatus;
 
 def parentFolder(file_path):
     return file_path[:file_path.rfind("/")];
@@ -72,6 +73,8 @@ def modelAllStaticData(model_id):
             );
 
         all_model_info["properties"] = modelPropertiesDictionary(model_properties[0]);
+
+        all_model_info["properties"]["deploy_status"] = getModelDeployStatus(all_model_info["properties"]);
 
         model_versions = db.execute(
             """

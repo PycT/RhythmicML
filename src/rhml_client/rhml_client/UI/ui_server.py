@@ -50,7 +50,7 @@ def index():
     #print("{}/{}".format(__name__, "index"));
     #print(models_list);
 
-    return renderTemplate("index.html", title = "Catalogue", ui_caption = "Catalogue", models_list = models_list);
+    return renderTemplate("index.html", title = "Catalogue", ui_caption = "Models Catalogue", models_list = models_list);
 
 #==========================================================================
 
@@ -286,6 +286,19 @@ def deployActiveVersion():
     data = json.loads(data_json)
 
     return helpers.deployModel(data);
+
+#==========================================================================
+
+#==========================================================================
+
+@app.route("/helpers/deploy_status", methods = ["POST", "GET"])
+@checkPost
+def requestDeployedModelSatus():
+
+    data_json = request.data.decode();
+    data = json.loads(data_json)
+
+    return helpers.getModelDeployStatus(data);
 
 
 #==========================================================================

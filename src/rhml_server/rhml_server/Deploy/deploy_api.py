@@ -70,6 +70,21 @@ def scoreModel(model_deploy_id):
 
     return result_json;
 
+@app.route("/status/<model_deploy_id>", methods = ["POST"])
+@checkPost
+def getModelStatus(model_deploy_id):
+
+    global deploy_storage;
+
+    the_model = deploy_storage.fetchCell(model_deploy_id);
+
+    if the_model:
+        result_string = the_model.lifeSign();
+    else:
+        result_string = "Error: model with deploy id = {} not found".format(model_deploy_id);
+
+    return result_string;
+
 #==========================================================================
 #==========================================================================
 #==========================================================================

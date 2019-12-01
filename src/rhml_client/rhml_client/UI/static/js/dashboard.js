@@ -588,3 +588,17 @@ function deployActiveVersion()
 
     callConfirmationDialogue(confirmation_message, helper_url, data_for_helper);
  }
+
+function onStatusClick(model_id, deploy_id, deploy_destination)
+{
+    var data_for_helper =
+    {
+        "deploy_id": deploy_id,
+        "deploy_destination": deploy_destination
+    }
+
+    var data_for_helper_json = JSON.stringify(data_for_helper);
+
+    var helper_url = "/helpers/deploy_status"
+    asyncPostRequest(helper_url, data_for_helper_json, "dashboard_status_display" + model_id);
+}

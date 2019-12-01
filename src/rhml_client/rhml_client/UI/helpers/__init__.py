@@ -1,6 +1,6 @@
 from . import configuration;
 from .scan_folder import scanFolder, scanModelFolder;
-from .get_models_list import getModelsList;
+from .get_models_list import getModelsList, getModelDeployStatus;
 from .model_naming import getNameFromPath, uniqueName;
 from .random_string import randomString;
 from .add_new_model import addNewModel;
