@@ -1,14 +1,10 @@
-from flask import Flask, request;
+from flask import Flask, request, render_template as renderTemplate;
 from . import helpers;
 from functools import wraps;
 import json;
-from os import getcwd as getCurrentWorkingDir;
 from rhythmic import rhythmicDB;
 
 app = Flask(__name__);
-
-# working_dir_path = getCurrentWorkingDir();
-# storage_dir = "{}/{}".format(working_dir_path, helpers.configuration.storage_folder_name);
 
 deploy_storage = helpers.DeployMemoryStorage();
 with rhythmicDB(db_name = "SQLite", db_filename = helpers.configuration.db_file_name) as db:
@@ -37,6 +33,13 @@ def checkPost(entry_point):
 #==========================================================================
 #====================      SERVER ROUTES     ========================================
 #==========================================================================
+@app.route("/")
+def index():
+
+    models_list = helpers.getModelsList();
+
+    return renderTemplate("index.html", models_list = models_list);
+
 
 @app.route("/deploy", methods = ["POST"])
 @checkPost
@@ -84,6 +87,37 @@ def getModelStatus(model_deploy_id):
         result_string = "Error: model with deploy id = {} not found".format(model_deploy_id);
 
     return result_string;
+
+#==========================================================================
+#============================= HELPERS =======================================
+#==========================================================================
+@app.route("/helpers/confirmation_dialogue", methods = ["POST", "GET"])
+@checkPost
+def renderConfirmationDialogue():
+
+    data_json = request.data.decode();
+    data = json.loads(data_json);
+# confirmation dialogue parameters are the following (passed as an object):
+# confirmation_message - string, the statement to confirm
+# helper_url - string, an url to request if confirmation is positive
+# data_for_helper - string, data to send with that request
+# confirmation_result - string: 
+#      "refresh" - call asyncPostRequestWithRefresh
+#      "value" - call asyncPostRequest(..., to_innerHTML = false)
+#      "html" - call regular asyncPostRequest();
+# result_element_id - string, dom element id to use in "value" and "html" cases
+
+    return renderTemplate("confirmation_dialogue.html", confirmation_dialogue_parameters = data);
+
+
+@app.route("/helpers/remove_deployment/<model_deploy_id>", methods = ["POST", "GET"])
+@checkPost
+def removeDeployment(model_deploy_id):
+
+    deploy_storage.killCell(model_deploy_id);
+
+    return helpers.removeModel(model_deploy_id);
+
 
 #==========================================================================
 #==========================================================================

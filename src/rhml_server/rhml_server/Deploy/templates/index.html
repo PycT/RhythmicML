@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block head %}
+{{ super() }}
+
+    <!-- anti_cache is defined in layout.html -->
+
+    <script  type = "text/javascript" src = "{{ url_for('static', filename = 'js/deployments.js') + anti_cache }}" type = "module">
+    </script>
+
+ {% endblock %}
+{% block main_content %}
+{{ super() }}
+
+ {% if models_list %}
+    <ol>
+    {% for the_model in models_list %}
+        <li> 
+            Model: <b>{{the_model["name"]}}</b>, 
+            version: <b>{{the_model["active_version"]}}</b>,
+            deployed: <b>{{the_model["last_deploy_timestamp"][:-7]}}</b>
+            &nbsp;&nbsp;&nbsp;
+            <button class="small_button" onclick="
+                callConfirmationDialogue(
+                                                        'Are you sure to <span style=\'color: red;\'> remove <b>{{the_model.name}}</b></span> deployment?',
+                                                        '/helpers/remove_deployment/{{the_model.id}}',
+                                                        ''
+                                                      );">
+                remove
+            </button>
+        </li>
+    {% endfor %}
+    </ol>
+ {%endif%}
+
+{% endblock %}

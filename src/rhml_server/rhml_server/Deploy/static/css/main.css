@@ -1,0 +1,232 @@
+@-ms-viewport
+{
+    width: device-width;
+}
+
+body
+{
+    font-family: "Liberation Sans";
+    height: 100%;
+}
+
+h1
+{
+    margin-top: 0;
+    text-align: center;
+}
+
+button
+{
+    background-color: #fafafa;
+    color: #777777;
+    font-size: 18pt;
+}
+
+.small_button
+{
+    background-color: #fafafa;
+    color: #777777;
+    font-size: 12pt;
+    margin-left: 8px;
+}
+
+button:disabled
+{
+    background-color: #ffffff!important;
+    color: #dadada!important;
+}
+
+.action_button
+{
+    background-color: #77ff77;
+    color: #007700;
+}
+
+.cancel_button
+{
+    background-color: #ff7777;
+    color: #770000;
+}
+
+.cross_logo
+{
+    text-align: center;
+    color: #000088;
+}
+
+.cross_footer
+{
+    font-size: 8pt;
+    color: #aaaaaa;
+    padding-right: 32px;
+    position: relative;
+    bottom: 16px;
+    right: 16px;
+    margin-top: 64px;
+}
+
+.status_bar
+{
+    font-size: 8pt;
+    color: #aaaaff;
+    padding-left: 32px;
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    margin-top: 32px;
+    overflow-x: auto;
+}
+
+.main_container
+{
+    display: block;
+}
+
+.main_sidebar
+{
+    width: 20%;
+    padding: 16px;
+    padding-top: 32px;
+    height: 100%;
+}
+
+.main_content
+{
+    width: 80%;
+    padding: 32px;
+    border-left: 1px solid #e2e2e2;
+    height: 100%;
+}
+
+.ui_caption
+{
+    color: #000088;
+}
+
+.navigation_menu_item
+{
+    border: outset 2px #dadada;
+    background-color: #efefff;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    width: 80%;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 16pt;
+    color: #000088;
+    overflow: hidden;
+}
+
+.navigation_menu_item:hover
+{
+    background-color: #ffffff;
+}
+
+.navigation_menu_item a
+{
+    color: #000088;
+    align-self: center;
+    vertical-align: middle;    
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.left_column_align_left
+{
+    float: left;
+    width: 50%;
+}
+
+.right_column_align_right
+{
+    float: right;
+    width: 50%;
+}
+
+.guideline
+{
+    color:#000088;
+    font-size: 14pt;
+}
+
+.folder_contents_box
+{
+    padding: 16px;
+    width: 80%;
+}
+
+.folder_contents_box_current_folder
+{
+    font-size: 16pt;
+    font-weight: bolder;
+    color: 888888;
+    padding: 8px;
+    border-bottom: dashed 1px #dadada;
+}
+
+.folder_content_box_item:hover
+{
+    background-color: #dadada;
+}
+
+.local_folder
+{
+    font-size: 14pt;
+}
+
+.wait_blinker
+{
+  animation: blinker 2s linear infinite;
+  font-size: 16pt;
+  color: red;
+  font-weight: bolder;
+}
+
+.warning_blinker
+{
+  animation: warning_blinker 1s linear infinite;
+  color: red;
+  font-weight: bolder;
+}
+
+@keyframes blinker 
+{
+  50%
+  {
+    opacity: 0;
+    color: green;
+  }
+}
+
+@keyframes warning_blinker 
+{
+  50%
+  {
+    //opacity: 0;
+    color: black;
+  }
+}
+
+.confirmation_dialogue_canvas
+{
+    display: none;
+    opacity: 0.95;
+    z-index: 10;
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    align-items: center;
+    background-color: #ffffff;
+    border: solid 3px #000088;
+}
+
+.confirmation_dialogue
+{
+    position: relative;
+    width: 100%;
+    padding: 32px;
+}

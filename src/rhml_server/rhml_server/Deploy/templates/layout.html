@@ -1,0 +1,53 @@
+{% set anti_cache = '?v=' + range(0,100500)|random()|string() %}
+<html>
+<head>
+{% block head %}
+
+    {% block title %}
+    <title>
+        RhythmicML Deployments{% if title %}: {{ title }} {% endif %}   
+    </title>
+    {% endblock %}
+
+    <link rel = "stylesheet" type = "text/css" href = "{{ url_for('static', filename = 'css/main.css')  + anti_cache }}">
+
+    <meta name = "viewport" content = "width=device-width">
+
+    <script  type = "text/javascript" src = "{{ url_for('static', filename = 'js/async_requests.js') + anti_cache }}">
+    </script>
+
+    <script  type = "text/javascript" src = "{{ url_for('static', filename = 'js/manipulations.js') + anti_cache }}">
+    </script>
+
+{% endblock %}
+</head>
+
+<body>
+<div class = "main_container">
+    <h1 class = "cross_logo">
+        RhythmicML Deployments
+    </h1>
+    <hr>
+        <div class = "confirmation_dialogue_canvas" id = "confirmation_dialogue_canvas" align = "center">
+            <div class = "confirmation_dialogue" id = "confirmation_dialogue">
+            </div>
+        </div>    
+    <div class = "main_content">
+        {% block main_content %}
+        {% endblock %}
+        <div class = "confirmation_dialogue_canvas" id = "confirmation_dialogue_canvas" align = "center">
+            <div class = "confirmation_dialogue" id = "confirmation_dialogue">
+            </div>
+        </div>
+    </div>
+</div>
+
+<br clear = "all">
+<div class = "status_bar" id = "status_bar" align = "left"></div>
+
+<div class = "cross_footer" align = "right">
+Copyright 2019 RhythmicML. Apache2 Licence. https://github.com/PycT/RhythmicML &nbsp;
+</div>
+
+</body>
+</html>

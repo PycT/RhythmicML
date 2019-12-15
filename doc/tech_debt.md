@@ -1,10 +1,10 @@
 Close:
 * Logging
-* Remove deployment
+* Access management
+* Request authentication
 
 
 Planned:
-* Request authentication
 * UI access management
 * Trackability and deployability set for a folder with all the contents, including subfolders
 * Dynamic backend script status while async requests* Roles and access management

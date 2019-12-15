@@ -15,4 +15,5 @@ model_wrapper_class_file_name = "ModelWrapper.py";
 #============
 #different parameters
 db_name = "SQLite";
+model_folder_max_tracked_depth = 5;
 #============

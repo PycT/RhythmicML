@@ -1,4 +1,4 @@
-# CLI - rhml
+# CLI - rhml `not implemented`
 
 Usage:
 `$ rhml [command]`

@@ -33,7 +33,7 @@ def deployModel(deploy_files):
     timestamp = datetime.now();
     working_dir_path = getCurrentWorkingDir();
 
-    storage_dir = "{}/{}".format(working_dir_path,configuration.storage_folder_name);
+    storage_dir = "{}/{}".format(working_dir_path, configuration.storage_folder_name);
     checkDir(storage_dir);
 
     for file_name in deploy_files:

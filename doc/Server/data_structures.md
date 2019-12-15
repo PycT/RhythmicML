@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS models_table
 );
 """;
 
+# `build_id` stores an id of the model on a client side, where the model is built and stored before deployment 
 ```
 
 ## Serving Cell inputs and outputs snapshot
