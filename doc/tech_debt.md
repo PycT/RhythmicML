@@ -1,4 +1,4 @@
-Close:
+Close: 
 * Logging
 * Access management
 * Request authentication
