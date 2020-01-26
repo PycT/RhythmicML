@@ -3,9 +3,16 @@ from functools import wraps;
 from urllib.parse import unquote;
 import json;
 from os import remove;
+from rhythmic import Logger;
 from . import helpers;
 
 app = Flask(__name__);
+
+#==========================================================================
+#====================      INITIALIZATION     =========================================
+#==========================================================================
+ui_logger = Logger();
+ui_logger.writeDown("Starting RhythmicML UI server.");
 
 #==========================================================================
 #====================      DECORATORS     =========================================
@@ -30,6 +37,14 @@ def checkPost(entry_point):
             </div>
             """.format( helpers.randomString() );
 
+            ui_logger.writeDown("Invalid method access attempt. \n {} \n {} \n {}".\
+                                                    format(
+                                                                entry_point.__name__,
+                                                                args,
+                                                                kwargs
+                                                              )
+                                                  );
+
             return random_string_html;
 
     return wrapper;
@@ -50,6 +65,8 @@ def index():
     #print("{}/{}".format(__name__, "index"));
     #print(models_list);
 
+    ui_logger.writeDown("Models List index:\n {}".format(models_list));
+
     return renderTemplate("index.html", title = "Catalogue", ui_caption = "Models Catalogue", models_list = models_list);
 
 #==========================================================================
@@ -68,6 +85,13 @@ def dashboard(model_id = None):
 
     #print("{}/{}".format(__name__, "dashboard"));
     # print(model_static_data);
+
+    ui_logger.writeDown("Model model_id = {} dashboard. \n {}".\
+                                    format(
+                                                model_id,
+                                                model_static_data
+                                              )
+                                    );
 
     return renderTemplate("dashboard.html", title = "Model Dashboard", ui_caption = "Model Dashboard", model_static_data = model_static_data);
 #==========================================================================
@@ -166,6 +190,7 @@ def renderConfirmationDialogue():
 
     data_json = request.data.decode();
     data = json.loads(data_json);
+    ui_logger.writeDown("Confirmation called: \n{}".format(data_json));
 # confirmation dialogue parameters are the following (passed as an object):
 # confirmation_message - string, the statement to confirm
 # helper_url - string, an url to request if confirmation is positive
@@ -190,6 +215,8 @@ def setNewDeployDestination():
     data_json = request.data.decode();
     data = json.loads(data_json);
 
+    ui_logger.writeDown("Deploy destination change: {}".format(data_json));
+
     return helpers.setNewModelDeployDestination(data["the_model_id"], data["new_deploy_destination"]);
 
 #==========================================================================
@@ -203,6 +230,7 @@ def updateActiveVersionMetadataAndDeployables():
     data_json = request.data.decode();
     data = json.loads(data_json);
     data["actual_metadata"] = unquote(data["actual_metadata"]);
+    ui_logger.writeDown("Metadata and/or active version change: {}".format(data_json));
 
     return helpers.updateMetadataAndDeployables(data);
 
@@ -218,6 +246,8 @@ def createNewVersion():
     data = json.loads(data_json);
     data["metadata"] = unquote(data["metadata"]); 
 
+    ui_logger.writeDown("New version created: {}".format(data_json));
+
     return helpers.createNewVersion(data);
 
 
@@ -232,6 +262,8 @@ def changeActiveVersion():
     data_json = request.data.decode();
     data = json.loads(data_json);
 
+    ui_logger.writeDown("Active version change: {}".format(data_json));
+
     return helpers.setModelVersionActive(data);
 
 #==========================================================================
@@ -244,6 +276,8 @@ def restoreFile():
     data_json = request.data.decode();
     data = json.loads(data_json);
 
+    ui_logger.writeDown("Restoring files: {}".format(data_json));
+
     return helpers.restoreFile(data);
 #==========================================================================
 
@@ -253,6 +287,8 @@ def restoreFile():
 @checkPost
 def deleteFile():
     file_path = request.data.decode();
+
+    ui_logger.writeDown("Removing file: {}".format(file_path));
 
     try:
         remove(file_path);
@@ -271,6 +307,8 @@ def removeModel():
     data_json = request.data.decode();
     data = json.loads(data_json)
 
+    ui_logger.writeDown("Removing a model: {}".format(data_json));
+
     return helpers.removeModel(data);
 
 
@@ -285,6 +323,8 @@ def deployActiveVersion():
     data_json = request.data.decode();
     data = json.loads(data_json)
 
+    ui_logger.writeDown("Deploying a model: {}".format(data_json));
+
     return helpers.deployModel(data);
 
 #==========================================================================
@@ -298,7 +338,13 @@ def requestDeployedModelSatus():
     data_json = request.data.decode();
     data = json.loads(data_json)
 
-    return helpers.getModelDeployStatus(data);
+    ui_logger.writeDown("Deployed model status requested: {}".format(data_json));
+
+    returned_status = helpers.getModelDeployStatus(data);
+
+    ui_logger.writeDown("Status returned: {}".fromat(returned_status));
+
+    return returned_status;
 
 
 #==========================================================================

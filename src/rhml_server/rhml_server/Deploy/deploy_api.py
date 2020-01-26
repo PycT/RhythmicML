@@ -2,9 +2,13 @@ from flask import Flask, request, render_template as renderTemplate;
 from . import helpers;
 from functools import wraps;
 import json;
-from rhythmic import rhythmicDB;
+from rhythmic import rhythmicDB, Logger;
 
 app = Flask(__name__);
+
+#==========================================================================
+#====================      INITIALIZATION     =========================================
+#==========================================================================
 
 deploy_storage = helpers.DeployMemoryStorage();
 with rhythmicDB(db_name = "SQLite", db_filename = helpers.configuration.db_file_name) as db:
@@ -12,6 +16,10 @@ with rhythmicDB(db_name = "SQLite", db_filename = helpers.configuration.db_file_
     if len(predeployed_ids) > 0:
         for predeployed_id in predeployed_ids:
             deploy_storage.deployCell(predeployed_id[0]);
+
+deploy_logger = Logger();
+
+deploy_logger.writeDown("Starting RhythmicML Deploy API Server.");
 
 #==========================================================================
 #====================      DECORATORS     =========================================
@@ -26,6 +34,14 @@ def checkPost(entry_point):
 
         else:
 
+            deploy_logger.writeDown("Invalid method access attempt. \n {} \n {} \n {}".\
+                                                    format(
+                                                                entry_point.__name__,
+                                                                args,
+                                                                kwargs
+                                                              )
+                                                  );
+
             return "Only POST requests are presumed.";
 
     return wrapper;
@@ -37,6 +53,8 @@ def checkPost(entry_point):
 def index():
 
     models_list = helpers.getModelsList();
+
+    deploy_logger.writeDown("Access to web-UI; \n Models List: {}".format(models_list));
 
     return renderTemplate("index.html", models_list = models_list);
 
@@ -55,6 +73,8 @@ def deployModelData():
 
     deploy_storage.deployCell(model_deploy_id);
 
+    deploy_logger.writeDown("A model deployed: \n {}".format(result_json));
+
     return result_json;
 
 @app.route("/score/<model_deploy_id>", methods = ["POST"])
@@ -71,6 +91,16 @@ def scoreModel(model_deploy_id):
     else:
         result_json = json.dumps({"Error":"model with deploy id = {} not found".format(model_deploy_id)});
 
+    deploy_logger.writeDown("Model deploy_id = {} scoring request: \
+                                            \n Input Data: {}\
+                                            \n Result: {}\
+                                            ".format(
+                                                            model_deploy_id,
+                                                            data_json,
+                                                            result_json
+                                                        )
+                                          );
+
     return result_json;
 
 @app.route("/status/<model_deploy_id>", methods = ["POST"])
@@ -86,6 +116,13 @@ def getModelStatus(model_deploy_id):
     else:
         result_string = "Error: model with deploy id = {} not found".format(model_deploy_id);
 
+    deploy_logger.writeDown("Model deploy_id = {} status request. \n Status: {}".\
+                                            format(
+                                                        model_deploy_id,
+                                                        result_string
+                                                      )
+                                         );
+
     return result_string;
 
 #==========================================================================
@@ -97,6 +134,8 @@ def renderConfirmationDialogue():
 
     data_json = request.data.decode();
     data = json.loads(data_json);
+
+    deploy_logger.writeDown("Confirmation called: \n{}".format(data_json));
 # confirmation dialogue parameters are the following (passed as an object):
 # confirmation_message - string, the statement to confirm
 # helper_url - string, an url to request if confirmation is positive
@@ -115,6 +154,8 @@ def renderConfirmationDialogue():
 def removeDeployment(model_deploy_id):
 
     deploy_storage.killCell(model_deploy_id);
+
+    deploy_logger.writeDown("Model deploy_id = {} deployment killed.".format(model_deploy_id));
 
     return helpers.removeModel(model_deploy_id);
 
