@@ -1,7 +1,7 @@
 .catalogue_toolbox
 {
-    border: solid 1px #888888;
-    background-color: #efefef;
+    border: none;
+    background-color: #E7E7E7;
     margin-top: 16px;
     margin-bottom: 16px;
     padding-left: 16px;
@@ -28,15 +28,25 @@
 
 .catalogue_button
 {
-    background-color: #77ff77;
-    color: #007700;
+    border: none;
+    background-color: #29A5EB;
+    color: #FFFFFF;
+    padding-left: 16px;
+    padding-right: 16px;
     font-size: 18pt;
+    overflow: hidden;
+    vertical-align: middle;
+    border-radius: 10px;
 }
 
-.catalogue_button#catalogue_cancel_adding_button
+.catalogue_button:hover
+{
+    background-color: #1BBA01;
+}
+
+.catalogue_button#catalogue_cancel_adding_button:hover
 {
     background-color: #ff7777;
-    color: #770000;
 }
 
 .catalogue_models_list_item
@@ -47,7 +57,7 @@
 {
     font-size: 14pt;
     font-weight: bolder;
-    color: green;
+    color: #1BBA01;
 }
 
 .catalogue_model_list_item_version

@@ -3,9 +3,15 @@
     width: device-width;
 }
 
+::placeholder
+{
+    color: #AAAAAA;
+    font-style: italic;
+}
+
 body
 {
-    font-family: "Liberation Sans";
+    font-family: "Open Sans";
     height: 100%;
 }
 
@@ -51,7 +57,7 @@ button:disabled
 .cross_logo
 {
     text-align: center;
-    color: #000088;
+    color: #000000;
 }
 
 .cross_footer
@@ -100,13 +106,14 @@ button:disabled
 
 .ui_caption
 {
-    color: #000088;
+    color: #000000;
 }
 
 .navigation_menu_item
 {
-    border: outset 2px #dadada;
-    background-color: #efefff;
+    border: none;
+    background-color: #29A5EB;
+    color: #FFFFFF;
     margin-top: 16px;
     margin-bottom: 16px;
     width: 80%;
@@ -114,23 +121,21 @@ button:disabled
     padding-right: 16px;
     padding-top: 8px;
     padding-bottom: 8px;
-    font-size: 16pt;
-    color: #000088;
+    font-size: 18pt;
     overflow: hidden;
 }
 
 .navigation_menu_item:hover
 {
-    background-color: #ffffff;
+    background-color: #0074B5;
 }
 
 .navigation_menu_item a
 {
-    color: #000088;
+    color: #FFFFFF;
     align-self: center;
     vertical-align: middle;    
     text-decoration: none;
-    text-transform: uppercase;
 }
 
 .left_column_align_left
@@ -147,7 +152,7 @@ button:disabled
 
 .guideline
 {
-    color:#000088;
+    color:#0074B5;
     font-size: 14pt;
 }
 
@@ -174,6 +179,7 @@ button:disabled
 .local_folder
 {
     font-size: 14pt;
+    color: #0074B5;
 }
 
 .wait_blinker
