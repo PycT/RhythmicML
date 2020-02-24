@@ -1,6 +1,11 @@
+h1
+{
+    color: #1BBA01;
+}
+
 th
 {
-    background-color: #dadada;
+    background-color: #ddf3ff;
     padding: 3px;
     vertical-align: top;
 }
@@ -19,7 +24,7 @@ td
 {
     font-size: 14pt;
     font-weight: bolder;
-    color: green;
+    color: #1BBA01;
 }
 
 .dashboard_model_path
@@ -36,8 +41,8 @@ td
 
 .dashboard_toolbox
 {
-    border: solid 1px #888888;
-    background-color: #efefef;
+    border: dashed 1px #dadada;
+    background-color: #ffffff;
     margin-bottom: 16px;
     padding-left: 16px;
     padding-right: 16px;
@@ -88,4 +93,39 @@ td
     padding-left: 16px;
     font-size: 10pt;
     color: #888888;
+}
+
+.dashboard_button
+{
+    border: none;
+    background-color: #29A5EB;
+    color: #FFFFFF;
+    margin-bottom: 8px;
+    padding: 3px;
+    font-size: 10pt;
+    overflow: hidden;
+    vertical-align: middle;
+    border-radius: 10px;
+    min-width: 250px;
+    min-height: 32px;
+}
+
+.dashboard_button:hover
+{
+    background-color: #1BBA01;
+}
+
+.dashboard_button#deploy_active_version_button
+{
+    float: right;
+}
+
+.dashboard_button#cancel:hover
+{
+    background-color: #ff7777;
+}
+
+.dashboard_actions
+{
+    padding-left:16px;
 }

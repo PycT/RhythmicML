@@ -11,7 +11,7 @@
 
 body
 {
-    font-family: "Open Sans";
+    font-family: "Roboto";
     height: 100%;
 }
 
@@ -40,6 +40,7 @@ button:disabled
 {
     background-color: #ffffff!important;
     color: #dadada!important;
+    border: solid #aaaaaa 1px;
 }
 
 .action_button
@@ -159,7 +160,7 @@ button:disabled
 .folder_contents_box
 {
     padding: 16px;
-    width: 80%;
+    width: 90%;
 }
 
 .folder_contents_box_current_folder

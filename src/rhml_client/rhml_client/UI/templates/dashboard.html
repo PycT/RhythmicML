@@ -57,13 +57,13 @@
         }
         ">
         <button id = "save_model_deploy_destination_button" class = "small_button" disabled onclick = "onSaveDeployDestinationClick();">save</button>
+
+        <button id = "deploy_active_version_button" class = "dashboard_button"
+        title = "Deploy Active Version" onclick = "deployActiveVersion();">
+            Deploy
+        </button>&nbsp;
         <br><br>
-        <div class = "dashboard_toolbox" align = "center">
-            <button id = "deploy_active_version_button" class = "action_button"
-            title = "Deploy Active Version" onclick = "deployActiveVersion();">
-                Deploy
-            </button>&nbsp;
-        </div>
+
         {% if model_static_data["properties"]["deploy_id"] !=0 %}
         <a class="guideline" href="#" onclick = "onStatusClick({{model_static_data['properties']['id']}}, {{model_static_data['properties']['deploy_id']}},
         '{{model_static_data.properties.deploy_destination}}');">Deploy Status:</a>
@@ -145,38 +145,42 @@
                         <br clear = "all">
                         <span class = "ui_caption">Metadata:</span>
                         <div class = "dashboard_metadata_and_actions">
-                            <textarea class = "dashboard_model_version_metadata"
-                            cols = "80" rows = "8" 
+                            <div class = "dashboard_metadata">
+                                <textarea class = "dashboard_model_version_metadata"
+                                cols = "80" rows = "16" 
 
-                            {%- if model_static_data['properties']['active_version'] == model_version %}
+                                {%- if model_static_data['properties']['active_version'] == model_version %}
 
-                                id = "active_model_version_metadata"
-                                onkeyup = "
-                                if ( elementIsDisabled('metadata_button') && inputValueHasChanged('active_model_version_metadata', window.actual_metadata))
-                                {
-                                    enableElement('metadata_button');
-                                }
+                                    id = "active_model_version_metadata"
+                                    onkeyup = "
+                                    if ( elementIsDisabled('metadata_button') && inputValueHasChanged('active_model_version_metadata', window.actual_metadata))
+                                    {
+                                        enableElement('metadata_button');
+                                    }
 
-                                if ( elementIsDisabled('action') && inputValueHasChanged('active_model_version_metadata', window.actual_metadata))
-                                {
-                                    enableElement('action');
-                                }
-                                " 
-                            {% else %}
-                                disabled
-                            {% endif -%}
-                            >{{ the_model_version["version_properties"]["metadata"] }}</textarea>
-                            &nbsp;
-                            {%- if model_static_data['properties']['active_version'] == model_version %}
-                            <button id = "metadata_button" disabled onclick = "onSaveMetadataClick();">
-                                Update v. {{ model_version }} <br>Metadata & Deployables
-                            </button>
-                            <button id = "action" class = "action_button" disabled
-                            onclick = "createNewVersion();">
-                                Save All as <br> v. {{model_static_data["properties"]["last_version"] + 1}}
-                            </button>
-                            <button id = "cancel" class = "cancel_button" onclick = "window.location.reload(true);">Discard Unsaved Changes</button>
-                            {%- endif-%}
+                                    if ( elementIsDisabled('action') && inputValueHasChanged('active_model_version_metadata', window.actual_metadata))
+                                    {
+                                        enableElement('action');
+                                    }
+                                    " 
+                                {% else %}
+                                    disabled
+                                {% endif -%}
+                                >{{ the_model_version["version_properties"]["metadata"] }}</textarea>
+                                &nbsp;
+                            </div>
+                            <div class = "dashboard_actions" align = "center">
+                                {%- if model_static_data['properties']['active_version'] == model_version %}
+                                <button id = "metadata_button" disabled onclick = "onSaveMetadataClick();" class = "dashboard_button">
+                                    Update v. {{ model_version }} <br>Metadata & Deployables
+                                </button>&nbsp;<br>
+                                <button id = "action" class = "dashboard_button" disabled
+                                onclick = "createNewVersion();">
+                                    Save All as <br> v. {{model_static_data["properties"]["last_version"] + 1}}
+                                </button>&nbsp;<br>
+                                <button id = "cancel" class = "dashboard_button" onclick = "window.location.reload(true);">Discard Unsaved Changes</button>
+                                {%- endif-%}
+                            </div>
                         </div>
                         <br clear = "all">
                         <span class = "ui_caption">Files:</span>
